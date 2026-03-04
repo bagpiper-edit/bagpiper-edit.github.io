@@ -1,0 +1,9 @@
+# Build artifacts
+_site/
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store

@@ -1,0 +1,2143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bagpiper — A Universal Audio Editing Model</title>
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet" />
+
+  <style>
+    /* ---------- global ---------- */
+    :root {
+      --bg-body: #fafafa;
+      --bg-card: #ffffff;
+      --accent: #4C72B0;
+    }
+    body {
+      background: var(--bg-body);
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    }
+
+    /* ---------- hero / header ---------- */
+    .hero {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      color: #fff;
+      padding: 3rem 0 2.5rem;
+      text-align: center;
+    }
+    .hero h1 { font-weight: 700; font-size: 2.6rem; }
+    .hero .subtitle { font-size: 1.2rem; opacity: .85; margin-top: .3rem; }
+
+    /* ---------- nav pills (top-level sections) ---------- */
+    .section-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-body);
+      border-bottom: 1px solid #dee2e6;
+      padding: .6rem 0;
+    }
+    .section-nav .nav-link {
+      font-weight: 600;
+      color: #555;
+      border-radius: 2rem;
+      padding: .35rem 1.1rem;
+    }
+    .section-nav .nav-link.active,
+    .section-nav .nav-link:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* ---------- section / subsection ---------- */
+    .demo-section { padding-top: 2.5rem; }
+    .demo-section h2 {
+      font-weight: 700;
+      border-left: 5px solid var(--accent);
+      padding-left: .7rem;
+    }
+    .subsection { margin-top: 2rem; }
+    .subsection h3 { font-size: 1.25rem; font-weight: 600; color: #333; }
+
+    /* ---------- sample table ---------- */
+    .sample-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: .8rem;
+      font-size: .92rem;
+    }
+    .sample-table th {
+      background: #f0f2f5;
+      font-weight: 600;
+      text-align: center;
+      padding: .55rem .6rem;
+      border: 1px solid #dee2e6;
+      white-space: nowrap;
+    }
+    .sample-table td {
+      padding: .5rem .6rem;
+      border: 1px solid #dee2e6;
+      vertical-align: middle;
+      text-align: center;
+    }
+    .sample-table td.text-col {
+      text-align: left;
+      min-width: 180px;
+      max-width: 300px;
+      word-break: break-word;
+    }
+
+    /* model-name header colour badges */
+    .model-badge {
+      display: inline-block;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+
+    /* audio player */
+    audio {
+      width: 180px;
+      height: 32px;
+    }
+    .no-audio {
+      color: #aaa;
+      font-style: italic;
+      font-size: .82rem;
+    }
+
+    /* ---------- abstract ---------- */
+    .abstract-box {
+      background: var(--bg-card);
+      border: 1px solid #dee2e6;
+      border-radius: .6rem;
+      padding: 1.5rem 2rem;
+      margin: 2rem auto;
+      max-width: 900px;
+      line-height: 1.7;
+      font-size: .98rem;
+    }
+
+    /* ---------- appendix ---------- */
+    .appendix {
+      background: var(--bg-card);
+      border: 1px solid #dee2e6;
+      border-radius: .6rem;
+      padding: 1.5rem 2rem;
+      margin-top: 2rem;
+    }
+
+    /* ---------- footer ---------- */
+    footer {
+      text-align: center;
+      padding: 2rem 0 1.5rem;
+      color: #999;
+      font-size: .85rem;
+    }
+
+    /* responsive audio */
+    @media (max-width: 768px) {
+      audio { width: 140px; }
+      .sample-table { font-size: .82rem; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ============ HERO ============ -->
+  <div class="hero">
+    
+    <h1>Bagpiper</h1>
+    <div class="subtitle">A Universal Audio Editing Model</div>
+  </div>
+
+  <!-- ============ SECTION NAV ============ -->
+  <nav class="section-nav">
+    <div class="container-fluid">
+      <ul class="nav nav-pills justify-content-center flex-wrap" id="sectionNav">
+        <li class="nav-item">
+          <a class="nav-link" href="#abstract">Abstract</a>
+        </li>
+        
+        <li class="nav-item">
+          <a class="nav-link" href="#speech">Speech Editing</a>
+        </li>
+        
+        <li class="nav-item">
+          <a class="nav-link" href="#audio">Audio Editing</a>
+        </li>
+        
+        <li class="nav-item">
+          <a class="nav-link" href="#creative">Creative Editing</a>
+        </li>
+        
+        
+        <li class="nav-item">
+          <a class="nav-link" href="#appendix">Appendix</a>
+        </li>
+        
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-fluid px-4">
+
+    <!-- ============ ABSTRACT ============ -->
+    <div id="abstract" class="demo-section">
+      <h2>Abstract</h2>
+      <div class="abstract-box">Current text-guided audio editing methods rely on paired training data, predefined operation templates, and separate processing pipelines across speech, music, and sound.
+We present Bagpiper-Edit to enable open-ended audio editing via free-form natural language instructions.
+We reformulate audio editing as a rich-caption rewriting task by treating a rich caption as the semantic representation of an audio clip.
+The user request is translated into an edited caption, which then guides Bagpiper-Edit to generate the target edited audio with the original audio as contextual acoustic anchor.
+This unlocks the potential of free-form editing, and circumvents the need for paired audio-editing training data, enabling powerful zero-shot editing capabilities.
+Evaluations across speech, audio, and free-form editing show Bagpiper-Edit maintains good consistency to the original audio and achieves similar performance to other expert models in most cases.
+</div>
+    </div>
+
+    <!-- ============ DEMO SECTIONS ============ -->
+    
+    <div id="speech" class="demo-section">
+      <h2>Speech Editing</h2>
+      
+      <p class="text-muted">Editing operations that modify the spoken content, speaking style, or emotion of a speech utterance.</p>
+      
+
+      
+      <div id="transcription_del" class="subsection">
+        <h3>Transcription — Deletion</h3>
+        
+        <p class="text-secondary" style="font-size:.9rem;">Remove specific words or phrases from the utterance while keeping the rest natural.</p>
+        
+
+        <div class="table-responsive">
+          <table class="sample-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Instruction</th>
+                <th>Text</th>
+                
+                <th>
+                  <span class="model-badge" style="background:#6c757d;"></span>
+                  Source
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#4C72B0;"></span>
+                  Bagpiper-Base
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#DD8452;"></span>
+                  Bagpiper-Edit (ST)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#55A868;"></span>
+                  Bagpiper-Edit (MT)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#C44E52;"></span>
+                  CosyVoice-3.0
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#8172B3;"></span>
+                  Step-Audio-EditX
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#937860;"></span>
+                  Ming-UniAudio-Edit
+                </th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <td>1</td>
+                <td class="text-col">Delete the word "nothing"</td>
+                <td class="text-col">but anders cared nothing about that</td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/transcription_del/del_001_source.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/transcription_del/del_001_bagpiper_base.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/transcription_del/del_001_bagpiper_st.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/transcription_del/del_001_bagpiper_mt.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/transcription_del/del_001_cosyvoice3.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/transcription_del/del_001_stepaudiox.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/transcription_del/del_001_minguniaudio.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div id="transcription_ins" class="subsection">
+        <h3>Transcription — Insertion</h3>
+        
+        <p class="text-secondary" style="font-size:.9rem;">Insert new words or phrases into the utterance at the designated position.</p>
+        
+
+        <div class="table-responsive">
+          <table class="sample-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Instruction</th>
+                <th>Text</th>
+                
+                <th>
+                  <span class="model-badge" style="background:#6c757d;"></span>
+                  Source
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#4C72B0;"></span>
+                  Bagpiper-Base
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#DD8452;"></span>
+                  Bagpiper-Edit (ST)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#55A868;"></span>
+                  Bagpiper-Edit (MT)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#C44E52;"></span>
+                  CosyVoice-3.0
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#8172B3;"></span>
+                  Step-Audio-EditX
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#937860;"></span>
+                  Ming-UniAudio-Edit
+                </th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <td>1</td>
+                <td class="text-col">Insert "really" before "cared"</td>
+                <td class="text-col">but anders cared nothing about that</td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/transcription_ins/ins_001_source.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/transcription_ins/ins_001_bagpiper_base.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/transcription_ins/ins_001_bagpiper_st.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/transcription_ins/ins_001_bagpiper_mt.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div id="transcription_sub" class="subsection">
+        <h3>Transcription — Substitution</h3>
+        
+        <p class="text-secondary" style="font-size:.9rem;">Replace specific words with alternatives while preserving prosody and speaker identity.</p>
+        
+
+        <div class="table-responsive">
+          <table class="sample-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Instruction</th>
+                <th>Text</th>
+                
+                <th>
+                  <span class="model-badge" style="background:#6c757d;"></span>
+                  Source
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#4C72B0;"></span>
+                  Bagpiper-Base
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#DD8452;"></span>
+                  Bagpiper-Edit (ST)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#55A868;"></span>
+                  Bagpiper-Edit (MT)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#C44E52;"></span>
+                  CosyVoice-3.0
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#8172B3;"></span>
+                  Step-Audio-EditX
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#937860;"></span>
+                  Ming-UniAudio-Edit
+                </th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <td>1</td>
+                <td class="text-col">Replace "nothing" with "everything"</td>
+                <td class="text-col">but anders cared nothing about that</td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/transcription_sub/sub_001_source.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/transcription_sub/sub_001_bagpiper_base.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/transcription_sub/sub_001_bagpiper_st.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/transcription_sub/sub_001_bagpiper_mt.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div id="transcription_replace_sentence" class="subsection">
+        <h3>Transcription — Replace Sentence</h3>
+        
+        <p class="text-secondary" style="font-size:.9rem;">Replace the entire spoken sentence with a new one, keeping the same speaker voice.</p>
+        
+
+        <div class="table-responsive">
+          <table class="sample-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Instruction</th>
+                <th>Text</th>
+                
+                <th>
+                  <span class="model-badge" style="background:#6c757d;"></span>
+                  Source
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#4C72B0;"></span>
+                  Bagpiper-Base
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#DD8452;"></span>
+                  Bagpiper-Edit (ST)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#55A868;"></span>
+                  Bagpiper-Edit (MT)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#C44E52;"></span>
+                  CosyVoice-3.0
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#8172B3;"></span>
+                  Step-Audio-EditX
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#937860;"></span>
+                  Ming-UniAudio-Edit
+                </th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <td>1</td>
+                <td class="text-col">Replace with "The weather is beautiful today."</td>
+                <td class="text-col">but anders cared nothing about that</td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/transcription_replace/rep_001_source.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/transcription_replace/rep_001_bagpiper_base.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/transcription_replace/rep_001_bagpiper_st.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/transcription_replace/rep_001_bagpiper_mt.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div id="paralinguistic" class="subsection">
+        <h3>Paralinguistic Editing</h3>
+        
+        <p class="text-secondary" style="font-size:.9rem;">Add or modify paralinguistic elements such as laughter, breathing, hesitation, etc.</p>
+        
+
+        <div class="table-responsive">
+          <table class="sample-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Instruction</th>
+                <th>Text</th>
+                
+                <th>
+                  <span class="model-badge" style="background:#6c757d;"></span>
+                  Source
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#4C72B0;"></span>
+                  Bagpiper-Base
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#DD8452;"></span>
+                  Bagpiper-Edit (ST)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#55A868;"></span>
+                  Bagpiper-Edit (MT)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#C44E52;"></span>
+                  CosyVoice-3.0
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#8172B3;"></span>
+                  Step-Audio-EditX
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#937860;"></span>
+                  Ming-UniAudio-Edit
+                </th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <td>1</td>
+                <td class="text-col">Add [Laughter] after "that"</td>
+                <td class="text-col">but anders cared nothing about that</td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/paralinguistic/para_001_source.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/paralinguistic/para_001_bagpiper_base.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/paralinguistic/para_001_bagpiper_st.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/paralinguistic/para_001_bagpiper_mt.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div id="emotion" class="subsection">
+        <h3>Emotion Editing</h3>
+        
+        <p class="text-secondary" style="font-size:.9rem;">Change the emotional expression of the speaker (e.g. happy, sad, angry, fearful).</p>
+        
+
+        <div class="table-responsive">
+          <table class="sample-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Instruction</th>
+                <th>Text</th>
+                
+                <th>
+                  <span class="model-badge" style="background:#6c757d;"></span>
+                  Source
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#4C72B0;"></span>
+                  Bagpiper-Base
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#DD8452;"></span>
+                  Bagpiper-Edit (ST)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#55A868;"></span>
+                  Bagpiper-Edit (MT)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#C44E52;"></span>
+                  CosyVoice-3.0
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#8172B3;"></span>
+                  Step-Audio-EditX
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#937860;"></span>
+                  Ming-UniAudio-Edit
+                </th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <td>1</td>
+                <td class="text-col">Change emotion to Happy</td>
+                <td class="text-col">but anders cared nothing about that</td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/emotion/emo_001_source.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/emotion/emo_001_bagpiper_base.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/emotion/emo_001_bagpiper_st.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/emotion/emo_001_bagpiper_mt.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div id="speaker_style" class="subsection">
+        <h3>Speaker Style Editing</h3>
+        
+        <p class="text-secondary" style="font-size:.9rem;">Modify the speaking style — e.g. whisper, shout, child voice, elderly voice.</p>
+        
+
+        <div class="table-responsive">
+          <table class="sample-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Instruction</th>
+                <th>Text</th>
+                
+                <th>
+                  <span class="model-badge" style="background:#6c757d;"></span>
+                  Source
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#4C72B0;"></span>
+                  Bagpiper-Base
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#DD8452;"></span>
+                  Bagpiper-Edit (ST)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#55A868;"></span>
+                  Bagpiper-Edit (MT)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#C44E52;"></span>
+                  CosyVoice-3.0
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#8172B3;"></span>
+                  Step-Audio-EditX
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#937860;"></span>
+                  Ming-UniAudio-Edit
+                </th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <td>1</td>
+                <td class="text-col">Change to Whisper style</td>
+                <td class="text-col">but anders cared nothing about that</td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/speaker_style/style_001_source.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/speaker_style/style_001_bagpiper_base.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/speaker_style/style_001_bagpiper_st.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/speech/speaker_style/style_001_bagpiper_mt.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+    </div>
+    
+    <div id="audio" class="demo-section">
+      <h2>Audio Editing</h2>
+      
+      <p class="text-muted">Operations on the background audio layer — adding or removing music and sound effects while preserving the foreground speech.</p>
+      
+
+      
+      <div id="music_add" class="subsection">
+        <h3>Music — Add</h3>
+        
+        <p class="text-secondary" style="font-size:.9rem;">Add background music to a speech utterance.</p>
+        
+
+        <div class="table-responsive">
+          <table class="sample-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Instruction</th>
+                
+                
+                <th>
+                  <span class="model-badge" style="background:#6c757d;"></span>
+                  Source
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#4C72B0;"></span>
+                  Bagpiper-Base
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#DD8452;"></span>
+                  Bagpiper-Edit (ST)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#55A868;"></span>
+                  Bagpiper-Edit (MT)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#C44E52;"></span>
+                  CosyVoice-3.0
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#8172B3;"></span>
+                  Step-Audio-EditX
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#937860;"></span>
+                  Ming-UniAudio-Edit
+                </th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <td>1</td>
+                <td class="text-col">Add soft piano background music</td>
+                
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/audio/music_add/madd_001_source.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/audio/music_add/madd_001_bagpiper_base.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/audio/music_add/madd_001_bagpiper_st.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/audio/music_add/madd_001_bagpiper_mt.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div id="music_remove" class="subsection">
+        <h3>Music — Remove</h3>
+        
+        <p class="text-secondary" style="font-size:.9rem;">Remove existing background music while preserving the speech.</p>
+        
+
+        <div class="table-responsive">
+          <table class="sample-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Instruction</th>
+                
+                
+                <th>
+                  <span class="model-badge" style="background:#6c757d;"></span>
+                  Source
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#4C72B0;"></span>
+                  Bagpiper-Base
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#DD8452;"></span>
+                  Bagpiper-Edit (ST)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#55A868;"></span>
+                  Bagpiper-Edit (MT)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#C44E52;"></span>
+                  CosyVoice-3.0
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#8172B3;"></span>
+                  Step-Audio-EditX
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#937860;"></span>
+                  Ming-UniAudio-Edit
+                </th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <td>1</td>
+                <td class="text-col">Remove the background music</td>
+                
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/audio/music_remove/mrmv_001_source.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/audio/music_remove/mrmv_001_bagpiper_base.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/audio/music_remove/mrmv_001_bagpiper_st.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/audio/music_remove/mrmv_001_bagpiper_mt.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div id="sound_add" class="subsection">
+        <h3>Sound Effects — Add</h3>
+        
+        <p class="text-secondary" style="font-size:.9rem;">Add environmental sound effects (rain, traffic, birds, etc.) to a speech utterance.</p>
+        
+
+        <div class="table-responsive">
+          <table class="sample-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Instruction</th>
+                
+                
+                <th>
+                  <span class="model-badge" style="background:#6c757d;"></span>
+                  Source
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#4C72B0;"></span>
+                  Bagpiper-Base
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#DD8452;"></span>
+                  Bagpiper-Edit (ST)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#55A868;"></span>
+                  Bagpiper-Edit (MT)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#C44E52;"></span>
+                  CosyVoice-3.0
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#8172B3;"></span>
+                  Step-Audio-EditX
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#937860;"></span>
+                  Ming-UniAudio-Edit
+                </th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <td>1</td>
+                <td class="text-col">Add rain sound in the background</td>
+                
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/audio/sound_add/sadd_001_source.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/audio/sound_add/sadd_001_bagpiper_base.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/audio/sound_add/sadd_001_bagpiper_st.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/audio/sound_add/sadd_001_bagpiper_mt.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div id="sound_remove" class="subsection">
+        <h3>Sound Effects — Remove</h3>
+        
+        <p class="text-secondary" style="font-size:.9rem;">Remove environmental sound effects while preserving the speech.</p>
+        
+
+        <div class="table-responsive">
+          <table class="sample-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Instruction</th>
+                
+                
+                <th>
+                  <span class="model-badge" style="background:#6c757d;"></span>
+                  Source
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#4C72B0;"></span>
+                  Bagpiper-Base
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#DD8452;"></span>
+                  Bagpiper-Edit (ST)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#55A868;"></span>
+                  Bagpiper-Edit (MT)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#C44E52;"></span>
+                  CosyVoice-3.0
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#8172B3;"></span>
+                  Step-Audio-EditX
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#937860;"></span>
+                  Ming-UniAudio-Edit
+                </th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <td>1</td>
+                <td class="text-col">Remove the background noise</td>
+                
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/audio/sound_remove/srmv_001_source.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/audio/sound_remove/srmv_001_bagpiper_base.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/audio/sound_remove/srmv_001_bagpiper_st.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/audio/sound_remove/srmv_001_bagpiper_mt.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+    </div>
+    
+    <div id="creative" class="demo-section">
+      <h2>Creative Editing</h2>
+      
+      <p class="text-muted">Free-form creative audio editing guided by natural-language instructions.</p>
+      
+
+      
+      <div id="music_creative" class="subsection">
+        <h3>Music Creative Edit</h3>
+        
+        <p class="text-secondary" style="font-size:.9rem;">Creatively modify or transform music elements according to free-form instructions.</p>
+        
+
+        <div class="table-responsive">
+          <table class="sample-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Instruction</th>
+                
+                
+                <th>
+                  <span class="model-badge" style="background:#6c757d;"></span>
+                  Source
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#4C72B0;"></span>
+                  Bagpiper-Base
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#DD8452;"></span>
+                  Bagpiper-Edit (ST)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#55A868;"></span>
+                  Bagpiper-Edit (MT)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#C44E52;"></span>
+                  CosyVoice-3.0
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#8172B3;"></span>
+                  Step-Audio-EditX
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#937860;"></span>
+                  Ming-UniAudio-Edit
+                </th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <td>1</td>
+                <td class="text-col">Change the guitar to a violin</td>
+                
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/creative/music/mcre_001_source.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/creative/music/mcre_001_bagpiper_base.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/creative/music/mcre_001_bagpiper_st.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/creative/music/mcre_001_bagpiper_mt.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div id="speech_creative" class="subsection">
+        <h3>Speech Creative Edit</h3>
+        
+        <p class="text-secondary" style="font-size:.9rem;">Creatively modify speech content or style via free-form instructions.</p>
+        
+
+        <div class="table-responsive">
+          <table class="sample-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Instruction</th>
+                
+                
+                <th>
+                  <span class="model-badge" style="background:#6c757d;"></span>
+                  Source
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#4C72B0;"></span>
+                  Bagpiper-Base
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#DD8452;"></span>
+                  Bagpiper-Edit (ST)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#55A868;"></span>
+                  Bagpiper-Edit (MT)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#C44E52;"></span>
+                  CosyVoice-3.0
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#8172B3;"></span>
+                  Step-Audio-EditX
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#937860;"></span>
+                  Ming-UniAudio-Edit
+                </th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <td>1</td>
+                <td class="text-col">Make the speaker sound like they are underwater</td>
+                
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/creative/speech/scre_001_source.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/creative/speech/scre_001_bagpiper_base.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/creative/speech/scre_001_bagpiper_st.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/creative/speech/scre_001_bagpiper_mt.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div id="sound_creative" class="subsection">
+        <h3>Sound Creative Edit</h3>
+        
+        <p class="text-secondary" style="font-size:.9rem;">Creatively modify or transform sound effects via free-form instructions.</p>
+        
+
+        <div class="table-responsive">
+          <table class="sample-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Instruction</th>
+                
+                
+                <th>
+                  <span class="model-badge" style="background:#6c757d;"></span>
+                  Source
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#4C72B0;"></span>
+                  Bagpiper-Base
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#DD8452;"></span>
+                  Bagpiper-Edit (ST)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#55A868;"></span>
+                  Bagpiper-Edit (MT)
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#C44E52;"></span>
+                  CosyVoice-3.0
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#8172B3;"></span>
+                  Step-Audio-EditX
+                </th>
+                
+                <th>
+                  <span class="model-badge" style="background:#937860;"></span>
+                  Ming-UniAudio-Edit
+                </th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              
+              <tr>
+                <td>1</td>
+                <td class="text-col">Replace the bird chirping with ocean waves</td>
+                
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/creative/sound/sndcre_001_source.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/creative/sound/sndcre_001_bagpiper_base.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/creative/sound/sndcre_001_bagpiper_st.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <audio controls preload="none">
+                    <source src="audios/creative/sound/sndcre_001_bagpiper_mt.wav" type="audio/wav" />
+                  </audio>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+                <td>
+                  
+                  
+                  <span class="no-audio">—</span>
+                  
+                </td>
+                
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+    </div>
+    
+
+    <!-- ============ APPENDIX ============ -->
+    
+    <div id="appendix" class="demo-section">
+      <h2>Appendix: Configuration Details</h2>
+      <div class="appendix">
+        <!-- ======== 1. Model Configurations ======== -->
+<h4>1. Model Configurations</h4>
+<table class="table table-sm table-bordered">
+  <thead>
+    <tr><th>Model</th><th>Backbone</th><th>Parameters</th><th>Training Stage</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Bagpiper-Base</td><td>Qwen-3 1.5B</td><td>~1.5B</td><td>Stage-2 Pre-train (350k steps)</td></tr>
+    <tr><td>Bagpiper-Edit (ST)</td><td>Qwen-3 1.5B</td><td>~1.5B</td><td>Stage-3 SFT single-task (359k steps)</td></tr>
+    <tr><td>Bagpiper-Edit (MT)</td><td>Qwen-3 1.5B</td><td>~1.5B</td><td>Stage-3 SFT multi-task (356k steps)</td></tr>
+  </tbody>
+</table>
+<p>All models use a parallel multimodal architecture with continuous audio input
+(Qwen3-Omni encoder) and discrete audio output (Xcodec with delay-pattern interleaving).</p>
+
+<!-- ======== 2. Audio Codec ======== -->
+<h4>2. Audio Codec</h4>
+<table class="table table-sm table-bordered">
+  <thead>
+    <tr><th>Component</th><th>Details</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Codec</td><td>Xcodec (<code>hf-audio/xcodec-hubert-general</code>)</td></tr>
+    <tr><td>Frame Rate</td><td>12.5 Hz (80 ms per frame)</td></tr>
+    <tr><td>Codebook Size</td><td>8192 entries</td></tr>
+    <tr><td>Interleaving</td><td>Delay-pattern interleave with 8 equal-weight streams</td></tr>
+    <tr><td>Audio Encoder</td><td><code>Qwen/Qwen3-Omni-30B-A3B-Instruct</code> (continuous input)</td></tr>
+  </tbody>
+</table>
+
+<!-- ======== 3. Training Pipeline ======== -->
+<h4>3. Training Pipeline
+  <a href="configs/train.yaml" target="_blank" style="font-size:.75em; font-weight:normal; margin-left:.5em;">
+    📄 Full Config (train.yaml)
+  </a>
+</h4>
+<p>Bagpiper follows a three-stage training pipeline. All stages use DeepSpeed ZeRO-1
+with Adam optimizer, bfloat16 mixed precision, and activation checkpointing.</p>
+
+<table class="table table-sm table-bordered">
+  <thead>
+    <tr>
+      <th>Stage</th><th>Objective</th><th>Frozen Params</th>
+      <th>LR</th><th>Batch Size</th><th>Grad Accum</th><th>Scheduler</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Stage 1 — Warmup</strong></td>
+      <td>Train multimodal adapters only</td>
+      <td>Codec modules + all LM layers + text embeddings</td>
+      <td>1e-4</td><td>15 000 tokens</td><td>1</td>
+      <td>Cosine (5k warmup → 600k, min 0.3)</td>
+    </tr>
+    <tr>
+      <td><strong>Stage 2 — Pre-train</strong></td>
+      <td>Full-parameter pre-training</td>
+      <td>Codec modules only</td>
+      <td>1e-4</td><td>15 000 tokens</td><td>1</td>
+      <td>Cosine (5k warmup → 600k, min 0.3)</td>
+    </tr>
+    <tr>
+      <td><strong>Stage 3 — SFT</strong></td>
+      <td>Task-specific fine-tuning</td>
+      <td>Codec modules only</td>
+      <td>1e-5</td><td>12 000 tokens</td><td>4</td>
+      <td>Cosine (350k warmup → 500k, min 0.2)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Key differences in Stage 3:</strong>
+Switches to <code>Qwen3-8B-Base</code> backbone with <code>flash_attention_3</code>.
+Learning rate is 10× lower (1e-5 vs 1e-4) with a very long warmup ramp from the pre-trained checkpoint.
+Gradient accumulation increases to 4 for effective larger batch size.
+The single-task (ST) variant trains to ~359k steps; multi-task (MT) to ~356k steps.</p>
+
+<p><strong>Classifier-free guidance (CFG):</strong>
+During training, 5% of audio conditions are randomly dropped (<code>audio_cfg: 0.05</code>)
+to enable CFG at inference time.</p>
+
+<!-- ======== 4. Inference Configuration ======== -->
+<h4>4. Inference Configuration
+  <a href="configs/infer.yaml" target="_blank" style="font-size:.75em; font-weight:normal; margin-left:.5em;">
+    📄 Full Config (infer.yaml)
+  </a>
+</h4>
+
+<table class="table table-sm table-bordered">
+  <thead>
+    <tr><th>Modality</th><th>Temperature</th><th>Top-k</th><th>CFG Scale</th><th>Max Steps</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Audio (default)</td><td>0.8</td><td>20</td><td>3</td><td>2048 (~164 s)</td></tr>
+    <tr><td>Text</td><td>0.6</td><td>20</td><td>1</td><td>4096</td></tr>
+    <tr><td>Audio continuation</td><td>0.8</td><td>20</td><td>3</td><td>2048 (min 50)</td></tr>
+  </tbody>
+</table>
+
+<p><strong>Decoding modes:</strong></p>
+<ul>
+  <li><strong>Audio generation</strong> — Standard auto-regressive decoding with CFG scale 3.</li>
+  <li><strong>Audio continuation</strong> — Retains a prefix (80%) of the source audio and generates the remainder.
+      Used for speech-level edits (transcription, style).</li>
+  <li><strong>Speech (no CFG)</strong> — For pure speech tasks where CFG may over-constrain prosody.</li>
+</ul>
+
+<!-- ======== 5. Evaluation Framework ======== -->
+<h4>5. Evaluation Framework
+  <a href="configs/eval.yaml" target="_blank" style="font-size:.75em; font-weight:normal; margin-left:.5em;">
+    📄 Full Config (eval.yaml)
+  </a>
+</h4>
+
+<p>We employ a comprehensive evaluation suite combining objective metrics and LLM-based judges.</p>
+
+<h5>5.1 Objective Metrics</h5>
+<table class="table table-sm table-bordered">
+  <thead>
+    <tr><th>Metric</th><th>Model / Tool</th><th>Applicable Tasks</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>ASR-WER</td><td>Whisper-large-v3</td><td>All speech editing tasks</td></tr>
+    <tr><td>Speaker Similarity</td><td>WavLM-large (fine-tuned)</td><td>Speech editing (identity preservation)</td></tr>
+    <tr><td>Emotion Accuracy</td><td>emotion2vec_plus_large</td><td>Emotion editing</td></tr>
+    <tr><td>Pseudo-MOS</td><td>UTMOS + DNSMOS</td><td>All tasks (audio quality)</td></tr>
+    <tr><td>CLAP Similarity</td><td>CLAP</td><td>Non-speech audio editing</td></tr>
+    <tr><td>FAD</td><td>EnCodec-24k embeddings</td><td>Non-speech audio editing (corpus-level)</td></tr>
+    <tr><td>Speed / Volume / Pitch</td><td>Signal-level analysis</td><td>Audio effect tasks</td></tr>
+  </tbody>
+</table>
+
+<h5>5.2 LLM Judge Metrics</h5>
+<p>Three independent LLM judges provide subjective quality scores (1–5 scale):</p>
+<table class="table table-sm table-bordered">
+  <thead>
+    <tr><th>Judge</th><th>Model</th><th>Mode</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Qwen3-Omni</td><td><code>Qwen3-Omni-30B-A3B-Thinking</code></td><td>Direct audio input → multimodal judge</td></tr>
+    <tr><td>Gemini</td><td><code>gemini-3-flash-preview</code></td><td>Direct audio input → multimodal judge</td></tr>
+    <tr><td>Caption + LLM</td><td>Captioner (<code>Qwen3-Omni Captioner</code>) + <code>Qwen3-235B</code></td><td>Audio → caption → text-LLM judge</td></tr>
+  </tbody>
+</table>
+
+<h5>5.3 Evaluation Dimensions</h5>
+<p><strong>Speech editing tasks</strong> are judged on:</p>
+<ul>
+  <li><strong>Consistency</strong> (1-5) — Preservation of speech content &amp; speaker identity</li>
+  <li><strong>Change Quality</strong> (1-5) — Execution quality of the requested change</li>
+  <li><strong>Overall Score</strong> (1-5) — Holistic quality (not a simple average)</li>
+</ul>
+<p><strong>Non-speech audio tasks</strong> additionally use:</p>
+<ul>
+  <li><strong>Edit Fidelity</strong> (1-5) — Was the edit correctly applied?</li>
+  <li><strong>Audio Quality</strong> (1-5) — Production quality, artifacts, distortion</li>
+  <li><strong>Coherence</strong> (1-5) — Scene coherence, naturalness of blend</li>
+  <li><strong>Preservation</strong> (1-5) — Are non-edited elements intact?</li>
+</ul>
+
+      </div>
+    </div>
+    
+
+  </div><!-- /container -->
+
+  <footer>
+    &copy; 2025 Bagpiper Team &middot;
+    Built from <code>config.yaml</code> &middot;
+    <a href="https://github.com/">GitHub</a>
+  </footer>
+
+  <!-- Bootstrap JS (for nav pills scroll-spy, optional) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Highlight active nav pill on scroll
+    (function () {
+      const sections = document.querySelectorAll('.demo-section');
+      const navLinks = document.querySelectorAll('#sectionNav .nav-link');
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            navLinks.forEach(l => l.classList.remove('active'));
+            const id = e.target.getAttribute('id');
+            const link = document.querySelector(`#sectionNav a[href="#${id}"]`);
+            if (link) link.classList.add('active');
+          }
+        });
+      }, { rootMargin: '-40% 0px -55% 0px' });
+      sections.forEach(s => observer.observe(s));
+    })();
+  </script>
+</body>
+</html>

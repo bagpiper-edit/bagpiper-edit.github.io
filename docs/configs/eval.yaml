@@ -1,0 +1,142 @@
+# ============================================================================
+# Bagpiper — Evaluation Configuration
+# Comprehensive evaluation framework for audio editing quality
+# ============================================================================
+#
+# This config defines all scorers and task-level evaluation setups used to
+# benchmark Bagpiper models across speech, audio, and creative editing tasks.
+#
+# Evaluation dimensions:
+#   - Objective metrics: ASR-WER, speaker similarity, pseudo-MOS, FAD, etc.
+#   - Subjective metrics: LLM-judge scores (Qwen3-Omni, Gemini, caption+LLM)
+#
+# For the complete configuration with full LLM judge prompts, see:
+#   local_eval/eval/eval.yaml
+# ============================================================================
+
+runtime:
+  num_workers: 8
+
+# ============================================================================
+# Scorer Definitions
+# ============================================================================
+scorers:
+
+  # --- Automatic Speech Recognition ---
+  asr_wer:
+    model_name: openai/whisper-large-v3
+    batch_size: 24
+    language: en
+
+  # --- Speaker Similarity ---
+  speaker_similarity_wavlm:
+    model_name: wavlm_large
+    device: cuda
+    batch_size: 1
+
+  # --- LLM Judge: Multimodal Audio (Qwen3-Omni) ---
+  llm_judge_openai:
+    model:
+      model: Qwen/Qwen3-Omni-30B-A3B-Thinking
+    batch_size: 256
+    max_samples: 10000
+
+  # --- LLM Judge: Gemini Multimodal ---
+  llm_judge_gemini:
+    batch_size: 512
+    max_samples: 100
+    model_kwargs:
+      model: gemini-3-flash-preview
+
+  # --- LLM Judge: Caption + Text-LLM Pipeline ---
+  llm_judge_caption_llm:
+    batch_size: 256
+    captioner:
+      model: Qwen/Qwen3-Omni-30B-A3B-Captioner
+    judge_model:
+      model: Qwen/Qwen3-235B-A22B-Instruct-2507-FP8
+
+  # --- Fréchet Audio Distance ---
+  fad:
+    model: vggish
+    device: cuda
+
+  # --- Pseudo-MOS (UTMOS + DNSMOS) ---
+  pseudo_mos:
+    predictor_types: [utmos, dnsmos]
+
+  # --- Emotion Recognition ---
+  emotion_modelscope:
+    model: iic/emotion2vec_plus_large
+
+  # --- CLAP Similarity ---
+  clap_similarity:
+    enable_fusion: false
+    device: cuda
+
+  # --- Audio Event Detection (OpenFLAM) ---
+  audio_event_flam:
+    model_name: v1-base
+
+  # --- Signal-level Metrics ---
+  speed_duration:
+    relative_tolerance: 0.15
+  volume_loudness:
+    delta_tolerance_db: 3.0
+  pitch_shift:
+    semitone_tolerance: 1.5
+
+# ============================================================================
+# Task → Scorer Mapping
+# ============================================================================
+tasks:
+
+  # --- Speech Editing: Transcription (objective only) ---
+  transcription_ins:        [asr_wer, speaker_similarity_wavlm, pseudo_mos]
+  transcription_del:        [asr_wer, speaker_similarity_wavlm, pseudo_mos]
+  transcription_sub:        [asr_wer, speaker_similarity_wavlm, pseudo_mos]
+  transcription_replace:    [asr_wer, speaker_similarity_wavlm, pseudo_mos]
+
+  # --- Speech Editing: Paralinguistic ---
+  transcription_add_paralinguistic:
+    [llm_judge_openai, llm_judge_gemini, pseudo_mos]
+
+  # --- Speech Editing: Style & Emotion ---
+  style_whisper:            [asr_wer, speaker_similarity_wavlm, llm_judge_openai, llm_judge_gemini, pseudo_mos]
+  style_emotion:            [asr_wer, speaker_similarity_wavlm, emotion_modelscope, llm_judge_openai, llm_judge_gemini, pseudo_mos]
+
+  # --- Speech Editing: Audio Effects ---
+  audio_effect_speed:       [speed_duration, asr_wer, speaker_similarity_wavlm, pseudo_mos]
+  audio_effect_volume:      [volume_loudness, asr_wer, speaker_similarity_wavlm, pseudo_mos]
+  audio_effect_pitch:       [pitch_shift, asr_wer, speaker_similarity_wavlm, pseudo_mos]
+  audio_effect_reverb:      [llm_judge_openai, llm_judge_gemini, pseudo_mos]
+  audio_effect_dereverb:    [asr_wer, speaker_similarity_wavlm, pseudo_mos]
+
+  # --- Audio Editing: Add / Remove / Replace ---
+  # (3 source types × 3+ target types each)
+  "*_add_*":                [clap_similarity, fad, llm_judge_openai, llm_judge_caption_llm, llm_judge_gemini]
+  "*_remove_*":             [clap_similarity, fad, llm_judge_openai, llm_judge_caption_llm, llm_judge_gemini]
+  "*_replace_*":            [clap_similarity, fad, llm_judge_openai, llm_judge_caption_llm, llm_judge_gemini]
+
+  # --- Creative Editing ---
+  music_creative_edit:      [clap_similarity, fad, llm_judge_openai, llm_judge_caption_llm, llm_judge_gemini]
+  sound_creative_edit:      [clap_similarity, fad, llm_judge_openai, llm_judge_caption_llm, llm_judge_gemini]
+  speech_creative_edit:     [clap_similarity, fad, llm_judge_openai, llm_judge_caption_llm, llm_judge_gemini]
+  sing_creative_edit:       [clap_similarity, fad, llm_judge_openai, llm_judge_caption_llm, llm_judge_gemini]
+
+# ============================================================================
+# LLM Judge Evaluation Dimensions
+# ============================================================================
+# All LLM judges use a 1–5 integer scoring rubric.
+#
+# Speech editing tasks:
+#   consistency (1-5)    — Preservation of speech content & speaker identity
+#   change_quality (1-5) — Execution quality of the requested change
+#   score (1-5)          — Overall quality (not a simple average)
+#
+# Non-speech audio tasks:
+#   edit_fidelity (1-5)  — Was the edit correctly applied?
+#   audio_quality (1-5)  — Production quality, artifacts, distortion
+#   coherence (1-5)      — Scene coherence, naturalness of blend
+#   preservation (1-5)   — Are non-edited elements intact?
+#   score (1-5)          — Overall quality

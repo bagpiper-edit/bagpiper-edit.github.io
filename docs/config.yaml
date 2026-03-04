@@ -1,0 +1,451 @@
+# ============================================================================
+# Bagpiper Demo Page Configuration
+# ============================================================================
+# This YAML drives the entire demo page.  Edit sections / samples here,
+# then run `python build.py` (or let GitHub Actions do it) to regenerate
+# index.html.
+#
+# Audio paths are relative to the site root (demo/).
+# Use the "audios/" prefix — put actual wav/mp3 files under demo/audios/.
+# ============================================================================
+
+# ---------- site-level metadata ----------
+title: "Bagpiper"
+subtitle: "A Universal Audio Editing Model"
+# logo: "assets/logo.png"   # optional, uncomment when ready
+
+# ---------- models to compare (column order) ----------
+models:
+  - id: source
+    name: "Source"
+    color: "#6c757d"
+  - id: bagpiper_base
+    name: "Bagpiper-Base"
+    color: "#4C72B0"
+  - id: bagpiper_st
+    name: "Bagpiper-Edit (ST)"
+    color: "#DD8452"
+  - id: bagpiper_mt
+    name: "Bagpiper-Edit (MT)"
+    color: "#55A868"
+  - id: cosyvoice3
+    name: "CosyVoice-3.0"
+    color: "#C44E52"
+  - id: stepaudiox
+    name: "Step-Audio-EditX"
+    color: "#8172B3"
+  - id: minguniaudio
+    name: "Ming-UniAudio-Edit"
+    color: "#937860"
+
+# ---------- abstract ----------
+abstract: |
+  Current text-guided audio editing methods rely on paired training data, predefined operation templates, and separate processing pipelines across speech, music, and sound.
+  We present Bagpiper-Edit to enable open-ended audio editing via free-form natural language instructions.
+  We reformulate audio editing as a rich-caption rewriting task by treating a rich caption as the semantic representation of an audio clip.
+  The user request is translated into an edited caption, which then guides Bagpiper-Edit to generate the target edited audio with the original audio as contextual acoustic anchor.
+  This unlocks the potential of free-form editing, and circumvents the need for paired audio-editing training data, enabling powerful zero-shot editing capabilities.
+  Evaluations across speech, audio, and free-form editing show Bagpiper-Edit maintains good consistency to the original audio and achieves similar performance to other expert models in most cases.
+
+# ---------- demo sections ----------
+sections:
+  # ================================================================
+  #  SPEECH EDITING
+  # ================================================================
+  - id: speech
+    title: "Speech Editing"
+    description: "Editing operations that modify the spoken content, speaking style, or emotion of a speech utterance."
+    subsections:
+
+      # --- Transcription: Deletion ---
+      - id: transcription_del
+        title: "Transcription — Deletion"
+        description: "Remove specific words or phrases from the utterance while keeping the rest natural."
+        instruction_col: true          # show an "Instruction" column
+        samples:
+          - id: del_001
+            instruction: 'Delete the word "nothing"'
+            text: "but anders cared nothing about that"
+            audios:
+              source:        "audios/speech/transcription_del/del_001_source.wav"
+              bagpiper_base: "audios/speech/transcription_del/del_001_bagpiper_base.wav"
+              bagpiper_st:   "audios/speech/transcription_del/del_001_bagpiper_st.wav"
+              bagpiper_mt:   "audios/speech/transcription_del/del_001_bagpiper_mt.wav"
+              cosyvoice3:  "audios/speech/transcription_del/del_001_cosyvoice3.wav"
+              stepaudiox:  "audios/speech/transcription_del/del_001_stepaudiox.wav"
+              minguniaudio: "audios/speech/transcription_del/del_001_minguniaudio.wav"
+
+      # --- Transcription: Insertion ---
+      - id: transcription_ins
+        title: "Transcription — Insertion"
+        description: "Insert new words or phrases into the utterance at the designated position."
+        instruction_col: true
+        samples:
+          - id: ins_001
+            instruction: 'Insert "really" before "cared"'
+            text: "but anders cared nothing about that"
+            audios:
+              source:        "audios/speech/transcription_ins/ins_001_source.wav"
+              bagpiper_base: "audios/speech/transcription_ins/ins_001_bagpiper_base.wav"
+              bagpiper_st:   "audios/speech/transcription_ins/ins_001_bagpiper_st.wav"
+              bagpiper_mt:   "audios/speech/transcription_ins/ins_001_bagpiper_mt.wav"
+
+      # --- Transcription: Substitution ---
+      - id: transcription_sub
+        title: "Transcription — Substitution"
+        description: "Replace specific words with alternatives while preserving prosody and speaker identity."
+        instruction_col: true
+        samples:
+          - id: sub_001
+            instruction: 'Replace "nothing" with "everything"'
+            text: "but anders cared nothing about that"
+            audios:
+              source:        "audios/speech/transcription_sub/sub_001_source.wav"
+              bagpiper_base: "audios/speech/transcription_sub/sub_001_bagpiper_base.wav"
+              bagpiper_st:   "audios/speech/transcription_sub/sub_001_bagpiper_st.wav"
+              bagpiper_mt:   "audios/speech/transcription_sub/sub_001_bagpiper_mt.wav"
+
+      # --- Transcription: Replace Sentence ---
+      - id: transcription_replace_sentence
+        title: "Transcription — Replace Sentence"
+        description: "Replace the entire spoken sentence with a new one, keeping the same speaker voice."
+        instruction_col: true
+        samples:
+          - id: rep_001
+            instruction: 'Replace with "The weather is beautiful today."'
+            text: "but anders cared nothing about that"
+            audios:
+              source:        "audios/speech/transcription_replace/rep_001_source.wav"
+              bagpiper_base: "audios/speech/transcription_replace/rep_001_bagpiper_base.wav"
+              bagpiper_st:   "audios/speech/transcription_replace/rep_001_bagpiper_st.wav"
+              bagpiper_mt:   "audios/speech/transcription_replace/rep_001_bagpiper_mt.wav"
+
+      # --- Paralinguistic ---
+      - id: paralinguistic
+        title: "Paralinguistic Editing"
+        description: "Add or modify paralinguistic elements such as laughter, breathing, hesitation, etc."
+        instruction_col: true
+        samples:
+          - id: para_001
+            instruction: 'Add [Laughter] after "that"'
+            text: "but anders cared nothing about that"
+            audios:
+              source:        "audios/speech/paralinguistic/para_001_source.wav"
+              bagpiper_base: "audios/speech/paralinguistic/para_001_bagpiper_base.wav"
+              bagpiper_st:   "audios/speech/paralinguistic/para_001_bagpiper_st.wav"
+              bagpiper_mt:   "audios/speech/paralinguistic/para_001_bagpiper_mt.wav"
+
+      # --- Emotion ---
+      - id: emotion
+        title: "Emotion Editing"
+        description: "Change the emotional expression of the speaker (e.g. happy, sad, angry, fearful)."
+        instruction_col: true
+        samples:
+          - id: emo_001
+            instruction: "Change emotion to Happy"
+            text: "but anders cared nothing about that"
+            audios:
+              source:        "audios/speech/emotion/emo_001_source.wav"
+              bagpiper_base: "audios/speech/emotion/emo_001_bagpiper_base.wav"
+              bagpiper_st:   "audios/speech/emotion/emo_001_bagpiper_st.wav"
+              bagpiper_mt:   "audios/speech/emotion/emo_001_bagpiper_mt.wav"
+
+      # --- Speaker Style ---
+      - id: speaker_style
+        title: "Speaker Style Editing"
+        description: "Modify the speaking style — e.g. whisper, shout, child voice, elderly voice."
+        instruction_col: true
+        samples:
+          - id: style_001
+            instruction: "Change to Whisper style"
+            text: "but anders cared nothing about that"
+            audios:
+              source:        "audios/speech/speaker_style/style_001_source.wav"
+              bagpiper_base: "audios/speech/speaker_style/style_001_bagpiper_base.wav"
+              bagpiper_st:   "audios/speech/speaker_style/style_001_bagpiper_st.wav"
+              bagpiper_mt:   "audios/speech/speaker_style/style_001_bagpiper_mt.wav"
+
+  # ================================================================
+  #  AUDIO EDITING
+  # ================================================================
+  - id: audio
+    title: "Audio Editing"
+    description: "Operations on the background audio layer — adding or removing music and sound effects while preserving the foreground speech."
+    subsections:
+
+      # --- Music Add ---
+      - id: music_add
+        title: "Music — Add"
+        description: "Add background music to a speech utterance."
+        instruction_col: true
+        samples:
+          - id: madd_001
+            instruction: "Add soft piano background music"
+            text: ""
+            audios:
+              source:        "audios/audio/music_add/madd_001_source.wav"
+              bagpiper_base: "audios/audio/music_add/madd_001_bagpiper_base.wav"
+              bagpiper_st:   "audios/audio/music_add/madd_001_bagpiper_st.wav"
+              bagpiper_mt:   "audios/audio/music_add/madd_001_bagpiper_mt.wav"
+
+      # --- Music Remove ---
+      - id: music_remove
+        title: "Music — Remove"
+        description: "Remove existing background music while preserving the speech."
+        instruction_col: true
+        samples:
+          - id: mrmv_001
+            instruction: "Remove the background music"
+            text: ""
+            audios:
+              source:        "audios/audio/music_remove/mrmv_001_source.wav"
+              bagpiper_base: "audios/audio/music_remove/mrmv_001_bagpiper_base.wav"
+              bagpiper_st:   "audios/audio/music_remove/mrmv_001_bagpiper_st.wav"
+              bagpiper_mt:   "audios/audio/music_remove/mrmv_001_bagpiper_mt.wav"
+
+      # --- Sound Add ---
+      - id: sound_add
+        title: "Sound Effects — Add"
+        description: "Add environmental sound effects (rain, traffic, birds, etc.) to a speech utterance."
+        instruction_col: true
+        samples:
+          - id: sadd_001
+            instruction: "Add rain sound in the background"
+            text: ""
+            audios:
+              source:        "audios/audio/sound_add/sadd_001_source.wav"
+              bagpiper_base: "audios/audio/sound_add/sadd_001_bagpiper_base.wav"
+              bagpiper_st:   "audios/audio/sound_add/sadd_001_bagpiper_st.wav"
+              bagpiper_mt:   "audios/audio/sound_add/sadd_001_bagpiper_mt.wav"
+
+      # --- Sound Remove ---
+      - id: sound_remove
+        title: "Sound Effects — Remove"
+        description: "Remove environmental sound effects while preserving the speech."
+        instruction_col: true
+        samples:
+          - id: srmv_001
+            instruction: "Remove the background noise"
+            text: ""
+            audios:
+              source:        "audios/audio/sound_remove/srmv_001_source.wav"
+              bagpiper_base: "audios/audio/sound_remove/srmv_001_bagpiper_base.wav"
+              bagpiper_st:   "audios/audio/sound_remove/srmv_001_bagpiper_st.wav"
+              bagpiper_mt:   "audios/audio/sound_remove/srmv_001_bagpiper_mt.wav"
+
+  # ================================================================
+  #  CREATIVE EDITING
+  # ================================================================
+  - id: creative
+    title: "Creative Editing"
+    description: "Free-form creative audio editing guided by natural-language instructions."
+    subsections:
+
+      # --- Music Creative ---
+      - id: music_creative
+        title: "Music Creative Edit"
+        description: "Creatively modify or transform music elements according to free-form instructions."
+        instruction_col: true
+        samples:
+          - id: mcre_001
+            instruction: "Change the guitar to a violin"
+            text: ""
+            audios:
+              source:        "audios/creative/music/mcre_001_source.wav"
+              bagpiper_base: "audios/creative/music/mcre_001_bagpiper_base.wav"
+              bagpiper_st:   "audios/creative/music/mcre_001_bagpiper_st.wav"
+              bagpiper_mt:   "audios/creative/music/mcre_001_bagpiper_mt.wav"
+
+      # --- Speech Creative ---
+      - id: speech_creative
+        title: "Speech Creative Edit"
+        description: "Creatively modify speech content or style via free-form instructions."
+        instruction_col: true
+        samples:
+          - id: scre_001
+            instruction: "Make the speaker sound like they are underwater"
+            text: ""
+            audios:
+              source:        "audios/creative/speech/scre_001_source.wav"
+              bagpiper_base: "audios/creative/speech/scre_001_bagpiper_base.wav"
+              bagpiper_st:   "audios/creative/speech/scre_001_bagpiper_st.wav"
+              bagpiper_mt:   "audios/creative/speech/scre_001_bagpiper_mt.wav"
+
+      # --- Sound Creative ---
+      - id: sound_creative
+        title: "Sound Creative Edit"
+        description: "Creatively modify or transform sound effects via free-form instructions."
+        instruction_col: true
+        samples:
+          - id: sndcre_001
+            instruction: "Replace the bird chirping with ocean waves"
+            text: ""
+            audios:
+              source:        "audios/creative/sound/sndcre_001_source.wav"
+              bagpiper_base: "audios/creative/sound/sndcre_001_bagpiper_base.wav"
+              bagpiper_st:   "audios/creative/sound/sndcre_001_bagpiper_st.wav"
+              bagpiper_mt:   "audios/creative/sound/sndcre_001_bagpiper_mt.wav"
+
+# ---------- appendix ----------
+appendix:
+  title: "Appendix: Configuration Details"
+  content: |
+    <!-- ======== 1. Model Configurations ======== -->
+    <h4>1. Model Configurations</h4>
+    <table class="table table-sm table-bordered">
+      <thead>
+        <tr><th>Model</th><th>Backbone</th><th>Parameters</th><th>Training Stage</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Bagpiper-Base</td><td>Qwen-3 1.5B</td><td>~1.5B</td><td>Stage-2 Pre-train (350k steps)</td></tr>
+        <tr><td>Bagpiper-Edit (ST)</td><td>Qwen-3 1.5B</td><td>~1.5B</td><td>Stage-3 SFT single-task (359k steps)</td></tr>
+        <tr><td>Bagpiper-Edit (MT)</td><td>Qwen-3 1.5B</td><td>~1.5B</td><td>Stage-3 SFT multi-task (356k steps)</td></tr>
+      </tbody>
+    </table>
+    <p>All models use a parallel multimodal architecture with continuous audio input
+    (Qwen3-Omni encoder) and discrete audio output (Xcodec with delay-pattern interleaving).</p>
+
+    <!-- ======== 2. Audio Codec ======== -->
+    <h4>2. Audio Codec</h4>
+    <table class="table table-sm table-bordered">
+      <thead>
+        <tr><th>Component</th><th>Details</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Codec</td><td>Xcodec (<code>hf-audio/xcodec-hubert-general</code>)</td></tr>
+        <tr><td>Frame Rate</td><td>12.5 Hz (80 ms per frame)</td></tr>
+        <tr><td>Codebook Size</td><td>8192 entries</td></tr>
+        <tr><td>Interleaving</td><td>Delay-pattern interleave with 8 equal-weight streams</td></tr>
+        <tr><td>Audio Encoder</td><td><code>Qwen/Qwen3-Omni-30B-A3B-Instruct</code> (continuous input)</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ======== 3. Training Pipeline ======== -->
+    <h4>3. Training Pipeline
+      <a href="configs/train.yaml" target="_blank" style="font-size:.75em; font-weight:normal; margin-left:.5em;">
+        📄 Full Config (train.yaml)
+      </a>
+    </h4>
+    <p>Bagpiper follows a three-stage training pipeline. All stages use DeepSpeed ZeRO-1
+    with Adam optimizer, bfloat16 mixed precision, and activation checkpointing.</p>
+
+    <table class="table table-sm table-bordered">
+      <thead>
+        <tr>
+          <th>Stage</th><th>Objective</th><th>Frozen Params</th>
+          <th>LR</th><th>Batch Size</th><th>Grad Accum</th><th>Scheduler</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Stage 1 — Warmup</strong></td>
+          <td>Train multimodal adapters only</td>
+          <td>Codec modules + all LM layers + text embeddings</td>
+          <td>1e-4</td><td>15 000 tokens</td><td>1</td>
+          <td>Cosine (5k warmup → 600k, min 0.3)</td>
+        </tr>
+        <tr>
+          <td><strong>Stage 2 — Pre-train</strong></td>
+          <td>Full-parameter pre-training</td>
+          <td>Codec modules only</td>
+          <td>1e-4</td><td>15 000 tokens</td><td>1</td>
+          <td>Cosine (5k warmup → 600k, min 0.3)</td>
+        </tr>
+        <tr>
+          <td><strong>Stage 3 — SFT</strong></td>
+          <td>Task-specific fine-tuning</td>
+          <td>Codec modules only</td>
+          <td>1e-5</td><td>12 000 tokens</td><td>4</td>
+          <td>Cosine (350k warmup → 500k, min 0.2)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p><strong>Key differences in Stage 3:</strong>
+    Switches to <code>Qwen3-8B-Base</code> backbone with <code>flash_attention_3</code>.
+    Learning rate is 10× lower (1e-5 vs 1e-4) with a very long warmup ramp from the pre-trained checkpoint.
+    Gradient accumulation increases to 4 for effective larger batch size.
+    The single-task (ST) variant trains to ~359k steps; multi-task (MT) to ~356k steps.</p>
+
+    <p><strong>Classifier-free guidance (CFG):</strong>
+    During training, 5% of audio conditions are randomly dropped (<code>audio_cfg: 0.05</code>)
+    to enable CFG at inference time.</p>
+
+    <!-- ======== 4. Inference Configuration ======== -->
+    <h4>4. Inference Configuration
+      <a href="configs/infer.yaml" target="_blank" style="font-size:.75em; font-weight:normal; margin-left:.5em;">
+        📄 Full Config (infer.yaml)
+      </a>
+    </h4>
+
+    <table class="table table-sm table-bordered">
+      <thead>
+        <tr><th>Modality</th><th>Temperature</th><th>Top-k</th><th>CFG Scale</th><th>Max Steps</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Audio (default)</td><td>0.8</td><td>20</td><td>3</td><td>2048 (~164 s)</td></tr>
+        <tr><td>Text</td><td>0.6</td><td>20</td><td>1</td><td>4096</td></tr>
+        <tr><td>Audio continuation</td><td>0.8</td><td>20</td><td>3</td><td>2048 (min 50)</td></tr>
+      </tbody>
+    </table>
+
+    <p><strong>Decoding modes:</strong></p>
+    <ul>
+      <li><strong>Audio generation</strong> — Standard auto-regressive decoding with CFG scale 3.</li>
+      <li><strong>Audio continuation</strong> — Retains a prefix (80%) of the source audio and generates the remainder.
+          Used for speech-level edits (transcription, style).</li>
+      <li><strong>Speech (no CFG)</strong> — For pure speech tasks where CFG may over-constrain prosody.</li>
+    </ul>
+
+    <!-- ======== 5. Evaluation Framework ======== -->
+    <h4>5. Evaluation Framework
+      <a href="configs/eval.yaml" target="_blank" style="font-size:.75em; font-weight:normal; margin-left:.5em;">
+        📄 Full Config (eval.yaml)
+      </a>
+    </h4>
+
+    <p>We employ a comprehensive evaluation suite combining objective metrics and LLM-based judges.</p>
+
+    <h5>5.1 Objective Metrics</h5>
+    <table class="table table-sm table-bordered">
+      <thead>
+        <tr><th>Metric</th><th>Model / Tool</th><th>Applicable Tasks</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>ASR-WER</td><td>Whisper-large-v3</td><td>All speech editing tasks</td></tr>
+        <tr><td>Speaker Similarity</td><td>WavLM-large (fine-tuned)</td><td>Speech editing (identity preservation)</td></tr>
+        <tr><td>Emotion Accuracy</td><td>emotion2vec_plus_large</td><td>Emotion editing</td></tr>
+        <tr><td>Pseudo-MOS</td><td>UTMOS + DNSMOS</td><td>All tasks (audio quality)</td></tr>
+        <tr><td>CLAP Similarity</td><td>CLAP</td><td>Non-speech audio editing</td></tr>
+        <tr><td>FAD</td><td>EnCodec-24k embeddings</td><td>Non-speech audio editing (corpus-level)</td></tr>
+        <tr><td>Speed / Volume / Pitch</td><td>Signal-level analysis</td><td>Audio effect tasks</td></tr>
+      </tbody>
+    </table>
+
+    <h5>5.2 LLM Judge Metrics</h5>
+    <p>Three independent LLM judges provide subjective quality scores (1–5 scale):</p>
+    <table class="table table-sm table-bordered">
+      <thead>
+        <tr><th>Judge</th><th>Model</th><th>Mode</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Qwen3-Omni</td><td><code>Qwen3-Omni-30B-A3B-Thinking</code></td><td>Direct audio input → multimodal judge</td></tr>
+        <tr><td>Gemini</td><td><code>gemini-3-flash-preview</code></td><td>Direct audio input → multimodal judge</td></tr>
+        <tr><td>Caption + LLM</td><td>Captioner (<code>Qwen3-Omni Captioner</code>) + <code>Qwen3-235B</code></td><td>Audio → caption → text-LLM judge</td></tr>
+      </tbody>
+    </table>
+
+    <h5>5.3 Evaluation Dimensions</h5>
+    <p><strong>Speech editing tasks</strong> are judged on:</p>
+    <ul>
+      <li><strong>Consistency</strong> (1-5) — Preservation of speech content &amp; speaker identity</li>
+      <li><strong>Change Quality</strong> (1-5) — Execution quality of the requested change</li>
+      <li><strong>Overall Score</strong> (1-5) — Holistic quality (not a simple average)</li>
+    </ul>
+    <p><strong>Non-speech audio tasks</strong> additionally use:</p>
+    <ul>
+      <li><strong>Edit Fidelity</strong> (1-5) — Was the edit correctly applied?</li>
+      <li><strong>Audio Quality</strong> (1-5) — Production quality, artifacts, distortion</li>
+      <li><strong>Coherence</strong> (1-5) — Scene coherence, naturalness of blend</li>
+      <li><strong>Preservation</strong> (1-5) — Are non-edited elements intact?</li>
+    </ul>
