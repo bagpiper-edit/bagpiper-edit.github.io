@@ -90,6 +90,42 @@
       word-break: break-word;
     }
 
+    /* ---------- sticky left columns ---------- */
+    .sample-table th.sticky-col,
+    .sample-table td.sticky-col {
+      position: sticky;
+      z-index: 2;
+      /* left is set dynamically by JS */
+    }
+    .sample-table th.sticky-col {
+      z-index: 3;
+      background: #f0f2f5;
+    }
+    .sample-table td.sticky-col {
+      background: #ffffff;
+    }
+    /* shadow to show scroll boundary */
+    .sample-table th.sticky-col:last-of-type,
+    .sample-table td.sticky-col:last-of-type {
+      box-shadow: 2px 0 4px -2px rgba(0,0,0,.12);
+    }
+
+    /* ---------- model description table ---------- */
+    .model-desc-table th {
+      text-align: center;
+      white-space: nowrap;
+      background: #f0f2f5;
+      padding: .5rem .8rem;
+    }
+    .model-desc-table td {
+      text-align: left;
+      vertical-align: top;
+      font-size: .88rem;
+      line-height: 1.5;
+      min-width: 130px;
+      padding: .55rem .8rem;
+    }
+
     /* model-name header colour badges */
     .model-badge {
       display: inline-block;
@@ -139,10 +175,40 @@
       font-size: .85rem;
     }
 
+    /* ---------- UTT-ID column ---------- */
+    .sample-table td.utt-id-col {
+      font-size: .76rem;
+      font-family: monospace;
+      white-space: nowrap;
+      color: #555;
+    }
+
+    /* ---------- caption columns (always-visible, scrollable) ---------- */
+    .sample-table td.caption-col {
+      min-width: 200px;
+      max-width: 280px;
+      vertical-align: top;
+      padding: .4rem .5rem !important;
+    }
+    .caption-box {
+      max-height: 160px;
+      overflow-y: auto;
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: .4rem;
+      padding: .5rem .7rem;
+      font-size: .78rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+      text-align: left;
+    }
+
     /* responsive audio */
     @media (max-width: 768px) {
       audio { width: 140px; }
       .sample-table { font-size: .82rem; }
+      .sample-table td.caption-col { min-width: 160px; max-width: 220px; }
     }
   </style>
 </head>
@@ -162,6 +228,11 @@
         <li class="nav-item">
           <a class="nav-link" href="#abstract">Abstract</a>
         </li>
+        {% if model_descriptions %}
+        <li class="nav-item">
+          <a class="nav-link" href="#models">Models</a>
+        </li>
+        {% endif %}
         {% for sec in sections %}
         <li class="nav-item">
           <a class="nav-link" href="#{{ sec.id }}">{{ sec.title }}</a>
@@ -184,6 +255,31 @@
       <div class="abstract-box">{{ abstract }}</div>
     </div>
 
+    <!-- ============ MODEL DESCRIPTIONS ============ -->
+    {% if model_descriptions %}
+    <div id="models" class="demo-section">
+      <h2>Models</h2>
+      <div class="table-responsive">
+        <table class="table table-bordered model-desc-table">
+          <thead>
+            <tr>
+              {% for m in model_descriptions %}
+              <th><span class="model-badge" style="background:{{ m.color }};"></span>{{ m.name }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              {% for m in model_descriptions %}
+              <td>{{ m.description if m.description else "—" }}</td>
+              {% endfor %}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endif %}
+
     <!-- ============ DEMO SECTIONS ============ -->
     {% for sec in sections %}
     <div id="{{ sec.id }}" class="demo-section">
@@ -198,45 +294,7 @@
         {% if sub.description %}
         <p class="text-secondary" style="font-size:.9rem;">{{ sub.description }}</p>
         {% endif %}
-
-        <div class="table-responsive">
-          <table class="sample-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                {% if sub.instruction_col %}<th>Instruction</th>{% endif %}
-                {% if sub.samples[0].text is defined and sub.samples[0].text %}<th>Text</th>{% endif %}
-                {% for m in models %}
-                <th>
-                  <span class="model-badge" style="background:{{ m.color }};"></span>
-                  {{ m.name }}
-                </th>
-                {% endfor %}
-              </tr>
-            </thead>
-            <tbody>
-              {% for s in sub.samples %}
-              <tr>
-                <td>{{ loop.index }}</td>
-                {% if sub.instruction_col %}<td class="text-col">{{ s.instruction }}</td>{% endif %}
-                {% if sub.samples[0].text is defined and sub.samples[0].text %}<td class="text-col">{{ s.text }}</td>{% endif %}
-                {% for m in models %}
-                <td>
-                  {% set audio_path = s.audios.get(m.id, "") if s.audios else "" %}
-                  {% if audio_path %}
-                  <audio controls preload="none">
-                    <source src="{{ audio_path }}" type="audio/wav" />
-                  </audio>
-                  {% else %}
-                  <span class="no-audio">—</span>
-                  {% endif %}
-                </td>
-                {% endfor %}
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
+        {{ sub._table_html }}
       </div>
       {% endfor %}
     </div>
@@ -247,7 +305,64 @@
     <div id="appendix" class="demo-section">
       <h2>{{ appendix.title }}</h2>
       <div class="appendix">
-        {{ appendix.content }}
+        {% if appendix.parts %}
+          {% for part in appendix.parts %}
+          <div class="appendix-part mb-4">
+            {% if part.title %}<h4>{{ part.title }}</h4>{% endif %}
+
+            {# ---- special renderer: eval_framework ---- #}
+            {% if part.type == 'eval_framework' %}
+              {% if part.config_link %}
+              <p><a href="{{ part.config_link }}" target="_blank" style="font-size:.9em;">&#128196; Full Config ({{ part.config_link | replace('configs/', '') }})</a></p>
+              {% endif %}
+
+              {% for group in part.groups %}
+              <h5>{{ group.title }}</h5>
+              <table class="table table-sm table-bordered">
+                <thead>
+                  <tr>{% for col in group.columns %}<th>{{ col }}</th>{% endfor %}</tr>
+                </thead>
+                <tbody>
+                  {% for row in group.rows %}
+                  <tr>{% for cell in row %}<td>{{ cell }}</td>{% endfor %}</tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              {% if group.notes %}
+              <p class="text-muted" style="font-size:.83rem;">{{ group.notes }}</p>
+              {% endif %}
+              {% endfor %}
+
+              {% if part.llm_judges %}
+              <h5>LLM Judges</h5>
+              <p class="text-muted" style="font-size:.87rem;">{{ part.llm_judges.rubric }}</p>
+              <table class="table table-sm table-bordered">
+                <thead>
+                  <tr><th>Judge</th><th>Model</th><th>Input Mode</th><th>Used For</th></tr>
+                </thead>
+                <tbody>
+                  {% for j in part.llm_judges.scorers %}
+                  <tr>
+                    <td>{{ j.name }}</td>
+                    <td><code>{{ j.model }}</code></td>
+                    <td>{{ j.mode }}</td>
+                    <td>{{ j.tasks }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              {% endif %}
+
+            {# ---- default: raw HTML content ---- #}
+            {% elif part.content %}
+              {{ part.content }}
+            {% endif %}
+
+          </div>
+          {% endfor %}
+        {% else %}
+          {{ appendix.content }}
+        {% endif %}
       </div>
     </div>
     {% endif %}
@@ -263,6 +378,19 @@
   <!-- Bootstrap JS (for nav pills scroll-spy, optional) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
+    // Sticky-column left-offset calculation
+    (function () {
+      document.querySelectorAll('.sample-table').forEach(function (table) {
+        table.querySelectorAll('tr').forEach(function (row) {
+          var left = 0;
+          row.querySelectorAll('th.sticky-col, td.sticky-col').forEach(function (cell) {
+            cell.style.left = left + 'px';
+            left += cell.offsetWidth;
+          });
+        });
+      });
+    })();
+
     // Highlight active nav pill on scroll
     (function () {
       const sections = document.querySelectorAll('.demo-section');

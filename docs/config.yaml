@@ -18,25 +18,76 @@ subtitle: "A Universal Audio Editing Model"
 models:
   - id: source
     name: "Source"
+    description: "Original unedited audio clip"
     color: "#6c757d"
+    # No expdir: source audio comes from metadata.audio_path
+
   - id: bagpiper_base
-    name: "Bagpiper-Base"
+    name: "Bagpiper-Base (TTS)"
+    description: "The audio is inferred with ONLY target CAPTION as input, by Bagpiper-Base."
     color: "#4C72B0"
-  - id: bagpiper_st
+    expdir: /mnt/home/xungong-andr-1766e0/opuslm_sft/egs2/opuslm_v2/speechlm1/exp/opuslm_v2_stage2_pretrain_base/inference/inference_audio_step_350000/dialogue_eval-test_clean-v1-{task}-tgt2audio
+
+  - id: bagpiper_base_mt
+    name: "Bagpiper-Base"
+    description: "The audio is inferred with Multi-Turn (MT) format, by Bagpiper-Base."
+    color: "#4C72B0"
+    expdir: /mnt/home/xungong-andr-1766e0/opuslm_sft/egs2/opuslm_v2/speechlm1/exp/opuslm_v2_stage2_pretrain_base/inference/inference_audio_step_350000/dialogue_eval-test_clean-v1-{task}-t2a_t2a
+
+  - id: bagpiper_st_353k
     name: "Bagpiper-Edit (ST)"
+    description: "The audio is inferred with Single-Turn (ST) format, by Bagpiper-Edit."
     color: "#DD8452"
-  - id: bagpiper_mt
+    expdir: /mnt/home/xungong-andr-1766e0/opuslm_sft/egs2/opuslm_v2/speechlm1/exp/ct-mt-t2a_v2-1000k/inference/inference_audio_step_353000/dialogue_eval-test_clean-v1-{task}-t2a_t2a
+
+  - id: bagpiper_st_356k
+    name: "Bagpiper-Edit (ST)"
+    description: "The audio is inferred with Single-Turn (ST) format, by Bagpiper-Edit."
+    color: "#DD8452"
+    expdir: /mnt/home/xungong-andr-1766e0/opuslm_sft/egs2/opuslm_v2/speechlm1/exp/ct-mt-t2a_v2-1000k/inference/inference_audio_step_356000/dialogue_eval-test_clean-v1-{task}-t2a_t2a
+
+  - id: bagpiper_st_359k
+    name: "Bagpiper-Edit (ST)"
+    description: "The audio is inferred with Single-Turn (ST) format, by Bagpiper-Edit."
+    color: "#DD8452"
+    expdir: /mnt/home/xungong-andr-1766e0/opuslm_sft/egs2/opuslm_v2/speechlm1/exp/ct-mt-t2a_v2-1000k/inference/inference_audio_step_359000/dialogue_eval-test_clean-v1-{task}-t2a_t2a
+
+  - id: bagpiper_mt_353k
     name: "Bagpiper-Edit (MT)"
+    description: "The audio is inferred with Multi-Turn (MT) format, by Bagpiper-Edit."
+
     color: "#55A868"
+    expdir: /mnt/home/xungong-andr-1766e0/opuslm_sft/egs2/opuslm_v2/speechlm1/exp/ct-mt-t2a_v2-1000k/inference/inference_audio_step_353000/dialogue_eval-test_clean-v1-{task}-t2a_t2a
+
+  - id: bagpiper_mt_356k
+    name: "Bagpiper-Edit (MT)"
+    description: "The audio is inferred with Multi-Turn (MT) format, by Bagpiper-Edit."
+    color: "#55A868"
+    expdir: /mnt/home/xungong-andr-1766e0/opuslm_sft/egs2/opuslm_v2/speechlm1/exp/ct-mt-t2a_v2-1000k/inference/inference_audio_step_356000/dialogue_eval-test_clean-v1-{task}-t2a_t2a
+
+  - id: bagpiper_mt_359k
+    name: "Bagpiper-Edit (MT)"
+    description: "The audio is inferred with Multi-Turn (MT) format, it is trained with only supervised data by Bagpiper-Edit."
+    color: "#55A868"
+    expdir: /mnt/home/xungong-andr-1766e0/opuslm_sft/egs2/opuslm_v2/speechlm1/exp/ct-mt-t2a_v2-1000k/inference/inference_audio_step_359000/dialogue_eval-test_clean-v1-{task}-t2a_t2a
+
   - id: cosyvoice3
-    name: "CosyVoice-3.0"
+    name: "CosyVoice-3"
+    description: "The audio is inferred with CosyVoice-3, , it is trained with <br>paired speech-edit</br> data, with zero-shot prompting."
     color: "#C44E52"
+    expdir: /mnt/home/xungong-andr-1766e0/opuslm_sft/egs2/opuslm_v2/speechlm1/exp/cv3/test_clean/speech_edit/{task}
+
   - id: stepaudiox
     name: "Step-Audio-EditX"
+    description: "The audio is inferred with Step-Audio-EditX, it is trained with <br>paired speech-edit</br> data, and inferred with constraint parameters."
     color: "#8172B3"
+    expdir: /mnt/home/xungong-andr-1766e0/opuslm_sft/egs2/opuslm_v2/speechlm1/exp/stepaudiox/test_clean/speech_edit/{task}
+
   - id: minguniaudio
     name: "Ming-UniAudio-Edit"
+    description: "The audio is inferred with Ming-UniAudio-Edit, it is trained with <br>paired speech-edit</br> data, and inferred with constraint prompting."
     color: "#937860"
+    expdir: /mnt/home/xungong-andr-1766e0/opuslm_sft/egs2/opuslm_v2/speechlm1/exp/minguniaudioedit/test_clean/speech_edit/{task}
 
 # ---------- abstract ----------
 abstract: |
@@ -57,113 +108,98 @@ sections:
     description: "Editing operations that modify the spoken content, speaking style, or emotion of a speech utterance."
     subsections:
 
-      # --- Transcription: Deletion ---
+      # --- Transcription — Deletion ---
       - id: transcription_del
         title: "Transcription — Deletion"
         description: "Remove specific words or phrases from the utterance while keeping the rest natural."
-        instruction_col: true          # show an "Instruction" column
+        metadata: /mnt/home/xungong-andr-1766e0/opuslm_sft/egs2/opuslm_v2/speechlm1/data/test_clean/speech_edit/transcription_del.jsonl
         samples:
-          - id: del_001
-            instruction: 'Delete the word "nothing"'
-            text: "but anders cared nothing about that"
-            audios:
-              source:        "audios/speech/transcription_del/del_001_source.wav"
-              bagpiper_base: "audios/speech/transcription_del/del_001_bagpiper_base.wav"
-              bagpiper_st:   "audios/speech/transcription_del/del_001_bagpiper_st.wav"
-              bagpiper_mt:   "audios/speech/transcription_del/del_001_bagpiper_mt.wav"
-              cosyvoice3:  "audios/speech/transcription_del/del_001_cosyvoice3.wav"
-              stepaudiox:  "audios/speech/transcription_del/del_001_stepaudiox.wav"
-              minguniaudio: "audios/speech/transcription_del/del_001_minguniaudio.wav"
-
-      # --- Transcription: Insertion ---
+          - id: "1188-133604-0028"
+            models: [bagpiper_base, bagpiper_base_mt, bagpiper_st_356k, bagpiper_mt_356k, cosyvoice3, stepaudiox, minguniaudio]
+          - id: "1089-134691-0011"
+            models: [bagpiper_base, bagpiper_base_mt, bagpiper_st_356k, bagpiper_mt_356k, cosyvoice3, stepaudiox, minguniaudio]
+          - id: "1089-134691-0013"
+            models: [bagpiper_base, bagpiper_base_mt, bagpiper_st_356k, bagpiper_mt_356k, cosyvoice3, stepaudiox, minguniaudio]
+          - id: "1089-134691-0023"
+            models: [bagpiper_base, bagpiper_base_mt, bagpiper_st_356k, bagpiper_mt_356k, cosyvoice3, stepaudiox, minguniaudio]
+          - id: "8463-294825-0005"
+            models: [bagpiper_base, bagpiper_base_mt, bagpiper_st_356k, bagpiper_mt_356k, cosyvoice3, stepaudiox, minguniaudio]
       - id: transcription_ins
         title: "Transcription — Insertion"
-        description: "Insert new words or phrases into the utterance at the designated position."
-        instruction_col: true
+        description: "Insert new words or phrases into the existing utterance at a specified position."
+        metadata: /mnt/home/xungong-andr-1766e0/opuslm_sft/egs2/opuslm_v2/speechlm1/data/test_clean/speech_edit/transcription_ins.jsonl
         samples:
-          - id: ins_001
-            instruction: 'Insert "really" before "cared"'
-            text: "but anders cared nothing about that"
-            audios:
-              source:        "audios/speech/transcription_ins/ins_001_source.wav"
-              bagpiper_base: "audios/speech/transcription_ins/ins_001_bagpiper_base.wav"
-              bagpiper_st:   "audios/speech/transcription_ins/ins_001_bagpiper_st.wav"
-              bagpiper_mt:   "audios/speech/transcription_ins/ins_001_bagpiper_mt.wav"
-
-      # --- Transcription: Substitution ---
-      - id: transcription_sub
-        title: "Transcription — Substitution"
-        description: "Replace specific words with alternatives while preserving prosody and speaker identity."
-        instruction_col: true
-        samples:
-          - id: sub_001
-            instruction: 'Replace "nothing" with "everything"'
-            text: "but anders cared nothing about that"
-            audios:
-              source:        "audios/speech/transcription_sub/sub_001_source.wav"
-              bagpiper_base: "audios/speech/transcription_sub/sub_001_bagpiper_base.wav"
-              bagpiper_st:   "audios/speech/transcription_sub/sub_001_bagpiper_st.wav"
-              bagpiper_mt:   "audios/speech/transcription_sub/sub_001_bagpiper_mt.wav"
-
-      # --- Transcription: Replace Sentence ---
+          - id: "1188-133604-0037"
+            models: [bagpiper_base, bagpiper_base_mt, bagpiper_mt_356k, bagpiper_st_356k, cosyvoice3, stepaudiox]
+          - id: "1221-135766-0000"
+            models: [bagpiper_base, bagpiper_base_mt, bagpiper_st_356k, bagpiper_mt_356k, cosyvoice3, stepaudiox]
+          - id: "8224-274384-0012"
+            models: [bagpiper_base, bagpiper_base_mt, bagpiper_st_356k, bagpiper_mt_356k, cosyvoice3, stepaudiox, minguniaudio]
+          - id: "2961-960-0004"
+            models: [bagpiper_base, bagpiper_base_mt, bagpiper_st_356k, bagpiper_mt_356k, cosyvoice3, minguniaudio, stepaudiox]
+          - id: "1188-133604-0000"
+            models: [bagpiper_base, bagpiper_base_mt, bagpiper_st_356k, bagpiper_mt_356k, cosyvoice3, stepaudiox, minguniaudio]
       - id: transcription_replace_sentence
         title: "Transcription — Replace Sentence"
-        description: "Replace the entire spoken sentence with a new one, keeping the same speaker voice."
-        instruction_col: true
+        description: "Replace entire sentences or clauses while preserving surrounding context."
+        metadata: /mnt/home/xungong-andr-1766e0/opuslm_sft/egs2/opuslm_v2/speechlm1/data/test_clean/speech_edit/transcription_replace_sentence.jsonl
         samples:
-          - id: rep_001
-            instruction: 'Replace with "The weather is beautiful today."'
-            text: "but anders cared nothing about that"
-            audios:
-              source:        "audios/speech/transcription_replace/rep_001_source.wav"
-              bagpiper_base: "audios/speech/transcription_replace/rep_001_bagpiper_base.wav"
-              bagpiper_st:   "audios/speech/transcription_replace/rep_001_bagpiper_st.wav"
-              bagpiper_mt:   "audios/speech/transcription_replace/rep_001_bagpiper_mt.wav"
-
-      # --- Paralinguistic ---
-      - id: paralinguistic
-        title: "Paralinguistic Editing"
-        description: "Add or modify paralinguistic elements such as laughter, breathing, hesitation, etc."
-        instruction_col: true
-        samples:
-          - id: para_001
-            instruction: 'Add [Laughter] after "that"'
-            text: "but anders cared nothing about that"
-            audios:
-              source:        "audios/speech/paralinguistic/para_001_source.wav"
-              bagpiper_base: "audios/speech/paralinguistic/para_001_bagpiper_base.wav"
-              bagpiper_st:   "audios/speech/paralinguistic/para_001_bagpiper_st.wav"
-              bagpiper_mt:   "audios/speech/paralinguistic/para_001_bagpiper_mt.wav"
-
-      # --- Emotion ---
+          - id: "8224-274381-0002"
+            models: [bagpiper_base, bagpiper_base_mt, bagpiper_st_356k, bagpiper_mt_356k, cosyvoice3, minguniaudio, stepaudiox]
+          - id: "5683-32866-0004"
+            models: [bagpiper_base, bagpiper_base_mt, bagpiper_mt_356k, cosyvoice3, stepaudiox, minguniaudio]
+          - id: "1580-141083-0012"
+            models: [bagpiper_base, bagpiper_base_mt, bagpiper_mt_356k, cosyvoice3, stepaudiox, minguniaudio]
+          - id: "1320-122617-0036"
+            models: [bagpiper_base, bagpiper_base_mt, bagpiper_mt_356k, cosyvoice3, stepaudiox]
+          - id: "1284-134647-0005"
+            models: [bagpiper_base, bagpiper_base_mt, bagpiper_mt_356k, cosyvoice3, stepaudiox]
       - id: emotion
         title: "Emotion Editing"
         description: "Change the emotional expression of the speaker (e.g. happy, sad, angry, fearful)."
-        instruction_col: true
         samples:
-          - id: emo_001
-            instruction: "Change emotion to Happy"
-            text: "but anders cared nothing about that"
-            audios:
-              source:        "audios/speech/emotion/emo_001_source.wav"
-              bagpiper_base: "audios/speech/emotion/emo_001_bagpiper_base.wav"
-              bagpiper_st:   "audios/speech/emotion/emo_001_bagpiper_st.wav"
-              bagpiper_mt:   "audios/speech/emotion/emo_001_bagpiper_mt.wav"
+          - - type: id
+              value: "emo_001"
+            - type: instruction
+              value: "Change emotion to Happy"
+            - type: text
+              value: "but anders cared nothing about that"
+            - type: audio
+              model: source
+              src: "audios/speech/emotion/emo_001_source.wav"
+            - type: audio
+              model: bagpiper_base
+              src: "audios/speech/emotion/emo_001_bagpiper_base.wav"
+            - type: audio
+              model: bagpiper_st
+              src: "audios/speech/emotion/emo_001_bagpiper_st.wav"
+            - type: audio
+              model: bagpiper_mt
+              src: "audios/speech/emotion/emo_001_bagpiper_mt.wav"
 
-      # --- Speaker Style ---
+      # --- Speaker Style Editing ---
       - id: speaker_style
         title: "Speaker Style Editing"
         description: "Modify the speaking style — e.g. whisper, shout, child voice, elderly voice."
-        instruction_col: true
         samples:
-          - id: style_001
-            instruction: "Change to Whisper style"
-            text: "but anders cared nothing about that"
-            audios:
-              source:        "audios/speech/speaker_style/style_001_source.wav"
-              bagpiper_base: "audios/speech/speaker_style/style_001_bagpiper_base.wav"
-              bagpiper_st:   "audios/speech/speaker_style/style_001_bagpiper_st.wav"
-              bagpiper_mt:   "audios/speech/speaker_style/style_001_bagpiper_mt.wav"
+          - - type: id
+              value: "style_001"
+            - type: instruction
+              value: "Change to Whisper style"
+            - type: text
+              value: "but anders cared nothing about that"
+            - type: audio
+              model: source
+              src: "audios/speech/speaker_style/style_001_source.wav"
+            - type: audio
+              model: bagpiper_base
+              src: "audios/speech/speaker_style/style_001_bagpiper_base.wav"
+            - type: audio
+              model: bagpiper_st
+              src: "audios/speech/speaker_style/style_001_bagpiper_st.wav"
+            - type: audio
+              model: bagpiper_mt
+              src: "audios/speech/speaker_style/style_001_bagpiper_mt.wav"
 
   # ================================================================
   #  AUDIO EDITING
@@ -173,66 +209,93 @@ sections:
     description: "Operations on the background audio layer — adding or removing music and sound effects while preserving the foreground speech."
     subsections:
 
-      # --- Music Add ---
+      # --- Music — Add ---
       - id: music_add
         title: "Music — Add"
         description: "Add background music to a speech utterance."
-        instruction_col: true
         samples:
-          - id: madd_001
-            instruction: "Add soft piano background music"
-            text: ""
-            audios:
-              source:        "audios/audio/music_add/madd_001_source.wav"
-              bagpiper_base: "audios/audio/music_add/madd_001_bagpiper_base.wav"
-              bagpiper_st:   "audios/audio/music_add/madd_001_bagpiper_st.wav"
-              bagpiper_mt:   "audios/audio/music_add/madd_001_bagpiper_mt.wav"
+          - - type: id
+              value: "madd_001"
+            - type: instruction
+              value: "Add soft piano background music"
+            - type: audio
+              model: source
+              src: "audios/audio/music_add/madd_001_source.wav"
+            - type: audio
+              model: bagpiper_base
+              src: "audios/audio/music_add/madd_001_bagpiper_base.wav"
+            - type: audio
+              model: bagpiper_st
+              src: "audios/audio/music_add/madd_001_bagpiper_st.wav"
+            - type: audio
+              model: bagpiper_mt
+              src: "audios/audio/music_add/madd_001_bagpiper_mt.wav"
 
-      # --- Music Remove ---
+      # --- Music — Remove ---
       - id: music_remove
         title: "Music — Remove"
         description: "Remove existing background music while preserving the speech."
-        instruction_col: true
         samples:
-          - id: mrmv_001
-            instruction: "Remove the background music"
-            text: ""
-            audios:
-              source:        "audios/audio/music_remove/mrmv_001_source.wav"
-              bagpiper_base: "audios/audio/music_remove/mrmv_001_bagpiper_base.wav"
-              bagpiper_st:   "audios/audio/music_remove/mrmv_001_bagpiper_st.wav"
-              bagpiper_mt:   "audios/audio/music_remove/mrmv_001_bagpiper_mt.wav"
+          - - type: id
+              value: "mrmv_001"
+            - type: instruction
+              value: "Remove the background music"
+            - type: audio
+              model: source
+              src: "audios/audio/music_remove/mrmv_001_source.wav"
+            - type: audio
+              model: bagpiper_base
+              src: "audios/audio/music_remove/mrmv_001_bagpiper_base.wav"
+            - type: audio
+              model: bagpiper_st
+              src: "audios/audio/music_remove/mrmv_001_bagpiper_st.wav"
+            - type: audio
+              model: bagpiper_mt
+              src: "audios/audio/music_remove/mrmv_001_bagpiper_mt.wav"
 
-      # --- Sound Add ---
+      # --- Sound Effects — Add ---
       - id: sound_add
         title: "Sound Effects — Add"
         description: "Add environmental sound effects (rain, traffic, birds, etc.) to a speech utterance."
-        instruction_col: true
         samples:
-          - id: sadd_001
-            instruction: "Add rain sound in the background"
-            text: ""
-            audios:
-              source:        "audios/audio/sound_add/sadd_001_source.wav"
-              bagpiper_base: "audios/audio/sound_add/sadd_001_bagpiper_base.wav"
-              bagpiper_st:   "audios/audio/sound_add/sadd_001_bagpiper_st.wav"
-              bagpiper_mt:   "audios/audio/sound_add/sadd_001_bagpiper_mt.wav"
+          - - type: id
+              value: "sadd_001"
+            - type: instruction
+              value: "Add rain sound in the background"
+            - type: audio
+              model: source
+              src: "audios/audio/sound_add/sadd_001_source.wav"
+            - type: audio
+              model: bagpiper_base
+              src: "audios/audio/sound_add/sadd_001_bagpiper_base.wav"
+            - type: audio
+              model: bagpiper_st
+              src: "audios/audio/sound_add/sadd_001_bagpiper_st.wav"
+            - type: audio
+              model: bagpiper_mt
+              src: "audios/audio/sound_add/sadd_001_bagpiper_mt.wav"
 
-      # --- Sound Remove ---
+      # --- Sound Effects — Remove ---
       - id: sound_remove
         title: "Sound Effects — Remove"
         description: "Remove environmental sound effects while preserving the speech."
-        instruction_col: true
         samples:
-          - id: srmv_001
-            instruction: "Remove the background noise"
-            text: ""
-            audios:
-              source:        "audios/audio/sound_remove/srmv_001_source.wav"
-              bagpiper_base: "audios/audio/sound_remove/srmv_001_bagpiper_base.wav"
-              bagpiper_st:   "audios/audio/sound_remove/srmv_001_bagpiper_st.wav"
-              bagpiper_mt:   "audios/audio/sound_remove/srmv_001_bagpiper_mt.wav"
-
+          - - type: id
+              value: "srmv_001"
+            - type: instruction
+              value: "Remove the background noise"
+            - type: audio
+              model: source
+              src: "audios/audio/sound_remove/srmv_001_source.wav"
+            - type: audio
+              model: bagpiper_base
+              src: "audios/audio/sound_remove/srmv_001_bagpiper_base.wav"
+            - type: audio
+              model: bagpiper_st
+              src: "audios/audio/sound_remove/srmv_001_bagpiper_st.wav"
+            - type: audio
+              model: bagpiper_mt
+              src: "audios/audio/sound_remove/srmv_001_bagpiper_mt.wav"
   # ================================================================
   #  CREATIVE EDITING
   # ================================================================
@@ -241,50 +304,71 @@ sections:
     description: "Free-form creative audio editing guided by natural-language instructions."
     subsections:
 
-      # --- Music Creative ---
+      # --- Music Creative Edit ---
       - id: music_creative
         title: "Music Creative Edit"
         description: "Creatively modify or transform music elements according to free-form instructions."
-        instruction_col: true
         samples:
-          - id: mcre_001
-            instruction: "Change the guitar to a violin"
-            text: ""
-            audios:
-              source:        "audios/creative/music/mcre_001_source.wav"
-              bagpiper_base: "audios/creative/music/mcre_001_bagpiper_base.wav"
-              bagpiper_st:   "audios/creative/music/mcre_001_bagpiper_st.wav"
-              bagpiper_mt:   "audios/creative/music/mcre_001_bagpiper_mt.wav"
+          - - type: id
+              value: "mcre_001"
+            - type: instruction
+              value: "Change the guitar to a violin"
+            - type: audio
+              model: source
+              src: "audios/creative/music/mcre_001_source.wav"
+            - type: audio
+              model: bagpiper_base
+              src: "audios/creative/music/mcre_001_bagpiper_base.wav"
+            - type: audio
+              model: bagpiper_st
+              src: "audios/creative/music/mcre_001_bagpiper_st.wav"
+            - type: audio
+              model: bagpiper_mt
+              src: "audios/creative/music/mcre_001_bagpiper_mt.wav"
 
-      # --- Speech Creative ---
+      # --- Speech Creative Edit ---
       - id: speech_creative
         title: "Speech Creative Edit"
         description: "Creatively modify speech content or style via free-form instructions."
-        instruction_col: true
         samples:
-          - id: scre_001
-            instruction: "Make the speaker sound like they are underwater"
-            text: ""
-            audios:
-              source:        "audios/creative/speech/scre_001_source.wav"
-              bagpiper_base: "audios/creative/speech/scre_001_bagpiper_base.wav"
-              bagpiper_st:   "audios/creative/speech/scre_001_bagpiper_st.wav"
-              bagpiper_mt:   "audios/creative/speech/scre_001_bagpiper_mt.wav"
+          - - type: id
+              value: "scre_001"
+            - type: instruction
+              value: "Make the speaker sound like they are underwater"
+            - type: audio
+              model: source
+              src: "audios/creative/speech/scre_001_source.wav"
+            - type: audio
+              model: bagpiper_base
+              src: "audios/creative/speech/scre_001_bagpiper_base.wav"
+            - type: audio
+              model: bagpiper_st
+              src: "audios/creative/speech/scre_001_bagpiper_st.wav"
+            - type: audio
+              model: bagpiper_mt
+              src: "audios/creative/speech/scre_001_bagpiper_mt.wav"
 
-      # --- Sound Creative ---
+      # --- Sound Creative Edit ---
       - id: sound_creative
         title: "Sound Creative Edit"
         description: "Creatively modify or transform sound effects via free-form instructions."
-        instruction_col: true
         samples:
-          - id: sndcre_001
-            instruction: "Replace the bird chirping with ocean waves"
-            text: ""
-            audios:
-              source:        "audios/creative/sound/sndcre_001_source.wav"
-              bagpiper_base: "audios/creative/sound/sndcre_001_bagpiper_base.wav"
-              bagpiper_st:   "audios/creative/sound/sndcre_001_bagpiper_st.wav"
-              bagpiper_mt:   "audios/creative/sound/sndcre_001_bagpiper_mt.wav"
+          - - type: id
+              value: "sndcre_001"
+            - type: instruction
+              value: "Replace the bird chirping with ocean waves"
+            - type: audio
+              model: source
+              src: "audios/creative/sound/sndcre_001_source.wav"
+            - type: audio
+              model: bagpiper_base
+              src: "audios/creative/sound/sndcre_001_bagpiper_base.wav"
+            - type: audio
+              model: bagpiper_st
+              src: "audios/creative/sound/sndcre_001_bagpiper_st.wav"
+            - type: audio
+              model: bagpiper_mt
+              src: "audios/creative/sound/sndcre_001_bagpiper_mt.wav"
 
 # ---------- appendix ----------
 appendix:

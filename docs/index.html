@@ -90,6 +90,42 @@
       word-break: break-word;
     }
 
+    /* ---------- sticky left columns ---------- */
+    .sample-table th.sticky-col,
+    .sample-table td.sticky-col {
+      position: sticky;
+      z-index: 2;
+      /* left is set dynamically by JS */
+    }
+    .sample-table th.sticky-col {
+      z-index: 3;
+      background: #f0f2f5;
+    }
+    .sample-table td.sticky-col {
+      background: #ffffff;
+    }
+    /* shadow to show scroll boundary */
+    .sample-table th.sticky-col:last-of-type,
+    .sample-table td.sticky-col:last-of-type {
+      box-shadow: 2px 0 4px -2px rgba(0,0,0,.12);
+    }
+
+    /* ---------- model description table ---------- */
+    .model-desc-table th {
+      text-align: center;
+      white-space: nowrap;
+      background: #f0f2f5;
+      padding: .5rem .8rem;
+    }
+    .model-desc-table td {
+      text-align: left;
+      vertical-align: top;
+      font-size: .88rem;
+      line-height: 1.5;
+      min-width: 130px;
+      padding: .55rem .8rem;
+    }
+
     /* model-name header colour badges */
     .model-badge {
       display: inline-block;
@@ -139,10 +175,40 @@
       font-size: .85rem;
     }
 
+    /* ---------- UTT-ID column ---------- */
+    .sample-table td.utt-id-col {
+      font-size: .76rem;
+      font-family: monospace;
+      white-space: nowrap;
+      color: #555;
+    }
+
+    /* ---------- caption columns (always-visible, scrollable) ---------- */
+    .sample-table td.caption-col {
+      min-width: 200px;
+      max-width: 280px;
+      vertical-align: top;
+      padding: .4rem .5rem !important;
+    }
+    .caption-box {
+      max-height: 160px;
+      overflow-y: auto;
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: .4rem;
+      padding: .5rem .7rem;
+      font-size: .78rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+      text-align: left;
+    }
+
     /* responsive audio */
     @media (max-width: 768px) {
       audio { width: 140px; }
       .sample-table { font-size: .82rem; }
+      .sample-table td.caption-col { min-width: 160px; max-width: 220px; }
     }
   </style>
 </head>
@@ -162,6 +228,11 @@
         <li class="nav-item">
           <a class="nav-link" href="#abstract">Abstract</a>
         </li>
+        
+        <li class="nav-item">
+          <a class="nav-link" href="#models">Models</a>
+        </li>
+        
         
         <li class="nav-item">
           <a class="nav-link" href="#speech">Speech Editing</a>
@@ -198,6 +269,59 @@ Evaluations across speech, audio, and free-form editing show Bagpiper-Edit maint
 </div>
     </div>
 
+    <!-- ============ MODEL DESCRIPTIONS ============ -->
+    
+    <div id="models" class="demo-section">
+      <h2>Models</h2>
+      <div class="table-responsive">
+        <table class="table table-bordered model-desc-table">
+          <thead>
+            <tr>
+              
+              <th><span class="model-badge" style="background:#6c757d;"></span>Source</th>
+              
+              <th><span class="model-badge" style="background:#4C72B0;"></span>Bagpiper-Base (TTS)</th>
+              
+              <th><span class="model-badge" style="background:#4C72B0;"></span>Bagpiper-Base</th>
+              
+              <th><span class="model-badge" style="background:#DD8452;"></span>Bagpiper-Edit (ST)</th>
+              
+              <th><span class="model-badge" style="background:#55A868;"></span>Bagpiper-Edit (MT)</th>
+              
+              <th><span class="model-badge" style="background:#C44E52;"></span>CosyVoice-3</th>
+              
+              <th><span class="model-badge" style="background:#8172B3;"></span>Step-Audio-EditX</th>
+              
+              <th><span class="model-badge" style="background:#937860;"></span>Ming-UniAudio-Edit</th>
+              
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              
+              <td>Original unedited audio clip</td>
+              
+              <td>The audio is inferred with ONLY target CAPTION as input, by Bagpiper-Base.</td>
+              
+              <td>The audio is inferred with Multi-Turn (MT) format, by Bagpiper-Base.</td>
+              
+              <td>The audio is inferred with Single-Turn (ST) format, by Bagpiper-Edit.</td>
+              
+              <td>The audio is inferred with Multi-Turn (MT) format, by Bagpiper-Edit.</td>
+              
+              <td>The audio is inferred with CosyVoice-3, , it is trained with <br>paired speech-edit</br> data, with zero-shot prompting.</td>
+              
+              <td>The audio is inferred with Step-Audio-EditX, it is trained with <br>paired speech-edit</br> data, and inferred with constraint parameters.</td>
+              
+              <td>The audio is inferred with Ming-UniAudio-Edit, it is trained with <br>paired speech-edit</br> data, and inferred with constraint prompting.</td>
+              
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+
     <!-- ============ DEMO SECTIONS ============ -->
     
     <div id="speech" class="demo-section">
@@ -212,615 +336,427 @@ Evaluations across speech, audio, and free-form editing show Bagpiper-Edit maint
         
         <p class="text-secondary" style="font-size:.9rem;">Remove specific words or phrases from the utterance while keeping the rest natural.</p>
         
-
         <div class="table-responsive">
-          <table class="sample-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Instruction</th>
-                <th>Text</th>
-                
-                <th>
-                  <span class="model-badge" style="background:#6c757d;"></span>
-                  Source
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#4C72B0;"></span>
-                  Bagpiper-Base
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#DD8452;"></span>
-                  Bagpiper-Edit (ST)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#55A868;"></span>
-                  Bagpiper-Edit (MT)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#C44E52;"></span>
-                  CosyVoice-3.0
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#8172B3;"></span>
-                  Step-Audio-EditX
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#937860;"></span>
-                  Ming-UniAudio-Edit
-                </th>
-                
-              </tr>
-            </thead>
-            <tbody>
-              
-              <tr>
-                <td>1</td>
-                <td class="text-col">Delete the word "nothing"</td>
-                <td class="text-col">but anders cared nothing about that</td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/transcription_del/del_001_source.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/transcription_del/del_001_bagpiper_base.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/transcription_del/del_001_bagpiper_st.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/transcription_del/del_001_bagpiper_mt.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/transcription_del/del_001_cosyvoice3.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/transcription_del/del_001_stepaudiox.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/transcription_del/del_001_minguniaudio.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-              </tr>
-              
-            </tbody>
-          </table>
-        </div>
+<table class="sample-table">
+<thead><tr>
+<th class="sticky-col">ID</th>
+<th class="sticky-col">Original Text</th>
+<th class="sticky-col">Edit Prompt</th>
+<th><span class="model-badge" style="background:#6c757d;"></span>Source</th>
+<th>Original Caption</th>
+<th>Edited Caption</th>
+<th><span class="model-badge" style="background:#4C72B0;"></span>Bagpiper-Base (TTS)</th>
+<th><span class="model-badge" style="background:#4C72B0;"></span>Bagpiper-Base</th>
+<th><span class="model-badge" style="background:#DD8452;"></span>Bagpiper-Edit (ST)</th>
+<th><span class="model-badge" style="background:#55A868;"></span>Bagpiper-Edit (MT)</th>
+<th><span class="model-badge" style="background:#C44E52;"></span>CosyVoice-3</th>
+<th><span class="model-badge" style="background:#8172B3;"></span>Step-Audio-EditX</th>
+<th><span class="model-badge" style="background:#937860;"></span>Ming-UniAudio-Edit</th>
+</tr></thead><tbody>
+<tr>
+<td class="utt-id-col sticky-col">1188-133604-0028</td>
+<td class="text-col sticky-col">well then last here is turner&#x27;s greek school of the highest class and you define his art absolutely as first the displaying intensely and with the sternest intellect of natural form as it is and then the envelopment of it with cloud and fire</td>
+<td class="text-col sticky-col">Delete &#x27;absolutely&#x27; and &#x27;as it is&#x27;</td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/fe283ab3800c5fbaa95f21f9d149bddb.wav" type="audio/wav" /></audio></td>
+<td class="caption-col"><div class="caption-box">The audio begins with a single, mature male voice, speaking in a measured, formal, and analytical tone, characterized by a General American accent with no regional markers. The speaker addresses an unseen audience, likely an academic or literary group, in a quiet, acoustically dry room—possibly a lecture hall or recording booth—using a close microphone to capture his voice with clarity and intimacy. There is a steady background hiss, consistent with analog tape or low-fidelity digital recording, and no environmental sounds, music, or distractions.
+
+He opens with, “Well then, last, here is Turner&#x27;s,” introducing Turner as the subject of his analysis. He continues, “Greek school of the highest class,” establishing Turner’s artistic lineage and high esteem. The speaker proceeds, “And you define his art absolutely,” using precise, formal language typical of early 20th-century American literary criticism. He then offers a two-part definition: “as first the displaying intensely and with the sternest intellect of natural form as it is.” The speaker pauses deliberately after “as it is,” allowing the phrase to resonate with emphasis and gravity. He concludes, “And then the envelopment of it with cloud and fire,” using the metaphor “cloud and fire” to describe Turner’s dramatic and expressive handling of light and atmosphere.
+
+Throughout, the speaker’s delivery is slow and deliberate, with clear enunciation and frequent pauses that enhance the sense of careful analysis. The speech is delivered in a single, uninterrupted take, with no interruptions or extraneous sounds, reinforcing the impression of a prepared lecture or recorded commentary. The recording’s technical limitations—persistent hiss, low-frequency hum, and a lack of high-frequency detail—add a historical, documentary character, suggesting the source is from the 1920s–1940s. The style, diction, and delivery indicate a formal, educated setting, likely an academic or literary gathering, with the speaker functioning as an authoritative critic or lecturer.
+
+In summary, the audio presents a formal, analytical lecture in which a mature male speaker defines J.M.W. Turner’s art as a synthesis of rigorous naturalism and dramatic atmospheric expression, delivered in a controlled, reverberation-free environment with historical technical characteristics. The speech’s structure, vocabulary, and context suggest a mid-20th-century American academic setting, offering a clear and authoritative interpretation of Turner’s work to an educated audience.</div></td>
+<td class="caption-col"><div class="caption-box">The audio begins with a single, mature male voice, speaking in a measured, formal, and analytical tone, characterized by a General American accent with no regional markers. The speaker addresses an unseen audience, likely an academic or literary group, in a quiet, acoustically dry room—possibly a lecture hall or recording booth—using a close microphone to capture his voice with clarity and intimacy. There is a steady background hiss, consistent with analog tape or low-fidelity digital recording, and no environmental sounds, music, or distractions.
+
+He opens with, “Well then, last, here is Turner&#x27;s,” introducing Turner as the subject of his analysis. He continues, “Greek school of the highest class,” establishing Turner’s artistic lineage and high esteem. The speaker proceeds, “And you define his art first the displaying intensely and with the sternest intellect of natural form,” using precise, formal language typical of early 20th-century American literary criticism. He pauses slightly after “natural form,” allowing the idea to settle before continuing. He concludes, “And then the envelopment of it with cloud and fire,” using the metaphor “cloud and fire” to describe Turner’s dramatic and expressive handling of light and atmosphere.
+
+Throughout, the speaker’s delivery is slow and deliberate, with clear enunciation and frequent pauses that enhance the sense of careful analysis. The speech is delivered in a single, uninterrupted take, with no interruptions or extraneous sounds, reinforcing the impression of a prepared lecture or recorded commentary. The recording’s technical limitations—persistent hiss, low-frequency hum, and a lack of high-frequency detail—add a historical, documentary character, suggesting the source is from the 1920s–1940s. The style, diction, and delivery indicate a formal, educated setting, likely an academic or literary gathering, with the speaker functioning as an authoritative critic or lecturer.
+
+In summary, the audio presents a formal, analytical lecture in which a mature male speaker defines J.M.W. Turner’s art as a synthesis of rigorous naturalism and dramatic atmospheric expression, delivered in a controlled, reverberation-free environment with historical technical characteristics. The speech’s structure, vocabulary, and context suggest a mid-20th-century American academic setting, offering a clear and authoritative interpretation of Turner’s work to an educated audience.</div></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/634acf59a12155a7ba15b9a5abd8e302.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/4fd2a3221fb158c3b5264c9910fc4800.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/9000f7aaaeee5ecf87f17aac464a142a.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/1dbbafd3cd515c2ba33dfd343f7186ad.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/e043913c28505a8f9ebc1255d508332b.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/b95d1576c13d5f78806f22f732ed83a6.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/d62f64cd6d0c51dfa16887959dd32ab7.wav" type="audio/wav" /></audio></td>
+</tr>
+<tr>
+<td class="utt-id-col sticky-col">1089-134691-0011</td>
+<td class="text-col sticky-col">their piety would be like their names like their faces like their clothes and it was idle for him to tell himself that their humble and contrite hearts it might be paid a far richer tribute of devotion than his had ever been a gift tenfold more acceptable than his elaborate adoration</td>
+<td class="text-col sticky-col">Delete &#x27;like their faces like their clothes and&#x27;</td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/e4d1a1e65dc554e1a4c9742c8259883b.wav" type="audio/wav" /></audio></td>
+<td class="caption-col"><div class="caption-box">The audio clip begins in near silence, marked only by a faint electronic hiss and subtle rustling, likely from the narrator’s clothing or paper. A mature male voice, deep and resonant with a General American accent, enters with a slow, deliberate, and contemplative tone, his speech imbued with controlled emotion and marked by a slight gravelly texture. He articulates the phrase, “…their piety would be like their names, like their faces, like their clothes,” with each phrase separated by measured pauses, the rhythm and delivery evoking a meditative, literary style. As he speaks, the rustling increases in prominence, suggesting movement near the microphone, possibly the handling of paper or fabric.
+
+Continuing, the narrator states, “And it was idle for him to tell himself that their humble and contrite hearts it might be paid a far richer tribute of devotion than his had ever been.” The phrasing is formal and archaic, with a slight pause before “it might be,” which introduces a sense of doubt and internal conflict. The narrator’s voice remains steady, the pace unhurried, and the emotional intensity grows subtly, hinting at the internal struggle of the character.
+
+The passage builds toward a climax as the narrator delivers, “A gift tenfold more acceptable than his elaborate adoration,” with a slight rise in pitch and emphasis on “tenfold” and “elaborate,” underscoring the contrast between the two forms of devotion. The narration concludes with a lingering pause, the final words trailing off, leaving a sense of unresolved tension and introspection. Throughout, the audio maintains consistent volume and clarity, with the only background noises being the persistent hiss and the increasing rustling, which never obscures the speech.
+
+The clip is a high-fidelity, close-mic recording, capturing every detail of the narrator’s performance and physical movements. The content, delivered in a formal, literary style, reflects themes of humility, internal conflict, and spiritual comparison. The emotional and stylistic choices, as well as the absence of music or extraneous sounds, situate the passage within a modern audiobook or dramatic reading tradition, likely excerpted from a classic American literary work. The overall effect is one of solemnity and introspection, inviting the listener to contemplate the narrator’s internal struggle and the contrast between sincere humility and elaborate devotion.</div></td>
+<td class="caption-col"><div class="caption-box">The audio clip begins in near silence, marked only by a faint electronic hiss and subtle rustling, likely from the narrator’s clothing or paper. A mature male voice, deep and resonant with a General American accent, enters with a slow, deliberate, and contemplative tone, his speech imbued with controlled emotion and marked by a slight gravelly texture. He articulates the phrase, “…their piety would be like their names,” with a measured pause following, the rhythm and delivery evoking a meditative, literary style. As he speaks, the rustling increases in prominence, suggesting movement near the microphone, possibly the handling of paper or fabric.
+
+Continuing, the narrator states, “And it was idle for him to tell himself that their humble and contrite hearts it might be paid a far richer tribute of devotion than his had ever been.” The phrasing is formal and archaic, with a slight pause before “it might be,” which introduces a sense of doubt and internal conflict. The narrator’s voice remains steady, the pace unhurried, and the emotional intensity grows subtly, hinting at the internal struggle of the character.
+
+The passage builds toward a climax as the narrator delivers, “A gift tenfold more acceptable than his elaborate adoration,” with a slight rise in pitch and emphasis on “tenfold” and “elaborate,” underscoring the contrast between the two forms of devotion. The narration concludes with a lingering pause, the final words trailing off, leaving a sense of unresolved tension and introspection. Throughout, the audio maintains consistent volume and clarity, with the only background noises being the persistent hiss and the increasing rustling, which never obscures the speech.
+
+The clip is a high-fidelity, close-mic recording, capturing every detail of the narrator’s performance and physical movements. The content, delivered in a formal, literary style, reflects themes of humility, internal conflict, and spiritual comparison. The emotional and stylistic choices, as well as the absence of music or extraneous sounds, situate the passage within a modern audiobook or dramatic reading tradition, likely excerpted from a classic American literary work. The overall effect is one of solemnity and introspection, inviting the listener to contemplate the narrator’s internal struggle and the contrast between sincere humility and elaborate devotion.</div></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/a5b4940d43a55109b742329d863127b6.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/a961a64ef37952d9a9dc2faa6e5b228b.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/666d740d5c3b5869b3aedb8cb102bcf4.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/c2080228a2f05d05ae9cb89894cb022e.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/53e14692db4e5907a8d3f9980bafb1d0.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/2bb26b9bdf925c8c87a16dc993e549af.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/2cd6f1dff9ea527ebe88cbe17c31aa1c.wav" type="audio/wav" /></audio></td>
+</tr>
+<tr>
+<td class="utt-id-col sticky-col">1089-134691-0013</td>
+<td class="text-col sticky-col">idle and embittering finally to argue against his own dispassionate certitude that the commandment of love bade us not to love our neighbour as ourselves with the same amount and intensity of love but to love him as ourselves with the same kind of love</td>
+<td class="text-col sticky-col">Delete &#x27;idle and embittering finally&#x27;</td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/005acfa553425c36bcad9848d6eb063b.wav" type="audio/wav" /></audio></td>
+<td class="caption-col"><div class="caption-box">The audio begins with a single male voice, delivered in a measured, contemplative manner, articulating the following passage: “idle and embittering finally to argue against his own dispassionate certitude that the commandment of love bade us not to love our neighbor as ourselves with the same amount and intensity of love, but to love him as ourselves with the same kind of love.” The speaker’s accent is General American, and his tone is neutral, analytical, and emotionally detached, resembling a literary or philosophical reading. Throughout the speech, the voice is accompanied by a subtle, persistent electronic hiss and a low-frequency hum, both indicative of a low-fidelity, possibly analog recording. The acoustic environment is dry, with minimal reverberation, suggesting a small, well-dampened room or a close-mic setup. The speaker’s delivery is precise, with deliberate pauses at grammatical breaks and a notable emphasis on the word “kind,” which is spoken more slowly and with a slight downward inflection. As the final word “love” is completed, a sharp, high-pitched click is heard—likely the result of a mechanical switch or tape stop—immediately followed by a brief, low-frequency thump, possibly from the device being handled or the microphone being bumped. The recording ends abruptly, with no fade-out, and the background hiss and hum cease instantly, confirming a hard digital cut.
+
+In summary, the audio features a clear but low-fidelity recording of a male speaker reading a philosophical passage about the nature of love, characterized by a neutral and analytical delivery. The background is marked by electronic noise and mechanical clicks, suggesting an analog tape source, while the absence of environmental sounds and abrupt editing reinforce the impression of a focused, archival, or archival-style reading. The passage itself explores the distinction between loving one’s neighbor “with the same amount and intensity” versus “with the same kind” of love, delivered in a formal, literary style with careful articulation and emotional restraint.</div></td>
+<td class="caption-col"><div class="caption-box">The audio begins with a single male voice, delivered in a measured, contemplative manner, articulating the following passage: “to argue against his own dispassionate certitude that the commandment of love bade us not to love our neighbor as ourselves with the same amount and intensity of love, but to love him as ourselves with the same kind of love.” The speaker’s accent is General American, and his tone is neutral, analytical, and emotionally detached, resembling a literary or philosophical reading. Throughout the speech, the voice is accompanied by a subtle, persistent electronic hiss and a low-frequency hum, both indicative of a low-fidelity, possibly analog recording. The acoustic environment is dry, with minimal reverberation, suggesting a small, well-dampened room or a close-mic setup. The speaker’s delivery is precise, with deliberate pauses at grammatical breaks and a notable emphasis on the word “kind,” which is spoken more slowly and with a slight downward inflection. As the final word “love” is completed, a sharp, high-pitched click is heard—likely the result of a mechanical switch or tape stop—immediately followed by a brief, low-frequency thump, possibly from the device being handled or the microphone being bumped. The recording ends abruptly, with no fade-out, and the background hiss and hum cease instantly, confirming a hard digital cut.
+
+In summary, the audio features a clear but low-fidelity recording of a male speaker reading a philosophical passage about the nature of love, characterized by a neutral and analytical delivery. The background is marked by electronic noise and mechanical clicks, suggesting an analog tape source, while the absence of environmental sounds and abrupt editing reinforce the impression of a focused, archival, or archival-style reading. The passage itself explores the distinction between loving one’s neighbor “with the same amount and intensity” versus “with the same kind” of love, delivered in a formal, literary style with careful articulation and emotional restraint.</div></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/e57ff56aa891517484dd77f647761326.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/5774d38ea08f5e0ca6050663d53624d8.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/82b84ff4aa395094ae3cfe41456f3662.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/02f6d6a96d8b537481e1e8c54585141f.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/7def8ac37cc756b1b5b7177a92d2727f.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/875bc4d1ed4d5a3e91a1bc79ebd10a93.wav" type="audio/wav" /></audio></td>
+<td><span class="no-audio">-</span></td>
+</tr>
+<tr>
+<td class="utt-id-col sticky-col">1089-134691-0023</td>
+<td class="text-col sticky-col">it was a pain to see them and a sword like pain to see the signs of adolescence that made repellent their pitiable nakedness</td>
+<td class="text-col sticky-col">Delete &#x27;a sword like pain&#x27;</td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/09b04003660b51c984d6760876f34c3a.wav" type="audio/wav" /></audio></td>
+<td class="caption-col"><div class="caption-box">The audio clip opens abruptly, presenting a single, mature male voice already mid-sentence. The speaker delivers the following phrase in a somber, measured tone: “It was a pain to see them and a sword-like pain to see the signs of adolescence that made repellent their pitiable nakedness.” The delivery is marked by deliberate pacing, with each word articulated distinctly and pauses between phrases, particularly at the conjunction “and.” The vocal timbre is deep and resonant, with clear enunciation and a slight British accent, indicating educated, standard British English. The speaker’s emotional register is grave and reflective, conveying a sense of melancholy and emotional distance.
+
+The acoustic environment is tightly controlled: there is no background noise, room tone, or reverberation, and the recording is monophonic, with the voice centered and close-miked. The audio is technically pristine—free from hiss, hum, distortion, or artifacts—suggesting a high-fidelity studio or sound booth setting. The absence of any ambient cues or sound effects reinforces the impression of a professional, purpose-driven recording.
+
+At the conclusion of the speech, the voice is cut off instantly, with no lingering echo or natural fade, indicating deliberate digital editing. Immediately, a single sustained musical note is introduced. This note is low, resonant, and played on a synthesized instrument with a warm, bell-like timbre reminiscent of a gong or chime. Its attack is soft, and it decays gradually, filling the sonic space and evoking a sense of finality or contemplation. The note’s volume and character remain consistent throughout, and its spectral content is rich in harmonics, adding emotional weight to the closing moment. The musical note serves as a deliberate emotional punctuation, contrasting the gravity of the spoken text with a sense of solemn reflection.
+
+There are no other sounds, voices, or environmental noises present. The structure and editing choices, as well as the formal language and narrative content, suggest that this clip is excerpted from a professionally produced audiobook or literary reading. The passage is from the opening of D.H. Lawrence’s *Sons and Lovers*, and the reading is performed by a skilled narrator. The absence of extraneous elements, the careful pacing, and the use of a musical cue all point to a production designed for literary appreciation or study, rather than entertainment or casual listening.
+
+In summary, the audio presents a high-quality, emotionally charged excerpt from D.H. Lawrence’s *Sons and Lovers*, delivered by a mature British male narrator in a sterile, studio-like setting. The speech is grave and reflective, concluding with a solitary, resonant musical note that amplifies the sense of melancholy and closure. The clip is a carefully crafted segment from a literary audiobook, showcasing both the narrative power of the text and the artistry of its professional recording.</div></td>
+<td class="caption-col"><div class="caption-box">The audio clip opens abruptly, presenting a single, mature male voice already mid-sentence. The speaker delivers the following phrase in a somber, measured tone: “It was a pain to see them and to see the signs of adolescence that made repellent their pitiable nakedness.” The delivery is marked by deliberate pacing, with each word articulated distinctly and pauses between phrases, particularly at the conjunction “and.” The vocal timbre is deep and resonant, with clear enunciation and a slight British accent, indicating educated, standard British English. The speaker’s emotional register is grave and reflective, conveying a sense of melancholy and emotional distance.
+
+The acoustic environment is tightly controlled: there is no background noise, room tone, or reverberation, and the recording is monophonic, with the voice centered and close-miked. The audio is technically pristine—free from hiss, hum, distortion, or artifacts—suggesting a high-fidelity studio or sound booth setting. The absence of any ambient cues or sound effects reinforces the impression of a professional, purpose-driven recording.
+
+At the conclusion of the speech, the voice is cut off instantly, with no lingering echo or natural fade, indicating deliberate digital editing. Immediately, a single sustained musical note is introduced. This note is low, resonant, and played on a synthesized instrument with a warm, bell-like timbre reminiscent of a gong or chime. Its attack is soft, and it decays gradually, filling the sonic space and evoking a sense of finality or contemplation. The note’s volume and character remain consistent throughout, and its spectral content is rich in harmonics, adding emotional weight to the closing moment. The musical note serves as a deliberate emotional punctuation, contrasting the gravity of the spoken text with a sense of solemn reflection.
+
+There are no other sounds, voices, or environmental noises present. The structure and editing choices, as well as the formal language and narrative content, suggest that this clip is excerpted from a professionally produced audiobook or literary reading. The passage is from the opening of D.H. Lawrence’s *Sons and Lovers*, and the reading is performed by a skilled narrator. The absence of extraneous elements, the careful pacing, and the use of a musical cue all point to a production designed for literary appreciation or study, rather than entertainment or casual listening.
+
+In summary, the audio presents a high-quality, emotionally charged excerpt from D.H. Lawrence’s *Sons and Lovers*, delivered by a mature British male narrator in a sterile, studio-like setting. The speech is grave and reflective, concluding with a solitary, resonant musical note that amplifies the sense of melancholy and closure. The clip is a carefully crafted segment from a literary audiobook, showcasing both the narrative power of the text and the artistry of its professional recording.</div></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/a1ae6fb55a525d799c43fbbd18ad7038.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/b6a5fd7672685693b5766226342ba0da.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/292f657597c85274b05e4023e81eae66.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/ca7505c031f55bbfb6d30374a39ed3d0.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/4578577e458950e79185e1ebae2b634c.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/d807fcbf905e599a8b99132b97d33348.wav" type="audio/wav" /></audio></td>
+<td><span class="no-audio">-</span></td>
+</tr>
+<tr>
+<td class="utt-id-col sticky-col">8463-294825-0005</td>
+<td class="text-col sticky-col">other subtleties occur inside each episode the textures sparkling with wit information and insight</td>
+<td class="text-col sticky-col">Delete &#x27;information and&#x27;</td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/b12775bb17a65ebd92c282301dee8880.wav" type="audio/wav" /></audio></td>
+<td class="caption-col"><div class="caption-box">The audio clip begins with a single adult female voice speaking in a measured, formal tone. Her delivery is clear, articulate, and devoid of regional accent, indicating a General American English background. The speaker enunciates each word with precision and a neutral, mid-to-low pitch, conveying a professional and polished presence. She states: &quot;Other subtleties occur inside each episode, the textures sparkling with wit, information, and insight.&quot; Her speech is structured in two clauses: the first, &quot;Other subtleties occur inside each episode,&quot; is delivered with a gentle rise and fall in intonation, suggesting a contemplative introduction; the second, &quot;the textures sparkling with wit, information, and insight,&quot; features a more emphatic rise on &quot;sparkling&quot; and a slight pause before listing &quot;wit, information, and insight,&quot; highlighting the value and diversity of the content. The rhythm is deliberate, with subtle pauses between phrases and a natural cadence.
+
+Throughout the recording, there is a continuous, low-level electronic hiss, most noticeable during brief silences, and a faint low-frequency hum, likely originating from studio equipment. The voice is captured with close-miking, resulting in a focused and intimate sound with minimal environmental reverberation and no extraneous background noises. The audio quality is high-fidelity, with the speaker’s voice centered and clear, and no distortion, clipping, or digital artifacts. The frequency range is broad, encompassing both low and high frequencies, and the overall sound is free from environmental distractions.
+
+The content and style of the speech indicate that it is a professional review or promotional narration, intended for an audience interested in media or entertainment content. The language is sophisticated, and the delivery is carefully controlled, suggesting the speaker is an experienced narrator or critic, possibly in the context of podcasting, digital media, or professional commentary. The absence of audience sounds, music, or ambient noise further supports a controlled studio or home studio environment.
+
+In summary, the audio features a single, articulate female voice delivering a polished, professional review or promotional statement about the depth and quality of media content. The recording is clean and focused, with subtle electronic background noise, and exemplifies a high standard of production typical of professional narration or media critique.</div></td>
+<td class="caption-col"><div class="caption-box">The audio clip begins with a single adult female voice speaking in a measured, formal tone. Her delivery is clear, articulate, and devoid of regional accent, indicating a General American English background. The speaker enunciates each word with precision and a neutral, mid-to-low pitch, conveying a professional and polished presence. She states: &quot;Other subtleties occur inside each episode, the textures sparkling with wit and insight.&quot; Her speech is structured in two clauses: the first, &quot;Other subtleties occur inside each episode,&quot; is delivered with a gentle rise and fall in intonation, suggesting a contemplative introduction; the second, &quot;the textures sparkling with wit and insight,&quot; features a more emphatic rise on &quot;sparkling&quot; and a slight pause before listing &quot;wit and insight,&quot; highlighting the value and depth of the content. The rhythm is deliberate, with subtle pauses between phrases and a natural cadence.
+
+Throughout the recording, there is a continuous, low-level electronic hiss, most noticeable during brief silences, and a faint low-frequency hum, likely originating from studio equipment. The voice is captured with close-miking, resulting in a focused and intimate sound with minimal environmental reverberation and no extraneous background noises. The audio quality is high-fidelity, with the speaker’s voice centered and clear, and no distortion, clipping, or digital artifacts. The frequency range is broad, encompassing both low and high frequencies, and the overall sound is free from environmental distractions.
+
+The content and style of the speech indicate that it is a professional review or promotional narration, intended for an audience interested in media or entertainment content. The language is sophisticated, and the delivery is carefully controlled, suggesting the speaker is an experienced narrator or critic, possibly in the context of podcasting, digital media, or professional commentary. The absence of audience sounds, music, or ambient noise further supports a controlled studio or home studio environment.
+
+In summary, the audio features a single, articulate female voice delivering a polished, professional review or promotional statement about the depth and quality of media content. The recording is clean and focused, with subtle electronic background noise, and exemplifies a high standard of production typical of professional narration or media critique.</div></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/8330c61ed413586f95b213804820bded.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/ae1a092760cf5736a0af2c12277ace35.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/e4dd4f2ab0125b19949a50fd753684ed.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/03ce63eb4ea853929a0bc95b41aa6ed5.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/006f9ed32f3f526999e1ccc69b5d0aaa.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/a7ed8f81e8c859df8ce3e5144f972d91.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/b6b350071c3e5d0bb1878a19c7137b90.wav" type="audio/wav" /></audio></td>
+</tr>
+</tbody></table></div>
       </div>
       
       <div id="transcription_ins" class="subsection">
         <h3>Transcription — Insertion</h3>
         
-        <p class="text-secondary" style="font-size:.9rem;">Insert new words or phrases into the utterance at the designated position.</p>
+        <p class="text-secondary" style="font-size:.9rem;">Insert new words or phrases into the existing utterance at a specified position.</p>
         
-
         <div class="table-responsive">
-          <table class="sample-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Instruction</th>
-                <th>Text</th>
-                
-                <th>
-                  <span class="model-badge" style="background:#6c757d;"></span>
-                  Source
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#4C72B0;"></span>
-                  Bagpiper-Base
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#DD8452;"></span>
-                  Bagpiper-Edit (ST)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#55A868;"></span>
-                  Bagpiper-Edit (MT)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#C44E52;"></span>
-                  CosyVoice-3.0
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#8172B3;"></span>
-                  Step-Audio-EditX
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#937860;"></span>
-                  Ming-UniAudio-Edit
-                </th>
-                
-              </tr>
-            </thead>
-            <tbody>
-              
-              <tr>
-                <td>1</td>
-                <td class="text-col">Insert "really" before "cared"</td>
-                <td class="text-col">but anders cared nothing about that</td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/transcription_ins/ins_001_source.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/transcription_ins/ins_001_bagpiper_base.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/transcription_ins/ins_001_bagpiper_st.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/transcription_ins/ins_001_bagpiper_mt.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-              </tr>
-              
-            </tbody>
-          </table>
-        </div>
-      </div>
-      
-      <div id="transcription_sub" class="subsection">
-        <h3>Transcription — Substitution</h3>
-        
-        <p class="text-secondary" style="font-size:.9rem;">Replace specific words with alternatives while preserving prosody and speaker identity.</p>
-        
+<table class="sample-table">
+<thead><tr>
+<th class="sticky-col">ID</th>
+<th class="sticky-col">Original Text</th>
+<th class="sticky-col">Edit Prompt</th>
+<th><span class="model-badge" style="background:#6c757d;"></span>Source</th>
+<th>Original Caption</th>
+<th>Edited Caption</th>
+<th><span class="model-badge" style="background:#4C72B0;"></span>Bagpiper-Base (TTS)</th>
+<th><span class="model-badge" style="background:#4C72B0;"></span>Bagpiper-Base</th>
+<th><span class="model-badge" style="background:#55A868;"></span>Bagpiper-Edit (MT)</th>
+<th><span class="model-badge" style="background:#DD8452;"></span>Bagpiper-Edit (ST)</th>
+<th><span class="model-badge" style="background:#C44E52;"></span>CosyVoice-3</th>
+<th><span class="model-badge" style="background:#8172B3;"></span>Step-Audio-EditX</th>
+<th><span class="model-badge" style="background:#937860;"></span>Ming-UniAudio-Edit</th>
+</tr></thead><tbody>
+<tr>
+<td class="utt-id-col sticky-col">1188-133604-0037</td>
+<td class="text-col sticky-col">every line in which the master traces it even where seemingly negligent is lovely and set down with a meditative calmness which makes these two etchings capable of being placed beside the most tranquil work of holbein or duerer</td>
+<td class="text-col sticky-col">Insert &#x27;so carefully&#x27; between &#x27;master&#x27; and &#x27;traces&#x27;</td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/9c11b28156e2534ca64f4b564d4b8c52.wav" type="audio/wav" /></audio></td>
+<td class="caption-col"><div class="caption-box">The audio clip begins with a single male voice speaking in a calm, measured, and deliberate manner, free from any other sounds or background noise. The speaker’s accent is General American English, with a clear, non-regional pronunciation and a low-to-mid pitch, marked by a steady, contemplative cadence. His delivery is slow and precise, with each word distinctly articulated and a slight emphasis on certain adjectives, such as “lovely” and “tranquil,” to highlight the aesthetic qualities being described. The environment is acoustically dry, with no ambient sounds or reverberation, indicating a professionally treated recording space.
 
-        <div class="table-responsive">
-          <table class="sample-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Instruction</th>
-                <th>Text</th>
-                
-                <th>
-                  <span class="model-badge" style="background:#6c757d;"></span>
-                  Source
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#4C72B0;"></span>
-                  Bagpiper-Base
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#DD8452;"></span>
-                  Bagpiper-Edit (ST)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#55A868;"></span>
-                  Bagpiper-Edit (MT)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#C44E52;"></span>
-                  CosyVoice-3.0
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#8172B3;"></span>
-                  Step-Audio-EditX
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#937860;"></span>
-                  Ming-UniAudio-Edit
-                </th>
-                
-              </tr>
-            </thead>
-            <tbody>
-              
-              <tr>
-                <td>1</td>
-                <td class="text-col">Replace "nothing" with "everything"</td>
-                <td class="text-col">but anders cared nothing about that</td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/transcription_sub/sub_001_source.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/transcription_sub/sub_001_bagpiper_base.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/transcription_sub/sub_001_bagpiper_st.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/transcription_sub/sub_001_bagpiper_mt.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-              </tr>
-              
-            </tbody>
-          </table>
-        </div>
+The speaker reads the following passage: “Every line in which the master traces it, even where seemingly negligent, is lovely and set down with a meditative calmness which makes these two etchings capable of being placed beside the most tranquil work of Holbein or Dürer.” Throughout, the voice remains steady and focused, with no emotional inflection or vocal variation, maintaining a consistent, neutral tone. The passage is delivered as a continuous, uninterrupted statement, and the speaker’s articulation is exceptionally clear, with each word pronounced cleanly and no evidence of filler sounds or hesitations.
+
+At the conclusion of the sentence, the voice stops abruptly, without any fade-out or trailing sound, reinforcing the sense of a carefully edited, studio-produced recording. The absence of any other audio elements, such as music or ambient noise, further underscores the professional and deliberate nature of the production.
+
+In summary, the clip features a single, well-articulated male voice reading a formal, literary description of an artist’s etchings in a highly controlled, studio environment. The speaker’s tone is neutral and contemplative, and the passage emphasizes the aesthetic and meditative qualities of the artwork, drawing comparisons to renowned artists Holbein and Dürer. The overall impression is one of clarity, professionalism, and focused intent, with no extraneous sounds or distractions.</div></td>
+<td class="caption-col"><div class="caption-box">The audio clip begins with a single male voice speaking in a calm, measured, and deliberate manner, free from any other sounds or background noise. The speaker’s accent is General American English, with a clear, non-regional pronunciation and a low-to-mid pitch, marked by a steady, contemplative cadence. His delivery is slow and precise, with each word distinctly articulated and a slight emphasis on certain adjectives, such as “lovely” and “tranquil,” to highlight the aesthetic qualities being described. The environment is acoustically dry, with no ambient sounds or reverberation, indicating a professionally treated recording space.
+
+The speaker reads the following passage: “Every line in which the master so carefully traces it, even where seemingly negligent, is lovely and set down with a meditative calmness which makes these two etchings capable of being placed beside the most tranquil work of Holbein or Dürer.” Throughout, the voice remains steady and focused, with no emotional inflection or vocal variation, maintaining a consistent, neutral tone. The passage is delivered as a continuous, uninterrupted statement, and the speaker’s articulation is exceptionally clear, with each word pronounced cleanly and no evidence of filler sounds or hesitations.
+
+At the conclusion of the sentence, the voice stops abruptly, without any fade-out or trailing sound, reinforcing the sense of a carefully edited, studio-produced recording. The absence of any other audio elements, such as music or ambient noise, further underscores the professional and deliberate nature of the production.
+
+In summary, the clip features a single, well-articulated male voice reading a formal, literary description of an artist’s etchings in a highly controlled, studio environment. The speaker’s tone is neutral and contemplative, and the passage emphasizes the aesthetic and meditative qualities of the artwork, drawing comparisons to renowned artists Holbein and Dürer. The overall impression is one of clarity, professionalism, and focused intent, with no extraneous sounds or distractions.</div></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/d1823044aeb959fea06c21e9f0f5745d.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/f51fded6bc5d56d8b6070c9e4b23bc8f.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/838cdad5095c524f83cd6f886b381b8a.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/5e1de20bd6ee50de89ef1f3479e86bf1.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/668a46b8bdbf50b5a22201d58f2efe39.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/b6b1b39b840c586e98f50587750d8296.wav" type="audio/wav" /></audio></td>
+<td><span class="no-audio">-</span></td>
+</tr>
+<tr>
+<td class="utt-id-col sticky-col">1221-135766-0000</td>
+<td class="text-col sticky-col">how strange it seemed to the sad woman as she watched the growth and the beauty that became every day more brilliant and the intelligence that threw its quivering sunshine over the tiny features of this child</td>
+<td class="text-col sticky-col">Insert &#x27;so fragile&#x27; between &#x27;the beauty&#x27; and &#x27;that became&#x27;</td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/ce1e8658936f574a8507a4098f446d00.wav" type="audio/wav" /></audio></td>
+<td class="caption-col"><div class="caption-box">The audio clip begins in complete silence, with no ambient or environmental sounds present, suggesting a highly controlled and acoustically isolated recording space. A single female voice, clear and measured, delivers the passage: &quot;How strange it seemed to the sad woman as she watched the growth and the beauty that became every day more brilliant and the intelligence that threw its quivering sunshine over the tiny features of this child.&quot; Her articulation is precise, with careful enunciation of words such as “strange,” “woman,” “beauty,” “brilliant,” “intelligence,” “quivering,” “sunshine,” and “features.” The pacing is slow and deliberate, with subtle pauses that create a sense of gravity and emotional depth. The voice is recorded with exceptional clarity, exhibiting no distortion, clipping, or extraneous noise, and is presented in mono with no stereo spread. The room’s acoustics are minimal, imparting a sense of intimacy as if the speaker is close to the microphone. The vocal timbre is mature and warm, with a low-to-mid pitch and a gentle, descending intonation at the end, reinforcing the contemplative and slightly melancholic mood. The emotional tone is somber and reflective, evoking sympathy for the “sad woman” and a sense of wonder at the child’s development. The passage itself describes a woman’s bittersweet observation of a child’s growth, beauty, and intelligence, with metaphorical language such as “quivering sunshine” and “tiny features,” indicating a literary origin. The speaker’s accent is General American English, and the overall style and delivery point to a professional, archival reading of a 19th or early 20th-century English literary text, likely intended for audiobook or educational purposes. No background music, environmental sounds, or audience noise are present.
+
+In summary, the audio features a professionally recorded, emotionally resonant reading of a classic English literary passage by a mature female narrator in a silent, acoustically dry setting. The passage details a sad woman’s observation of a child’s growth and intelligence, employing vivid metaphor and evocative language. The recording’s high fidelity, clear diction, and deliberate pacing create a contemplative and intimate atmosphere, indicative of archival or educational intent.</div></td>
+<td class="caption-col"><div class="caption-box">The audio clip begins in complete silence, with no ambient or environmental sounds present, suggesting a highly controlled and acoustically isolated recording space. A single female voice, clear and measured, delivers the passage: &quot;How strange it seemed to the sad woman as she watched the growth and the beauty so fragile that became every day more brilliant and the intelligence that threw its quivering sunshine over the tiny features of this child.&quot; Her articulation is precise, with careful enunciation of words such as “strange,” “woman,” “beauty,” “fragile,” “brilliant,” “intelligence,” “quivering,” “sunshine,” and “features.” The pacing is slow and deliberate, with subtle pauses that create a sense of gravity and emotional depth. The voice is recorded with exceptional clarity, exhibiting no distortion, clipping, or extraneous noise, and is presented in mono with no stereo spread. The room’s acoustics are minimal, imparting a sense of intimacy as if the speaker is close to the microphone. The vocal timbre is mature and warm, with a low-to-mid pitch and a gentle, descending intonation at the end, reinforcing the contemplative and slightly melancholic mood. The emotional tone is somber and reflective, evoking sympathy for the “sad woman” and a sense of wonder at the child’s development. The passage itself describes a woman’s bittersweet observation of a child’s growth, beauty, and intelligence, with metaphorical language such as “quivering sunshine” and “tiny features,” and the added phrase “so fragile” heightens the poignancy of the moment, emphasizing the vulnerability within the child’s emerging brilliance. The speaker’s accent is General American English, and the overall style and delivery point to a professional, archival reading of a 19th or early 20th-century English literary text, likely intended for audiobook or educational purposes. No background music, environmental sounds, or audience noise are present.
+
+In summary, the audio features a professionally recorded, emotionally resonant reading of a classic English literary passage by a mature female narrator in a silent, acoustically dry setting. The passage details a sad woman’s observation of a child’s growth and intelligence, employing vivid metaphor and evocative language. The recording’s high fidelity, clear diction, and deliberate pacing create a contemplative and intimate atmosphere, indicative of archival or educational intent.</div></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/403530f5f8d259e0894506cf1e8e77f2.wav" type="audio/wav" /></audio></td>
+<td><span class="no-audio">-</span></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/754ef7a3ebb557e1a4ffd2f5dd144cab.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/0d0a6a0170ed5d48b5f41c25fadd09c2.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/eabc575afbeb54799ef33d0fe51163e0.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/436c2e3acba651658aa8d40f18aeca45.wav" type="audio/wav" /></audio></td>
+<td><span class="no-audio">-</span></td>
+</tr>
+<tr>
+<td class="utt-id-col sticky-col">8224-274384-0012</td>
+<td class="text-col sticky-col">if any still retained rancor against him in his present condition they passed in silence while his well wishers more generous than prudent accompanied his march with tears with acclamations and with prayers for his safety</td>
+<td class="text-col sticky-col">Insert &#x27;perhaps out of pity&#x27; between &#x27;condition&#x27; and &#x27;they&#x27;</td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/f6c3df6bcba85f3ebeda816b22be3044.wav" type="audio/wav" /></audio></td>
+<td class="caption-col"><div class="caption-box">The audio clip opens with a single male narrator, speaking in a clear, calm, and measured manner characteristic of formal British English. His voice is centered in the stereo field, close-mic’d, and free of background noise, indicating a professional studio or sound booth environment. The narrator begins with, “If any still retained rancor against him, in his present condition, they passed in silence,” articulating each word distinctly and maintaining a steady, narrative pace. Following a brief pause, he continues, “While his well-wishers, more generous than prudent, accompanied his march with tears, with acclamations, and with prayers for his safety.” The narration is delivered in a neutral, emotionally restrained tone, with subtle inflections marking the contrasting attitudes of “rancor” and “well-wishers.” The final phrase is spoken with a gentle rise and fall, imparting a sense of solemnity and respect.
+
+Throughout the recording, a faint, persistent broadband hiss is present, likely originating from the recording equipment, but it does not interfere with the clarity of the voice. The narrator’s speech is free of any other environmental sounds, reverberation, or musical accompaniment, reinforcing the sense of an isolated, controlled studio setting. The segment concludes with an abrupt cutoff, with no fade-out or trailing sounds.
+
+The passage’s content, delivered in a manner reminiscent of 19th-century British literature, references themes of public judgment, compassion, and ceremonial farewell. The narrator’s accent and diction align with Received Pronunciation, and the style is typical of classic British narration found in audiobooks or radio dramas. No explicit cultural, historical, or social identifiers are provided in the speech itself, but the language, delivery, and production choices suggest the work is intended for a general, possibly adult audience seeking literary or historical engagement.
+
+In summary, this audio excerpt is a professionally produced, high-fidelity reading of a British literary passage, narrated in a formal, neutral tone by a male voice in a controlled studio environment. The content explores the contrasting reactions of those who resent and those who support a departing figure, using language and delivery that evoke the traditions of British literary and broadcast narration. The absence of music, ambient noise, or explicit context focuses attention on the narrative’s emotional and thematic depth, inviting listeners to reflect on the human responses to public adversity.</div></td>
+<td class="caption-col"><div class="caption-box">The audio clip opens with a single male narrator, speaking in a clear, calm, and measured manner characteristic of formal British English. His voice is centered in the stereo field, close-mic’d, and free of background noise, indicating a professional studio or sound booth environment. The narrator begins with, “If any still retained rancor against him, in his present condition, perhaps out of pity, they passed in silence,” articulating each word distinctly and maintaining a steady, narrative pace. Following a brief pause, he continues, “While his well-wishers, more generous than prudent, accompanied his march with tears, with acclamations, and with prayers for his safety.” The narration is delivered in a neutral, emotionally restrained tone, with subtle inflections marking the contrasting attitudes of “rancor” and “well-wishers.” The final phrase is spoken with a gentle rise and fall, imparting a sense of solemnity and respect.
+
+Throughout the recording, a faint, persistent broadband hiss is present, likely originating from the recording equipment, but it does not interfere with the clarity of the voice. The narrator’s speech is free of any other environmental sounds, reverberation, or musical accompaniment, reinforcing the sense of an isolated, controlled studio setting. The segment concludes with an abrupt cutoff, with no fade-out or trailing sounds.
+
+The passage’s content, delivered in a manner reminiscent of 19th-century British literature, references themes of public judgment, compassion, and ceremonial farewell. The narrator’s accent and diction align with Received Pronunciation, and the style is typical of classic British narration found in audiobooks or radio dramas. No explicit cultural, historical, or social identifiers are provided in the speech itself, but the language, delivery, and production choices suggest the work is intended for a general, possibly adult audience seeking literary or historical engagement.
+
+In summary, this audio excerpt is a professionally produced, high-fidelity reading of a British literary passage, narrated in a formal, neutral tone by a male voice in a controlled studio environment. The content explores the contrasting reactions of those who resent and those who support a departing figure, using language and delivery that evoke the traditions of British literary and broadcast narration. The absence of music, ambient noise, or explicit context focuses attention on the narrative’s emotional and thematic depth, inviting listeners to reflect on the human responses to public adversity.</div></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/8e036ebc3e015f00bd4ca105d0ec34c2.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/796dc9d4edc4590699cbed883fe56aa6.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/a07b7723da485c3cb9cef34913c2faa5.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/d70cc9a45bfc5fb6ae92651b1a99d4d7.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/eb52d30e48fb52c2bf7a06c1d4e695c8.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/2c021726face5f78a0b961692a4444b6.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/eb16beb098a15f2c925be25a61826fdd.wav" type="audio/wav" /></audio></td>
+</tr>
+<tr>
+<td class="utt-id-col sticky-col">2961-960-0004</td>
+<td class="text-col sticky-col">there is no danger of the modern commentators on the timaeus falling into the absurdities of the neo platonists</td>
+<td class="text-col sticky-col">Insert &#x27;such as Plotinus&#x27; after &#x27;the neo platonists&#x27;</td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/1e862affd0985c03b814160cccc42f8e.wav" type="audio/wav" /></audio></td>
+<td class="caption-col"><div class="caption-box">The audio clip opens abruptly with a faint, low-frequency hum characteristic of an analog tape recording, accompanied by a subtle high-frequency hiss that suggests the use of vintage analog equipment. Immediately, a mature male voice with a refined Southern British English accent begins speaking in a slow, measured, and formal tone. The voice is deep and resonant, marked by precise articulation and a deliberate cadence, with each syllable carefully enunciated and pronounced. The speech is presented in a single, uninterrupted sentence: “There is no danger of the modern commentators on the Timaeus falling into the absurdities of the Neoplatonists.” The speaker’s delivery remains steady and emotionally neutral, with a slight emphasis on the word “absurdities” to convey a rhetorical contrast. Throughout the clip, the room’s acoustic properties are evident, as the speaker’s voice is accompanied by natural reverberation and a slight echo, indicating the recording took place in a medium-sized, acoustically reflective space such as a lecture hall or library. The analog hum and hiss persist in the background, with no other sounds present—no audience, environmental noise, or interruptions. The recording ends with an abrupt cutoff, leaving the hiss and hum momentarily audible before silence returns.
+
+This recording captures a single, uninterrupted statement delivered by a British academic in a formal, analog setting, discussing the philosophical distinction between modern and Neoplatonic interpretations of Plato’s Timaeus. The speaker’s accent, style, and environment suggest a mid-20th-century British academic context, with technical and environmental cues supporting the authenticity of the vintage recording. The clip is purely speech, with no music or extraneous sounds, and its abrupt start and finish indicate it is an excerpt from a longer recording.</div></td>
+<td class="caption-col"><div class="caption-box">The audio clip opens abruptly with a faint, low-frequency hum characteristic of an analog tape recording, accompanied by a subtle high-frequency hiss that suggests the use of vintage analog equipment. Immediately, a mature male voice with a refined Southern British English accent begins speaking in a slow, measured, and formal tone. The voice is deep and resonant, marked by precise articulation and a deliberate cadence, with each syllable carefully enunciated and pronounced. The speech is presented in a single, uninterrupted sentence: “There is no danger of the modern commentators on the Timaeus falling into the absurdities of the Neoplatonists such as Plotinus.” The speaker’s delivery remains steady and emotionally neutral, with a slight emphasis on the word “absurdities” to convey a rhetorical contrast. Throughout the clip, the room’s acoustic properties are evident, as the speaker’s voice is accompanied by natural reverberation and a slight echo, indicating the recording took place in a medium-sized, acoustically reflective space such as a lecture hall or library. The analog hum and hiss persist in the background, with no other sounds present—no audience, environmental noise, or interruptions. The recording ends with an abrupt cutoff, leaving the hiss and hum momentarily audible before silence returns.
+
+This recording captures a single, uninterrupted statement delivered by a British academic in a formal, analog setting, discussing the philosophical distinction between modern and Neoplatonic interpretations of Plato’s Timaeus. The speaker’s accent, style, and environment suggest a mid-20th-century British academic context, with technical and environmental cues supporting the authenticity of the vintage recording. The clip is purely speech, with no music or extraneous sounds, and its abrupt start and finish indicate it is an excerpt from a longer recording.</div></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/7a18c77543515d79ae5f0447f0f40344.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/75a2a9d69ea85a53b170bb726886d81b.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/a037fe3f90f855afb80db8930f144aa7.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/89bd8a8281a85a46b98c6a8225d838aa.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/56f0da9105285153b8559fd9780491ac.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/41762e34bf355a01bdb80f72090bf31e.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/393f48c1dd575f7d8a47fbbd007c9b5b.wav" type="audio/wav" /></audio></td>
+</tr>
+<tr>
+<td class="utt-id-col sticky-col">1188-133604-0000</td>
+<td class="text-col sticky-col">you will find me continually speaking of four men titian holbein turner and tintoret in almost the same terms</td>
+<td class="text-col sticky-col">Insert &#x27;namely the great&#x27; between &#x27;four men&#x27; and &#x27;titian&#x27;</td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/58ebde40c2385adcb819ed245e1cd819.wav" type="audio/wav" /></audio></td>
+<td class="caption-col"><div class="caption-box">The audio clip begins with a faint, low-frequency thump, likely the result of the microphone being tapped or bumped, followed immediately by a subtle, consistent background hiss, indicative of analog recording equipment or the natural noise floor of a quiet room. A single adult male, speaking in a clear and measured tone with a General American accent, delivers the opening line: “You will find me continually speaking of four men.” His delivery is deliberate, with careful enunciation and a slightly formal cadence. The recording is marked by a persistent, low-level hum, possibly from nearby electrical sources, and subtle reverberation suggesting a small-to-medium-sized, acoustically treated room, such as a studio or library. The speaker maintains a calm and reflective mood throughout, with a gentle, unhurried rhythm and a voice that is mid-to-low in pitch, resonant, and slightly gravelly, reflecting maturity and authority.
+
+After a brief, natural pause, the speaker continues: “Titian, Holbein, Turner, and Tintoret.” Each name is pronounced distinctly and evenly, with slight emphasis on “Titian” and “Tintoret,” indicating their significance. The word “Holbein” is delivered with a crisp “H,” and “Turner” is spoken with a clear “r” sound. The cadence remains steady and the emotional tone remains contemplative, as if the speaker is sharing a deeply considered insight with a close audience. Another short pause follows, during which the background hiss becomes more apparent. The speaker then concludes with, “in almost the same terms,” articulating “almost” with a soft, rounded vowel and ending on a slightly rising inflection, which imparts a sense of reflection and subtle emphasis.
+
+Throughout the recording, there is no evidence of other voices, music, or environmental sounds; the setting is quiet and controlled. The audio’s fidelity is moderate, with a limited frequency range, some analog noise, and a slightly muffled character, suggesting it was captured on mid-20th-century magnetic tape equipment. The speech is clear and intelligible, though the room’s natural reverberation softens the edges of the voice. The speaker’s tone and delivery, combined with the absence of any explicit context or identifying information, suggest a scholarly or artistic focus—likely a lecture, personal statement, or archival record from the early-to-mid 20th century, intended for a small, attentive audience.
+
+In summary, the audio presents a solitary, mature male voice delivering a brief, reflective statement about four renowned artists—Titian, Holbein, Turner, and Tintoret—within a quiet, reverberant studio or library setting. The recording’s technical and acoustic characteristics, along with its content and delivery, point to an archival or educational context, likely from the early-to-mid 20th century. The speaker’s measured tone, the clarity of his enunciation, and the absence of extraneous sounds all contribute to an atmosphere of focused contemplation and authority.</div></td>
+<td class="caption-col"><div class="caption-box">The audio clip begins with a faint, low-frequency thump, likely the result of the microphone being tapped or bumped, followed immediately by a subtle, consistent background hiss, indicative of analog recording equipment or the natural noise floor of a quiet room. A single adult male, speaking in a clear and measured tone with a General American accent, delivers the opening line: “You will find me continually speaking of four men.” His delivery is deliberate, with careful enunciation and a slightly formal cadence. The recording is marked by a persistent, low-level hum, possibly from nearby electrical sources, and subtle reverberation suggesting a small-to-medium-sized, acoustically treated room, such as a studio or library. The speaker maintains a calm and reflective mood throughout, with a gentle, unhurried rhythm and a voice that is mid-to-low in pitch, resonant, and slightly gravelly, reflecting maturity and authority.
+
+After a brief, natural pause, the speaker continues: “namely the great Titian, Holbein, Turner, and Tintoret.” Each name is pronounced distinctly and evenly, with slight emphasis on “Titian” and “Tintoret,” indicating their significance. The word “Holbein” is delivered with a crisp “H,” and “Turner” is spoken with a clear “r” sound. The cadence remains steady and the emotional tone remains contemplative, as if the speaker is sharing a deeply considered insight with a close audience. Another short pause follows, during which the background hiss becomes more apparent. The speaker then concludes with, “in almost the same terms,” articulating “almost” with a soft, rounded vowel and ending on a slightly rising inflection, which imparts a sense of reflection and subtle emphasis.
+
+Throughout the recording, there is no evidence of other voices, music, or environmental sounds; the setting is quiet and controlled. The audio’s fidelity is moderate, with a limited frequency range, some analog noise, and a slightly muffled character, suggesting it was captured on mid-20th-century magnetic tape equipment. The speech is clear and intelligible, though the room’s natural reverberation softens the edges of the voice. The speaker’s tone and delivery, combined with the absence of any explicit context or identifying information, suggest a scholarly or artistic focus—likely a lecture, personal statement, or archival record from the early-to-mid 20th century, intended for a small, attentive audience.
+
+In summary, the audio presents a solitary, mature male voice delivering a brief, reflective statement about four renowned artists—namely the great Titian, Holbein, Turner, and Tintoret—within a quiet, reverberant studio or library setting. The recording’s technical and acoustic characteristics, along with its content and delivery, point to an archival or educational context, likely from the early-to-mid 20th century. The speaker’s measured tone, the clarity of his enunciation, and the absence of extraneous sounds all contribute to an atmosphere of focused contemplation and authority.</div></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/061b901d5f9156909991f79f5ec04f96.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/0de2ca7de2ad5119a24c18805c1d47d5.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/c76f280ecc075e51ab8b8ed5fe4c7c8e.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/ad6a4ddb07125bbb86172ea0b420d4e0.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/1d34b8637f925befb9b84d982df1067a.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/b0767a6d0f545a1494c207ca8560d691.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/091dfd61397453368b4bd9b4f5cb8a00.wav" type="audio/wav" /></audio></td>
+</tr>
+</tbody></table></div>
       </div>
       
       <div id="transcription_replace_sentence" class="subsection">
         <h3>Transcription — Replace Sentence</h3>
         
-        <p class="text-secondary" style="font-size:.9rem;">Replace the entire spoken sentence with a new one, keeping the same speaker voice.</p>
+        <p class="text-secondary" style="font-size:.9rem;">Replace entire sentences or clauses while preserving surrounding context.</p>
         
-
         <div class="table-responsive">
-          <table class="sample-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Instruction</th>
-                <th>Text</th>
-                
-                <th>
-                  <span class="model-badge" style="background:#6c757d;"></span>
-                  Source
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#4C72B0;"></span>
-                  Bagpiper-Base
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#DD8452;"></span>
-                  Bagpiper-Edit (ST)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#55A868;"></span>
-                  Bagpiper-Edit (MT)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#C44E52;"></span>
-                  CosyVoice-3.0
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#8172B3;"></span>
-                  Step-Audio-EditX
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#937860;"></span>
-                  Ming-UniAudio-Edit
-                </th>
-                
-              </tr>
-            </thead>
-            <tbody>
-              
-              <tr>
-                <td>1</td>
-                <td class="text-col">Replace with "The weather is beautiful today."</td>
-                <td class="text-col">but anders cared nothing about that</td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/transcription_replace/rep_001_source.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/transcription_replace/rep_001_bagpiper_base.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/transcription_replace/rep_001_bagpiper_st.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/transcription_replace/rep_001_bagpiper_mt.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-              </tr>
-              
-            </tbody>
-          </table>
-        </div>
-      </div>
-      
-      <div id="paralinguistic" class="subsection">
-        <h3>Paralinguistic Editing</h3>
-        
-        <p class="text-secondary" style="font-size:.9rem;">Add or modify paralinguistic elements such as laughter, breathing, hesitation, etc.</p>
-        
+<table class="sample-table">
+<thead><tr>
+<th class="sticky-col">ID</th>
+<th class="sticky-col">Original Text</th>
+<th class="sticky-col">Edit Prompt</th>
+<th><span class="model-badge" style="background:#6c757d;"></span>Source</th>
+<th>Original Caption</th>
+<th>Edited Caption</th>
+<th><span class="model-badge" style="background:#4C72B0;"></span>Bagpiper-Base (TTS)</th>
+<th><span class="model-badge" style="background:#4C72B0;"></span>Bagpiper-Base</th>
+<th><span class="model-badge" style="background:#DD8452;"></span>Bagpiper-Edit (ST)</th>
+<th><span class="model-badge" style="background:#55A868;"></span>Bagpiper-Edit (MT)</th>
+<th><span class="model-badge" style="background:#C44E52;"></span>CosyVoice-3</th>
+<th><span class="model-badge" style="background:#937860;"></span>Ming-UniAudio-Edit</th>
+<th><span class="model-badge" style="background:#8172B3;"></span>Step-Audio-EditX</th>
+</tr></thead><tbody>
+<tr>
+<td class="utt-id-col sticky-col">8224-274381-0002</td>
+<td class="text-col sticky-col">while the former foretold that the scottish covenanters were secretly forming a union with the english parliament and inculcated the necessity of preventing them by some vigorous undertaking the latter still insisted that every such attempt would precipitate them into measures to which otherwise they were not perhaps inclined</td>
+<td class="text-col sticky-col">Rewrite the sentence with &#x27;Although the initial report claimed that the Irish Confederates were covertly negotiating a truce with the Scottish nobility, and emphasized the urgency of disrupting their plans through decisive military action, the opposing faction maintained that such aggression would only drive them toward alliances they might not have otherwise considered.&#x27;</td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/ee2636ea9d705b6d8cbe49edc0af3c9d.wav" type="audio/wav" /></audio></td>
+<td class="caption-col"><div class="caption-box">The audio clip begins with a single male voice, mature and steady, speaking in a clear, formal tone. He delivers a historical statement in Received Pronunciation, stating: &quot;While the former foretold that the Scottish Covenanters were secretly forming a union with the English Parliament, and inculcated the necessity of preventing them by some vigorous undertaking, the latter still insisted that every such attempt would precipitate them into measures to which otherwise they were not perhaps inclined.&quot; The speaker maintains a measured pace, with precise enunciation and subtle emphasis on key phrases, such as &quot;secretly forming a union,&quot; &quot;vigorous undertaking,&quot; and &quot;precipitate them into measures.&quot; The passage is presented as a single, uninterrupted sentence, with only a brief pause following the word &quot;undertaking&quot; and a more significant pause after &quot;insisted,&quot; before the sentence resumes and concludes with the final phrase.
 
-        <div class="table-responsive">
-          <table class="sample-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Instruction</th>
-                <th>Text</th>
-                
-                <th>
-                  <span class="model-badge" style="background:#6c757d;"></span>
-                  Source
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#4C72B0;"></span>
-                  Bagpiper-Base
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#DD8452;"></span>
-                  Bagpiper-Edit (ST)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#55A868;"></span>
-                  Bagpiper-Edit (MT)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#C44E52;"></span>
-                  CosyVoice-3.0
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#8172B3;"></span>
-                  Step-Audio-EditX
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#937860;"></span>
-                  Ming-UniAudio-Edit
-                </th>
-                
-              </tr>
-            </thead>
-            <tbody>
-              
-              <tr>
-                <td>1</td>
-                <td class="text-col">Add [Laughter] after "that"</td>
-                <td class="text-col">but anders cared nothing about that</td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/paralinguistic/para_001_source.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/paralinguistic/para_001_bagpiper_base.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/paralinguistic/para_001_bagpiper_st.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/paralinguistic/para_001_bagpiper_mt.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-              </tr>
-              
-            </tbody>
-          </table>
-        </div>
+The recording exhibits a low-level, continuous electronic hiss, especially noticeable during pauses, and a subtle, persistent hum in the low frequencies. These noises indicate a quiet, controlled studio environment and high-fidelity equipment, but also reveal the presence of analog tape or early digital recording artifacts. The speaker is closely miked, with little room reverberation, producing a dry, intimate sound. The frequency response is midrange-focused, with rolled-off lows and highs, and the overall timbre is slightly boxy and compressed, imparting a vintage character. No other sounds—such as breathing, mouth noises, or background disturbances—are present, suggesting careful microphone placement and an acoustically isolated studio. The clip ends abruptly, mid-word, with a faint click, indicating a hard digital edit and further reinforcing its archival or broadcast origin.
+
+The speaker’s accent and delivery are consistent with mid-20th-century British public address or educational media, marked by careful articulation, formal diction, and a neutral, authoritative tone. The content is a historical analysis referencing the Scottish Covenanters and the English Parliament, employing formal vocabulary and complex syntax. The absence of emotional inflection and the precise pacing suggest the passage is from an educational or documentary source, intended for an audience seeking factual information. The technical and stylistic elements imply that the recording was made for radio, television, or educational use, likely during the mid-20th century, and intended for a general audience familiar with British history.
+
+In summary, this audio clip features a single, formally educated British male narrator presenting a concise historical account of political tensions between the Scottish Covenanters and the English Parliament. The passage is delivered in a measured, authoritative tone, recorded in a controlled studio environment with high fidelity and vintage analog characteristics. The content and delivery suggest a mid-20th-century educational or documentary context, crafted for a general audience interested in British history and political analysis.</div></td>
+<td class="caption-col"><div class="caption-box">The audio clip features a single male voice, mature and composed, speaking in a clear, formal register with Received Pronunciation. He delivers a historical narrative stating: &quot;Although the initial report claimed that the Irish Confederates were covertly negotiating a truce with the Scottish nobility, and emphasized the urgency of disrupting their plans through decisive military action, the opposing faction maintained that such aggression would only drive them toward alliances they might not have otherwise considered.&quot; The speaker proceeds at a measured pace, with crisp enunciation and slight stress on key phrases like &quot;covertly negotiating a truce,&quot; &quot;decisive military action,&quot; and &quot;drive them toward alliances.&quot; The sentence is delivered in one continuous take, with a brief pause after &quot;action&quot; and a more pronounced break following &quot;maintained,&quot; before resuming to its conclusion. The recording contains a faint, constant electronic hiss, most evident during pauses, alongside a low-frequency hum, suggesting a quiet studio setting with high-quality analog or early digital equipment. The speaker is closely miked, resulting in a dry, intimate sonic profile with minimal room ambience. The frequency response is centered in the midrange, with attenuated bass and treble, yielding a slightly boxy, compressed tonality characteristic of vintage recordings. No extraneous sounds—such as breaths, mouth clicks, or environmental noise—are audible, indicating precise microphone technique and acoustic isolation. The clip ends abruptly with a soft click, signaling a digital edit and supporting its archival or broadcast nature. The accent and delivery align with mid-20th-century British educational or public broadcasting standards, featuring precise articulation, formal lexicon, and a neutral, authoritative demeanor. The content presents a historical analysis involving the Irish Confederates and Scottish nobility, using elevated syntax and objective tone. The lack of emotional inflection and steady rhythm imply an instructional or documentary context aimed at an informed audience. Technical and stylistic cues suggest the recording was produced for radio, television, or academic media in the mid-1900s, intended for general listeners interested in European political history. In summary, this segment showcases a single, well-educated British male narrator offering a succinct account of diplomatic tensions between the Irish Confederates and Scottish nobility, delivered in a calm, authoritative manner and recorded in a controlled environment with high fidelity and analog-era sonic qualities, pointing to a mid-20th-century educational or documentary origin for a broad audience engaged in historical and political themes.</div></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/dfdabde1226751299f4c08329cb2420e.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/841ee20bccd1554ca1c74369864ddcec.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/ab9d288ad8435c2d86eaa5896fa3cd2b.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/cbd9be789bc15ffaa2a46987873879fd.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/bc90c0724b7e5f10b9651d37f8f233f7.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/3014850df5b35bc5a62c23e0a7ef4756.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/00e873ef16be5f4799d49ca9b730451e.wav" type="audio/wav" /></audio></td>
+</tr>
+<tr>
+<td class="utt-id-col sticky-col">5683-32866-0004</td>
+<td class="text-col sticky-col">by this time lord chelford and wylder returned and disgusted rather with myself i ruminated on my want of general ship</td>
+<td class="text-col sticky-col">Rewrite the sentence with &#x27;She then considered the consequences of her earlier decisions with quiet resignation.&#x27;</td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/545e36e93d4b5e19ae0e5d1e698c28ea.wav" type="audio/wav" /></audio></td>
+<td class="caption-col"><div class="caption-box">The audio clip opens in a quiet, acoustically controlled environment, marked only by a faint, low-frequency electronic hum and a subtle, steady hiss, both characteristic of a high-quality studio or library recording. A female narrator, speaking in a neutral, clear American English accent, begins with the sentence: “By this time, Lord Chelford and Wilder returned.” Her voice is steady and measured, with precise articulation and a slightly formal cadence, indicating a professional narrator reading from a literary text. As she continues, she pauses for a moment before stating, “And disgusted rather with myself,” inflecting “disgusted” with a subtle downward emphasis that conveys emotional weight and introspection. The next phrase, “I ruminated on my want of generalship,” is delivered with an even, reflective tone, underscoring the internal nature of the character’s thoughts. The audio concludes with a brief silence and the natural decay of the ambient hum, reinforcing the sense of a carefully produced recording.
+
+The narration is entirely focused on the spoken text, with no background music, environmental noise, or other voices present. The content reveals a character reflecting on their own shortcomings in leadership (“generalship”) following the return of two named individuals. The formal language, archaic structure, and elevated diction suggest a late 19th- or early 20th-century literary origin, likely intended for an audience familiar with historical fiction or adventure genres. The controlled recording quality and professional delivery indicate the clip’s purpose as an excerpt from an audiobook or archival library recording, designed for clarity and narrative immersion.
+
+In summary, the audio presents a solitary, reflective passage from a classic literary work, delivered by a professional narrator in a pristine studio setting. The speaker’s introspective tone and formal language evoke a historical context, while the technical quality and absence of extraneous sound emphasize the narrative’s emotional and thematic depth.</div></td>
+<td class="caption-col"><div class="caption-box">The audio clip unfolds in a still, acoustically insulated setting, defined only by a soft, low-level electronic drone and a gentle, continuous background hiss, typical of a professional studio or archival recording environment. A female narrator, speaking in a clear, neutral American English accent, begins the passage with the statement: &#x27;She then considered the consequences of her earlier decisions with quiet resignation.&#x27; Her voice is calm and deliberate, marked by careful enunciation and a restrained, formal rhythm, suggesting a skilled performer reading from a literary source. As she speaks, she lingers slightly on &#x27;consequences&#x27; and &#x27;resignation,&#x27; imbuing the words with a subdued emotional gravity that reflects the character’s inward reflection. The phrase &#x27;earlier decisions&#x27; is delivered with a measured neutrality, emphasizing the weight of past actions without overt judgment. The recording ends in silence, the ambient hum fading naturally, preserving the sense of a meticulously produced audio segment.
+
+The narration remains focused solely on the spoken text, with no accompanying music, environmental sounds, or additional voices. The content reveals a character engaging in retrospective self-assessment, confronting the outcomes of prior choices with a sense of acceptance tinged with regret. The formal diction, reflective tone, and grammatical structure point to a literary work from the early 20th century, likely situated within the genres of psychological realism or historical fiction. The high production quality and articulate delivery suggest the clip originates from an audiobook or curated archival collection, intended for audiences seeking narrative depth and auditory clarity.
+
+In summary, the audio presents a moment of personal reckoning within a classic literary context, rendered by a professional narrator in a controlled studio environment. The speaker’s contemplative delivery and precise articulation evoke a sense of emotional restraint and historical authenticity, while the pristine sound quality enhances the immersive and introspective nature of the passage.</div></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/bb5a7416884853d5a2d5059384a1181a.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/31fe35211c2155f4b1df92bbe13aae19.wav" type="audio/wav" /></audio></td>
+<td><span class="no-audio">-</span></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/38fa746de8f054239a733bca8ef0eeea.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/996e3a647d5e5f4585c739de78bd187e.wav" type="audio/wav" /></audio></td>
+<td><span class="no-audio">-</span></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/ba8490c29e5251faa69403aee06ff532.wav" type="audio/wav" /></audio></td>
+</tr>
+<tr>
+<td class="utt-id-col sticky-col">1580-141083-0012</td>
+<td class="text-col sticky-col">not only this but on the table i found a small ball of black dough or clay with specks of something which looks like sawdust in it</td>
+<td class="text-col sticky-col">Rewrite the sentence with &#x27;She paused briefly, then added that the object seemed to pulse faintly, as though it were alive.&#x27;</td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/a63eed81d1915e36a6636f627b5eda45.wav" type="audio/wav" /></audio></td>
+<td class="caption-col"><div class="caption-box">The audio clip begins with a single adult female voice speaking in a clear, neutral, and narrative tone, characteristic of an American English accent with General American pronunciation and no regional inflections. The delivery is measured and formal, resembling a story being read aloud. The speaker says: “Not only this, but on the table I found a small ball of black dough or clay with specks of something which looks like sawdust in it.” The passage is delivered without pauses, with a slightly rising intonation at the end of the last phrase, suggesting the narrative is continuing. Throughout, the voice is clean and intelligible, with a mid-to-high pitch, and the only audible artifacts are a persistent, low-level background hiss and a faint electronic hum, typical of consumer-grade recording equipment. The acoustics indicate a small, non-reverberant, and acoustically treated space, such as a home office or bedroom, with no evidence of other people or environmental sounds.
+
+After the speaker completes the sentence, a brief silence follows, during which the background hiss and hum become more noticeable, and the absence of any other sounds reinforces the solitary and controlled nature of the recording environment. At the end of this pause, a synthesized, low-pitched electronic tone is introduced. This tone, resembling a square or sawtooth wave, is monophonic, steady, and centered in the stereo field, with no modulation or vibrato. It is abruptly cut off after a short duration, with no fade-out, indicating a deliberate, technical edit. The tone’s timbre and abrupt ending are reminiscent of a censor beep or digital “bloop” used in media to mask audio content, but in this case, it serves as a stylistic or functional conclusion rather than a censorship signal.
+
+The recording is monophonic, with all elements centered and no spatial effects. The frequency range is limited, with a rolled-off high end and a low-frequency hum, and the overall loudness is moderate and consistent, with no dynamic variation. The clip is devoid of other human activity, music, or ambient noise, and the narrative is presented in a neutral, objective manner, with no emotional cues or emphasis. The content, describing a discovery of a mysterious object—“a small ball of black dough or clay with specks of something which looks like sawdust in it”—suggests a literary or dramatic context, likely excerpted from a short story, novella, or audiobook, possibly with gothic, mystery, or fantasy themes. The presence of the electronic tone at the end is a deliberate editorial choice, signaling a transition or closure, rather than censorship.
+
+In summary, the audio features a solitary, neutral female voice narrating a mysterious object discovery in a small, acoustically controlled room. The recording is clear but limited in fidelity, with a persistent background hiss and hum. The narrative is abruptly concluded by a synthetic electronic tone, which acts as a stylistic marker rather than censorship. The clip’s context and production suggest it is an excerpt from a literary work, intended for audiobook or podcast use, with a focus on clarity, narrative pacing, and editorial closure.</div></td>
+<td class="caption-col"><div class="caption-box">The audio clip features a single adult female voice continuing her narrative in a calm, measured tone with clear enunciation and a neutral American English accent, maintaining the same formal and detached delivery as before. She says: &#x27;She paused briefly, then added that the object seemed to pulse faintly, as though it were alive.&#x27; The sentence is delivered in a continuous flow with a slight intonation rise at the end, suggesting ongoing suspense. The voice remains mid-to-high in pitch, intelligible, and free of emotional inflection, consistent with a literary reading. Background conditions persist: a low-level hiss and faint electronic hum are present, and the acoustics continue to indicate a small, dry, non-reverberant space with no ambient distractions. The recording remains monophonic, centered, and dynamically stable, with no added effects or spatial cues, reinforcing the controlled, intimate atmosphere of a private recording session. The content deepens the mysterious tone of the narrative, introducing a surreal detail—the pulsing object—that enhances the sense of unease and otherworldliness, likely within a gothic or speculative fiction context. The clip maintains its focus on narrative clarity and atmospheric tension, with no interruption or additional sound events.</div></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/cccd58577840530591008fb6c7a95ecc.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/a0f1f3556d835721b88d6debd26c105b.wav" type="audio/wav" /></audio></td>
+<td><span class="no-audio">-</span></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/755fd306838e55829f29e383d52b0fc2.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/3f7fc544f9cd55dea7d6830b64c7f343.wav" type="audio/wav" /></audio></td>
+<td><span class="no-audio">-</span></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/0b10720433a953f38b1b04c4c7922d4c.wav" type="audio/wav" /></audio></td>
+</tr>
+<tr>
+<td class="utt-id-col sticky-col">1320-122617-0036</td>
+<td class="text-col sticky-col">god bless you friend i do believe your scent is not greatly wrong when the matter is duly considered and keeping eternity before the eyes though much depends on the natural gifts and the force of temptation</td>
+<td class="text-col sticky-col">Rewrite the sentence with &#x27;Perhaps clarity will emerge when we revisit these thoughts with patience and care.&#x27;</td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/24dc2a2b8d9c5718ae2516826697e584.wav" type="audio/wav" /></audio></td>
+<td class="caption-col"><div class="caption-box">The audio clip begins in a quiet, intimate setting, distinguished by a subtle, persistent analog hiss and a faint low-frequency hum characteristic of tape-based recording. The sole speaker, a mature adult male with a General American accent, is positioned close to the microphone, enveloping the listener in a warm, full-bodied timbre. He speaks deliberately and with gentle solemnity, articulating: &quot;God bless you, friend.&quot; After a brief, soft inhalation, he continues, &quot;I do believe your scent has not greatly wrong.&quot; The word &quot;scent&quot; is delivered with a slight emphasis, and a soft, breathy exhalation follows. The speech continues: &quot;When the matter is duly considered,&quot; punctuated by another short, soft breath. He proceeds, &quot;and keeping eternity before the eyes,&quot; with a measured pace and a subtle lowering of pitch on &quot;eternity,&quot; suggesting reflective gravity. The final sentence is spoken with a slight rise in pitch and emphasis: &quot;though much depends on the natural gifts and the force of temptation.&quot; The recording ends abruptly after this last phrase, with the analog hiss and hum fading quickly into silence.
+
+The clip is marked by clear, intelligible speech and a lack of distortion, indicating high-fidelity analog recording. The environment is acoustically dry and insulated, likely a private or studio setting, with no extraneous noise or room echo. The speaker’s tone is gentle, earnest, and measured, evoking a sense of pastoral or spiritual guidance, and the vocabulary and phrasing reflect mid-20th-century American English and Christian theological discourse. The overall effect is one of quiet intimacy and moral reflection, as if the speaker is offering private counsel or a blessing to a trusted friend in a serene, contemplative moment.
+
+In summary, the audio features a mature male voice delivering a solemn, reflective blessing and moral advice in clear, mid-20th-century American English, set in a quiet, acoustically controlled environment and recorded with analog fidelity. The content, tone, and technical qualities together evoke a sense of personal spiritual guidance and gentle reassurance, culminating in a sudden, unresolved ending that amplifies the sense of intimacy and contemplation.</div></td>
+<td class="caption-col"><div class="caption-box">The audio clip unfolds in a hushed, personal atmosphere, underscored by a steady analog hiss and a soft, underlying hum typical of magnetic tape recording. A mature adult male speaker, possessing a General American accent, is positioned near the microphone, producing a rich, close-miked vocal quality. He speaks slowly and with quiet sincerity, articulating: &quot;Perhaps clarity will emerge when we revisit these thoughts with patience and care.&quot; His delivery is even and contemplative, with a slight softening on the word &quot;patience,&quot; followed by a quiet breath. The phrase is rendered with a gentle rise in intonation on &quot;care,&quot; lending it a sense of open-ended hope. The recording concludes immediately after this statement, the ambient tape noise dissipating swiftly into silence. The speech remains crisp and undistorted throughout, reflecting high-quality analog capture. The setting appears acoustically isolated, with no background sounds or reverberation, suggesting a private or professional studio environment. The speaker’s demeanor is calm and thoughtful, evoking the tone of personal reflection or quiet mentorship, with phrasing that aligns with mid-20th-century American diction and philosophical discourse. The overall impression is one of measured introspection and tender guidance, as if offering quiet reassurance during a moment of uncertainty. In essence, the recording captures a reflective, softly delivered insight in a serene, controlled acoustic space, preserved with analog warmth and clarity, ending with a sense of gentle invitation rather than resolution.</div></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/d7fe84a28f035f2faadc125e31dceda4.wav" type="audio/wav" /></audio></td>
+<td><span class="no-audio">-</span></td>
+<td><span class="no-audio">-</span></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/20dc4e226bd252b08b19c859e6007f56.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/2ace2e3a39975ff8b02e2d7eb293d517.wav" type="audio/wav" /></audio></td>
+<td><span class="no-audio">-</span></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/e06c012533ed5d12bc4bd04c562b0467.wav" type="audio/wav" /></audio></td>
+</tr>
+<tr>
+<td class="utt-id-col sticky-col">1284-134647-0005</td>
+<td class="text-col sticky-col">they asserted with confidence and almost with exultation that the apostolical succession was interrupted that all the bishops of europe and asia were infected by the contagion of guilt and schism and that the prerogatives of the catholic church were confined to the chosen portion of the african believers who alone had preserved inviolate the integrity of their faith and discipline</td>
+<td class="text-col sticky-col">Rewrite the sentence with &#x27;He continued in the same composed and authoritative manner, emphasizing the historical weight of the schism and the unwavering conviction of those who believed they alone upheld the true apostolic tradition.&#x27;</td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/9ab38412ef545e2b8239a509e3324aff.wav" type="audio/wav" /></audio></td>
+<td class="caption-col"><div class="caption-box">The audio begins in a quiet, indoor setting with a faint electronic hiss and subtle room reverberation, indicating a small to medium-sized, reflective-walled space such as a study or library. A single male speaker, with a mature, measured, and formal tone, starts reading aloud. His voice is clear, resonant, and well-articulated, with a General American accent. He maintains a consistent, slightly elevated pitch and steady, deliberate pace, suggesting a prepared reading of a formal text. The speaker articulates each word carefully, with pronounced vowels and crisp consonants, and employs a neutral, declarative delivery devoid of emotional inflection, evoking the style of a documentary narrator or an audiobook reader. The content of the reading is: &quot;They asserted with confidence and almost with exultation that the apostolical succession was interrupted, that all the bishops of Europe and Asia were infected by the contagion of guilt and schism, and that the prerogatives of the Catholic Church were confined to the chosen portion of the African believers, who alone had preserved inviolate the integrity of their faith and discipline.&quot; The passage is delivered in a single, uninterrupted sentence, with careful pauses at punctuation points but no breaks or changes in rhythm. Throughout, the background remains silent aside from the speaker’s voice and a steady, low-level hiss, and there are no other audible sounds, music, or environmental cues. The recording ends abruptly, with no fade-out or concluding remarks, leaving only the residual hiss and reverberation in the silence.
+
+In summary, this audio clip features a single male narrator reading a historical passage in a formal, measured tone, focusing on the claims of African believers regarding the integrity of faith and discipline in contrast to bishops in Europe and Asia. The recording is clear and professional, set in a quiet, reverberant room, with no music or extraneous sounds, and is likely intended for educational or documentary purposes.</div></td>
+<td class="caption-col"><div class="caption-box">The audio unfolds in a quiet, indoor environment marked by a soft electronic hiss and faint room reverberation, suggesting a medium-sized, acoustically reflective space such as a study or recording studio. A single male speaker, possessing a mature, steady, and formal vocal quality, speaks with clarity and precision, using a General American accent. His tone remains consistently measured and deliberate, with a slightly raised pitch and even pacing, indicative of a rehearsed or scripted delivery. The speaker articulates each word distinctly, with clear vowels and sharp consonants, and maintains a neutral, declarative intonation without emotional variation, resembling the style of a scholarly narrator or documentary voiceover. The spoken content is: &quot;He continued in the same composed and authoritative manner, emphasizing the historical weight of the schism and the unwavering conviction of those who believed they alone upheld the true apostolic tradition.&quot; The sentence is delivered in one continuous flow, with precise pauses at syntactic boundaries but no interruptions or shifts in tempo. The background remains devoid of any additional sounds, music, or environmental cues, consisting only of the speaker’s voice and a constant, low-level electronic hum. The recording concludes abruptly, without fade-out or closing remarks, leaving only the ambient hiss in the ensuing silence.
+
+In summary, this audio features a male narrator delivering a reflective historical observation in a calm, professional tone, focusing on the perceived legitimacy and spiritual resolve of a religious minority during a period of ecclesiastical division. The recording is clean and focused, set in a silent, reverberant interior, with no music or external noise, and appears designed for academic or informational narration.</div></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/09043882977257448b8fcb5127606a25.wav" type="audio/wav" /></audio></td>
+<td><span class="no-audio">-</span></td>
+<td><span class="no-audio">-</span></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/bcc1751d59255c9996f3f7f8289dbb39.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/d6009bf3d1bc5c1e8a1cd89553a90f4b.wav" type="audio/wav" /></audio></td>
+<td><span class="no-audio">-</span></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/e381ce089cdd5b8ea25d56974c658faa.wav" type="audio/wav" /></audio></td>
+</tr>
+</tbody></table></div>
       </div>
       
       <div id="emotion" class="subsection">
@@ -828,121 +764,23 @@ Evaluations across speech, audio, and free-form editing show Bagpiper-Edit maint
         
         <p class="text-secondary" style="font-size:.9rem;">Change the emotional expression of the speaker (e.g. happy, sad, angry, fearful).</p>
         
-
         <div class="table-responsive">
-          <table class="sample-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Instruction</th>
-                <th>Text</th>
-                
-                <th>
-                  <span class="model-badge" style="background:#6c757d;"></span>
-                  Source
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#4C72B0;"></span>
-                  Bagpiper-Base
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#DD8452;"></span>
-                  Bagpiper-Edit (ST)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#55A868;"></span>
-                  Bagpiper-Edit (MT)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#C44E52;"></span>
-                  CosyVoice-3.0
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#8172B3;"></span>
-                  Step-Audio-EditX
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#937860;"></span>
-                  Ming-UniAudio-Edit
-                </th>
-                
-              </tr>
-            </thead>
-            <tbody>
-              
-              <tr>
-                <td>1</td>
-                <td class="text-col">Change emotion to Happy</td>
-                <td class="text-col">but anders cared nothing about that</td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/emotion/emo_001_source.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/emotion/emo_001_bagpiper_base.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/emotion/emo_001_bagpiper_st.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/emotion/emo_001_bagpiper_mt.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-              </tr>
-              
-            </tbody>
-          </table>
-        </div>
+<table class="sample-table">
+<thead><tr>
+<th class="sticky-col">ID</th>
+<th class="sticky-col">Original Text</th>
+<th class="sticky-col">Edit Prompt</th>
+<th><span class="model-badge" style="background:#6c757d;"></span>Source</th>
+<th><span class="model-badge" style="background:#4C72B0;"></span>Bagpiper-Base (TTS)</th>
+</tr></thead><tbody>
+<tr>
+<td class="utt-id-col sticky-col">emo_001</td>
+<td class="text-col sticky-col">but anders cared nothing about that</td>
+<td class="text-col sticky-col">Change emotion to Happy</td>
+<td><audio controls preload="none"><source src="audios/speech/emotion/emo_001_source.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/emotion/emo_001_bagpiper_base.wav" type="audio/wav" /></audio></td>
+</tr>
+</tbody></table></div>
       </div>
       
       <div id="speaker_style" class="subsection">
@@ -950,121 +788,23 @@ Evaluations across speech, audio, and free-form editing show Bagpiper-Edit maint
         
         <p class="text-secondary" style="font-size:.9rem;">Modify the speaking style — e.g. whisper, shout, child voice, elderly voice.</p>
         
-
         <div class="table-responsive">
-          <table class="sample-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Instruction</th>
-                <th>Text</th>
-                
-                <th>
-                  <span class="model-badge" style="background:#6c757d;"></span>
-                  Source
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#4C72B0;"></span>
-                  Bagpiper-Base
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#DD8452;"></span>
-                  Bagpiper-Edit (ST)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#55A868;"></span>
-                  Bagpiper-Edit (MT)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#C44E52;"></span>
-                  CosyVoice-3.0
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#8172B3;"></span>
-                  Step-Audio-EditX
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#937860;"></span>
-                  Ming-UniAudio-Edit
-                </th>
-                
-              </tr>
-            </thead>
-            <tbody>
-              
-              <tr>
-                <td>1</td>
-                <td class="text-col">Change to Whisper style</td>
-                <td class="text-col">but anders cared nothing about that</td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/speaker_style/style_001_source.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/speaker_style/style_001_bagpiper_base.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/speaker_style/style_001_bagpiper_st.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/speech/speaker_style/style_001_bagpiper_mt.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-              </tr>
-              
-            </tbody>
-          </table>
-        </div>
+<table class="sample-table">
+<thead><tr>
+<th class="sticky-col">ID</th>
+<th class="sticky-col">Original Text</th>
+<th class="sticky-col">Edit Prompt</th>
+<th><span class="model-badge" style="background:#6c757d;"></span>Source</th>
+<th><span class="model-badge" style="background:#4C72B0;"></span>Bagpiper-Base (TTS)</th>
+</tr></thead><tbody>
+<tr>
+<td class="utt-id-col sticky-col">style_001</td>
+<td class="text-col sticky-col">but anders cared nothing about that</td>
+<td class="text-col sticky-col">Change to Whisper style</td>
+<td><audio controls preload="none"><source src="audios/speech/speaker_style/style_001_source.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/speaker_style/style_001_bagpiper_base.wav" type="audio/wav" /></audio></td>
+</tr>
+</tbody></table></div>
       </div>
       
     </div>
@@ -1081,121 +821,21 @@ Evaluations across speech, audio, and free-form editing show Bagpiper-Edit maint
         
         <p class="text-secondary" style="font-size:.9rem;">Add background music to a speech utterance.</p>
         
-
         <div class="table-responsive">
-          <table class="sample-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Instruction</th>
-                
-                
-                <th>
-                  <span class="model-badge" style="background:#6c757d;"></span>
-                  Source
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#4C72B0;"></span>
-                  Bagpiper-Base
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#DD8452;"></span>
-                  Bagpiper-Edit (ST)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#55A868;"></span>
-                  Bagpiper-Edit (MT)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#C44E52;"></span>
-                  CosyVoice-3.0
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#8172B3;"></span>
-                  Step-Audio-EditX
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#937860;"></span>
-                  Ming-UniAudio-Edit
-                </th>
-                
-              </tr>
-            </thead>
-            <tbody>
-              
-              <tr>
-                <td>1</td>
-                <td class="text-col">Add soft piano background music</td>
-                
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/audio/music_add/madd_001_source.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/audio/music_add/madd_001_bagpiper_base.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/audio/music_add/madd_001_bagpiper_st.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/audio/music_add/madd_001_bagpiper_mt.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-              </tr>
-              
-            </tbody>
-          </table>
-        </div>
+<table class="sample-table">
+<thead><tr>
+<th class="sticky-col">ID</th>
+<th class="sticky-col">Edit Prompt</th>
+<th><span class="model-badge" style="background:#6c757d;"></span>Source</th>
+<th><span class="model-badge" style="background:#4C72B0;"></span>Bagpiper-Base (TTS)</th>
+</tr></thead><tbody>
+<tr>
+<td class="utt-id-col sticky-col">madd_001</td>
+<td class="text-col sticky-col">Add soft piano background music</td>
+<td><audio controls preload="none"><source src="audios/audio/music_add/madd_001_source.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/audio/music_add/madd_001_bagpiper_base.wav" type="audio/wav" /></audio></td>
+</tr>
+</tbody></table></div>
       </div>
       
       <div id="music_remove" class="subsection">
@@ -1203,121 +843,21 @@ Evaluations across speech, audio, and free-form editing show Bagpiper-Edit maint
         
         <p class="text-secondary" style="font-size:.9rem;">Remove existing background music while preserving the speech.</p>
         
-
         <div class="table-responsive">
-          <table class="sample-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Instruction</th>
-                
-                
-                <th>
-                  <span class="model-badge" style="background:#6c757d;"></span>
-                  Source
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#4C72B0;"></span>
-                  Bagpiper-Base
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#DD8452;"></span>
-                  Bagpiper-Edit (ST)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#55A868;"></span>
-                  Bagpiper-Edit (MT)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#C44E52;"></span>
-                  CosyVoice-3.0
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#8172B3;"></span>
-                  Step-Audio-EditX
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#937860;"></span>
-                  Ming-UniAudio-Edit
-                </th>
-                
-              </tr>
-            </thead>
-            <tbody>
-              
-              <tr>
-                <td>1</td>
-                <td class="text-col">Remove the background music</td>
-                
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/audio/music_remove/mrmv_001_source.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/audio/music_remove/mrmv_001_bagpiper_base.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/audio/music_remove/mrmv_001_bagpiper_st.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/audio/music_remove/mrmv_001_bagpiper_mt.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-              </tr>
-              
-            </tbody>
-          </table>
-        </div>
+<table class="sample-table">
+<thead><tr>
+<th class="sticky-col">ID</th>
+<th class="sticky-col">Edit Prompt</th>
+<th><span class="model-badge" style="background:#6c757d;"></span>Source</th>
+<th><span class="model-badge" style="background:#4C72B0;"></span>Bagpiper-Base (TTS)</th>
+</tr></thead><tbody>
+<tr>
+<td class="utt-id-col sticky-col">mrmv_001</td>
+<td class="text-col sticky-col">Remove the background music</td>
+<td><audio controls preload="none"><source src="audios/audio/music_remove/mrmv_001_source.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/audio/music_remove/mrmv_001_bagpiper_base.wav" type="audio/wav" /></audio></td>
+</tr>
+</tbody></table></div>
       </div>
       
       <div id="sound_add" class="subsection">
@@ -1325,121 +865,21 @@ Evaluations across speech, audio, and free-form editing show Bagpiper-Edit maint
         
         <p class="text-secondary" style="font-size:.9rem;">Add environmental sound effects (rain, traffic, birds, etc.) to a speech utterance.</p>
         
-
         <div class="table-responsive">
-          <table class="sample-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Instruction</th>
-                
-                
-                <th>
-                  <span class="model-badge" style="background:#6c757d;"></span>
-                  Source
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#4C72B0;"></span>
-                  Bagpiper-Base
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#DD8452;"></span>
-                  Bagpiper-Edit (ST)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#55A868;"></span>
-                  Bagpiper-Edit (MT)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#C44E52;"></span>
-                  CosyVoice-3.0
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#8172B3;"></span>
-                  Step-Audio-EditX
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#937860;"></span>
-                  Ming-UniAudio-Edit
-                </th>
-                
-              </tr>
-            </thead>
-            <tbody>
-              
-              <tr>
-                <td>1</td>
-                <td class="text-col">Add rain sound in the background</td>
-                
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/audio/sound_add/sadd_001_source.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/audio/sound_add/sadd_001_bagpiper_base.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/audio/sound_add/sadd_001_bagpiper_st.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/audio/sound_add/sadd_001_bagpiper_mt.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-              </tr>
-              
-            </tbody>
-          </table>
-        </div>
+<table class="sample-table">
+<thead><tr>
+<th class="sticky-col">ID</th>
+<th class="sticky-col">Edit Prompt</th>
+<th><span class="model-badge" style="background:#6c757d;"></span>Source</th>
+<th><span class="model-badge" style="background:#4C72B0;"></span>Bagpiper-Base (TTS)</th>
+</tr></thead><tbody>
+<tr>
+<td class="utt-id-col sticky-col">sadd_001</td>
+<td class="text-col sticky-col">Add rain sound in the background</td>
+<td><audio controls preload="none"><source src="audios/audio/sound_add/sadd_001_source.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/audio/sound_add/sadd_001_bagpiper_base.wav" type="audio/wav" /></audio></td>
+</tr>
+</tbody></table></div>
       </div>
       
       <div id="sound_remove" class="subsection">
@@ -1447,121 +887,21 @@ Evaluations across speech, audio, and free-form editing show Bagpiper-Edit maint
         
         <p class="text-secondary" style="font-size:.9rem;">Remove environmental sound effects while preserving the speech.</p>
         
-
         <div class="table-responsive">
-          <table class="sample-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Instruction</th>
-                
-                
-                <th>
-                  <span class="model-badge" style="background:#6c757d;"></span>
-                  Source
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#4C72B0;"></span>
-                  Bagpiper-Base
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#DD8452;"></span>
-                  Bagpiper-Edit (ST)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#55A868;"></span>
-                  Bagpiper-Edit (MT)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#C44E52;"></span>
-                  CosyVoice-3.0
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#8172B3;"></span>
-                  Step-Audio-EditX
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#937860;"></span>
-                  Ming-UniAudio-Edit
-                </th>
-                
-              </tr>
-            </thead>
-            <tbody>
-              
-              <tr>
-                <td>1</td>
-                <td class="text-col">Remove the background noise</td>
-                
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/audio/sound_remove/srmv_001_source.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/audio/sound_remove/srmv_001_bagpiper_base.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/audio/sound_remove/srmv_001_bagpiper_st.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/audio/sound_remove/srmv_001_bagpiper_mt.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-              </tr>
-              
-            </tbody>
-          </table>
-        </div>
+<table class="sample-table">
+<thead><tr>
+<th class="sticky-col">ID</th>
+<th class="sticky-col">Edit Prompt</th>
+<th><span class="model-badge" style="background:#6c757d;"></span>Source</th>
+<th><span class="model-badge" style="background:#4C72B0;"></span>Bagpiper-Base (TTS)</th>
+</tr></thead><tbody>
+<tr>
+<td class="utt-id-col sticky-col">srmv_001</td>
+<td class="text-col sticky-col">Remove the background noise</td>
+<td><audio controls preload="none"><source src="audios/audio/sound_remove/srmv_001_source.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/audio/sound_remove/srmv_001_bagpiper_base.wav" type="audio/wav" /></audio></td>
+</tr>
+</tbody></table></div>
       </div>
       
     </div>
@@ -1578,121 +918,21 @@ Evaluations across speech, audio, and free-form editing show Bagpiper-Edit maint
         
         <p class="text-secondary" style="font-size:.9rem;">Creatively modify or transform music elements according to free-form instructions.</p>
         
-
         <div class="table-responsive">
-          <table class="sample-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Instruction</th>
-                
-                
-                <th>
-                  <span class="model-badge" style="background:#6c757d;"></span>
-                  Source
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#4C72B0;"></span>
-                  Bagpiper-Base
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#DD8452;"></span>
-                  Bagpiper-Edit (ST)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#55A868;"></span>
-                  Bagpiper-Edit (MT)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#C44E52;"></span>
-                  CosyVoice-3.0
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#8172B3;"></span>
-                  Step-Audio-EditX
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#937860;"></span>
-                  Ming-UniAudio-Edit
-                </th>
-                
-              </tr>
-            </thead>
-            <tbody>
-              
-              <tr>
-                <td>1</td>
-                <td class="text-col">Change the guitar to a violin</td>
-                
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/creative/music/mcre_001_source.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/creative/music/mcre_001_bagpiper_base.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/creative/music/mcre_001_bagpiper_st.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/creative/music/mcre_001_bagpiper_mt.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-              </tr>
-              
-            </tbody>
-          </table>
-        </div>
+<table class="sample-table">
+<thead><tr>
+<th class="sticky-col">ID</th>
+<th class="sticky-col">Edit Prompt</th>
+<th><span class="model-badge" style="background:#6c757d;"></span>Source</th>
+<th><span class="model-badge" style="background:#4C72B0;"></span>Bagpiper-Base (TTS)</th>
+</tr></thead><tbody>
+<tr>
+<td class="utt-id-col sticky-col">mcre_001</td>
+<td class="text-col sticky-col">Change the guitar to a violin</td>
+<td><audio controls preload="none"><source src="audios/creative/music/mcre_001_source.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/creative/music/mcre_001_bagpiper_base.wav" type="audio/wav" /></audio></td>
+</tr>
+</tbody></table></div>
       </div>
       
       <div id="speech_creative" class="subsection">
@@ -1700,121 +940,21 @@ Evaluations across speech, audio, and free-form editing show Bagpiper-Edit maint
         
         <p class="text-secondary" style="font-size:.9rem;">Creatively modify speech content or style via free-form instructions.</p>
         
-
         <div class="table-responsive">
-          <table class="sample-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Instruction</th>
-                
-                
-                <th>
-                  <span class="model-badge" style="background:#6c757d;"></span>
-                  Source
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#4C72B0;"></span>
-                  Bagpiper-Base
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#DD8452;"></span>
-                  Bagpiper-Edit (ST)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#55A868;"></span>
-                  Bagpiper-Edit (MT)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#C44E52;"></span>
-                  CosyVoice-3.0
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#8172B3;"></span>
-                  Step-Audio-EditX
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#937860;"></span>
-                  Ming-UniAudio-Edit
-                </th>
-                
-              </tr>
-            </thead>
-            <tbody>
-              
-              <tr>
-                <td>1</td>
-                <td class="text-col">Make the speaker sound like they are underwater</td>
-                
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/creative/speech/scre_001_source.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/creative/speech/scre_001_bagpiper_base.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/creative/speech/scre_001_bagpiper_st.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/creative/speech/scre_001_bagpiper_mt.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-              </tr>
-              
-            </tbody>
-          </table>
-        </div>
+<table class="sample-table">
+<thead><tr>
+<th class="sticky-col">ID</th>
+<th class="sticky-col">Edit Prompt</th>
+<th><span class="model-badge" style="background:#6c757d;"></span>Source</th>
+<th><span class="model-badge" style="background:#4C72B0;"></span>Bagpiper-Base (TTS)</th>
+</tr></thead><tbody>
+<tr>
+<td class="utt-id-col sticky-col">scre_001</td>
+<td class="text-col sticky-col">Make the speaker sound like they are underwater</td>
+<td><audio controls preload="none"><source src="audios/creative/speech/scre_001_source.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/creative/speech/scre_001_bagpiper_base.wav" type="audio/wav" /></audio></td>
+</tr>
+</tbody></table></div>
       </div>
       
       <div id="sound_creative" class="subsection">
@@ -1822,121 +962,21 @@ Evaluations across speech, audio, and free-form editing show Bagpiper-Edit maint
         
         <p class="text-secondary" style="font-size:.9rem;">Creatively modify or transform sound effects via free-form instructions.</p>
         
-
         <div class="table-responsive">
-          <table class="sample-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Instruction</th>
-                
-                
-                <th>
-                  <span class="model-badge" style="background:#6c757d;"></span>
-                  Source
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#4C72B0;"></span>
-                  Bagpiper-Base
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#DD8452;"></span>
-                  Bagpiper-Edit (ST)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#55A868;"></span>
-                  Bagpiper-Edit (MT)
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#C44E52;"></span>
-                  CosyVoice-3.0
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#8172B3;"></span>
-                  Step-Audio-EditX
-                </th>
-                
-                <th>
-                  <span class="model-badge" style="background:#937860;"></span>
-                  Ming-UniAudio-Edit
-                </th>
-                
-              </tr>
-            </thead>
-            <tbody>
-              
-              <tr>
-                <td>1</td>
-                <td class="text-col">Replace the bird chirping with ocean waves</td>
-                
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/creative/sound/sndcre_001_source.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/creative/sound/sndcre_001_bagpiper_base.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/creative/sound/sndcre_001_bagpiper_st.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <audio controls preload="none">
-                    <source src="audios/creative/sound/sndcre_001_bagpiper_mt.wav" type="audio/wav" />
-                  </audio>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-                <td>
-                  
-                  
-                  <span class="no-audio">—</span>
-                  
-                </td>
-                
-              </tr>
-              
-            </tbody>
-          </table>
-        </div>
+<table class="sample-table">
+<thead><tr>
+<th class="sticky-col">ID</th>
+<th class="sticky-col">Edit Prompt</th>
+<th><span class="model-badge" style="background:#6c757d;"></span>Source</th>
+<th><span class="model-badge" style="background:#4C72B0;"></span>Bagpiper-Base (TTS)</th>
+</tr></thead><tbody>
+<tr>
+<td class="utt-id-col sticky-col">sndcre_001</td>
+<td class="text-col sticky-col">Replace the bird chirping with ocean waves</td>
+<td><audio controls preload="none"><source src="audios/creative/sound/sndcre_001_source.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/creative/sound/sndcre_001_bagpiper_base.wav" type="audio/wav" /></audio></td>
+</tr>
+</tbody></table></div>
       </div>
       
     </div>
@@ -1947,7 +987,8 @@ Evaluations across speech, audio, and free-form editing show Bagpiper-Edit maint
     <div id="appendix" class="demo-section">
       <h2>Appendix: Configuration Details</h2>
       <div class="appendix">
-        <!-- ======== 1. Model Configurations ======== -->
+        
+          <!-- ======== 1. Model Configurations ======== -->
 <h4>1. Model Configurations</h4>
 <table class="table table-sm table-bordered">
   <thead>
@@ -2107,6 +1148,7 @@ to enable CFG at inference time.</p>
   <li><strong>Preservation</strong> (1-5) — Are non-edited elements intact?</li>
 </ul>
 
+        
       </div>
     </div>
     
@@ -2122,6 +1164,19 @@ to enable CFG at inference time.</p>
   <!-- Bootstrap JS (for nav pills scroll-spy, optional) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
+    // Sticky-column left-offset calculation
+    (function () {
+      document.querySelectorAll('.sample-table').forEach(function (table) {
+        table.querySelectorAll('tr').forEach(function (row) {
+          var left = 0;
+          row.querySelectorAll('th.sticky-col, td.sticky-col').forEach(function (cell) {
+            cell.style.left = left + 'px';
+            left += cell.offsetWidth;
+          });
+        });
+      });
+    })();
+
     // Highlight active nav pill on scroll
     (function () {
       const sections = document.querySelectorAll('.demo-section');
