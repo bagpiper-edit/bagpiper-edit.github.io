@@ -119,24 +119,8 @@ tasks:
   "*_replace_*":            [clap_similarity, fad, llm_judge_openai, llm_judge_caption_llm, llm_judge_gemini]
 
   # --- Creative Editing ---
-  music_creative_edit:      [clap_similarity, fad, llm_judge_openai, llm_judge_caption_llm, llm_judge_gemini]
+  freeform_edit:
+  - [clap_similarity, fad, llm_judge_openai, llm_judge_caption_llm, llm_judge_gemini]
   sound_creative_edit:      [clap_similarity, fad, llm_judge_openai, llm_judge_caption_llm, llm_judge_gemini]
   speech_creative_edit:     [clap_similarity, fad, llm_judge_openai, llm_judge_caption_llm, llm_judge_gemini]
   sing_creative_edit:       [clap_similarity, fad, llm_judge_openai, llm_judge_caption_llm, llm_judge_gemini]
-
-# ============================================================================
-# LLM Judge Evaluation Dimensions
-# ============================================================================
-# All LLM judges use a 1–5 integer scoring rubric.
-#
-# Speech editing tasks:
-#   consistency (1-5)    — Preservation of speech content & speaker identity
-#   change_quality (1-5) — Execution quality of the requested change
-#   score (1-5)          — Overall quality (not a simple average)
-#
-# Non-speech audio tasks:
-#   edit_fidelity (1-5)  — Was the edit correctly applied?
-#   audio_quality (1-5)  — Production quality, artifacts, distortion
-#   coherence (1-5)      — Scene coherence, naturalness of blend
-#   preservation (1-5)   — Are non-edited elements intact?
-#   score (1-5)          — Overall quality
