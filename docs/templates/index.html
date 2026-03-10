@@ -209,8 +209,9 @@
     .hero-affiliations sup { font-size: .65em; vertical-align: super; }
     .hero-email { font-size: .8rem; opacity: .6; margin-top: .15rem; }
 
-    /* ---------- model figures (collapsible) ---------- */
-    .model-fig-collapse { margin-bottom: 1.2rem; }
+    /* ---------- model figures (collapsible, side-by-side) ---------- */
+    .model-fig-row { display: flex; gap: 1.5rem; align-items: flex-start; flex-wrap: wrap; margin-bottom: 1.8rem; }
+    .model-fig-collapse { flex: 1 1 0; min-width: 280px; }
     .model-fig-toggle {
       display: flex;
       align-items: center;
@@ -364,8 +365,9 @@
     <div id="models" class="demo-section">
       <h2>Models</h2>
 
-      <!-- architecture figures (collapsible subsections) -->
+      <!-- architecture figures (collapsible, side-by-side) -->
       {% if model_figures %}
+      <div class="model-fig-row">
       {% for fig in model_figures %}
       <details class="model-fig-collapse" open>
         <summary class="model-fig-toggle">
@@ -381,6 +383,7 @@
         </div>
       </details>
       {% endfor %}
+      </div>
       {% endif %}
 
       <div class="table-responsive">

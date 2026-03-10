@@ -209,8 +209,9 @@
     .hero-affiliations sup { font-size: .65em; vertical-align: super; }
     .hero-email { font-size: .8rem; opacity: .6; margin-top: .15rem; }
 
-    /* ---------- model figures (collapsible) ---------- */
-    .model-fig-collapse { margin-bottom: 1.2rem; }
+    /* ---------- model figures (collapsible, side-by-side) ---------- */
+    .model-fig-row { display: flex; gap: 1.5rem; align-items: flex-start; flex-wrap: wrap; margin-bottom: 1.8rem; }
+    .model-fig-collapse { flex: 1 1 0; min-width: 280px; }
     .model-fig-toggle {
       display: flex;
       align-items: center;
@@ -363,18 +364,19 @@
     <div id="models" class="demo-section">
       <h2>Models</h2>
 
-      <!-- architecture figures (collapsible subsections) -->
+      <!-- architecture figures (collapsible, side-by-side) -->
       
+      <div class="model-fig-row">
       
       <details class="model-fig-collapse" open>
         <summary class="model-fig-toggle">
           <span class="toggle-icon">&#9658;</span>
-          Overview: Rich-Caption as Semantic Representation
+          Zero-Shot Inference: Bagpiper-Edit Three-Stage Inference Pipeline
           <span class="toggle-hint">click to collapse / expand</span>
         </summary>
         <div class="model-fig-body">
           <figure>
-            <img src="imgs/freeform-edit.png" alt="Overview: Rich-Caption as Semantic Representation" />
+            <img src="imgs/freeform-edit.png" alt="Zero-Shot Inference: Bagpiper-Edit Three-Stage Inference Pipeline" />
             <figcaption><em>Bagpiper-Edit</em> treats a rich caption as the semantic representation of an audio clip, and defines editing as a text-space transformation before materializing the edited audio via anchored original audio.</figcaption>
           </figure>
         </div>
@@ -394,6 +396,7 @@
         </div>
       </details>
       
+      </div>
       
 
       <div class="table-responsive">
@@ -403,21 +406,21 @@
               
               <th><span class="model-badge" style="background:#6c757d;"></span>Source</th>
               
-              <th><span class="model-badge" style="background:#4C72B0;"></span>Bagpiper-Base (TTS)</th>
-              
-              <th><span class="model-badge" style="background:#4C72B0;"></span>Bagpiper-Base</th>
+              <th><span class="model-badge" style="background:#55A868;"></span><b style='color:#55A868'>Bagpiper-Edit (MT)</b></th>
               
               <th><span class="model-badge" style="background:#DD8452;"></span>Bagpiper-Edit (ST)</th>
               
-              <th><span class="model-badge" style="background:#55A868;"></span><b style='color:#55A868'>Bagpiper-Edit (MT)</b></th>
+              <th><span class="model-badge" style="background:#4C72B0;"></span>Bagpiper-Base (TTS)</th>
+              
+              <th><span class="model-badge" style="background:#4C72B0;"></span>Bagpiper-Base</th>
               
               <th><span class="model-badge" style="background:#C44E52;"></span>CosyVoice-3</th>
               
               <th><span class="model-badge" style="background:#8172B3;"></span>Step-Audio-EditX</th>
               
-              <th><span class="model-badge" style="background:#8C8C8C;"></span>AudioLDM2</th>
-              
               <th><span class="model-badge" style="background:#937860;"></span>Ming-UniAudio-Edit</th>
+              
+              <th><span class="model-badge" style="background:#8C8C8C;"></span>AudioLDM2</th>
               
             </tr>
           </thead>
@@ -426,21 +429,21 @@
               
               <td>Original unedited audio clip</td>
               
-              <td>Bagpiper-Base, TTS inference from target caption only, without fine-tuning.</td>
-              
-              <td>Bagpiper-Base, Multi-Turn (MT) inference, without fine-tuning.</td>
+              <td>Bagpiper-Edit, Multi-Turn (MT) inference, trained <b>without paired audio-edit data</b>, trained with only self-supervised data.</td>
               
               <td>Bagpiper-Edit, Single-Turn (ST) inference, trained <b>without paired audio-edit data</b>, trained with only self-supervised data.</td>
               
-              <td>Bagpiper-Edit, Multi-Turn (MT) inference, trained <b>without paired audio-edit data</b>, trained with only self-supervised data.</td>
+              <td>Bagpiper-Base, TTS inference from target caption only, without fine-tuning.</td>
+              
+              <td>Bagpiper-Base, Multi-Turn (MT) inference, without fine-tuning.</td>
               
               <td>CosyVoice-3, trained with <b>paired speech-edit</b> data, zero-shot prompting.</td>
               
               <td>Step-Audio-EditX, trained with <b>paired speech-edit</b> data, constraint inference parameters.</td>
               
-              <td>AudioLDM2, text-prompt-only inference.</td>
-              
               <td>Ming-UniAudio-Edit, trained with <b>paired speech-edit</b> data, constraint prompting.</td>
+              
+              <td>AudioLDM2, text-prompt-only inference.</td>
               
             </tr>
           </tbody>
@@ -471,10 +474,10 @@
 <th>Original Caption</th>
 <th>Edited Caption</th>
 <th><span class="model-badge" style="background:#6c757d;"></span>Source</th>
+<th><span class="model-badge" style="background:#55A868"></span><b style='color:#55A868'>Bagpiper-Edit (MT)</b></th>
+<th><span class="model-badge" style="background:#DD8452"></span>Bagpiper-Edit (ST)</th>
 <th><span class="model-badge" style="background:#4C72B0"></span>Bagpiper-Base (TTS)</th>
 <th><span class="model-badge" style="background:#4C72B0"></span>Bagpiper-Base</th>
-<th><span class="model-badge" style="background:#DD8452"></span>Bagpiper-Edit (ST)</th>
-<th><span class="model-badge" style="background:#55A868"></span><b style='color:#55A868'>Bagpiper-Edit (MT)</b></th>
 <th><span class="model-badge" style="background:#C44E52"></span>CosyVoice-3</th>
 <th><span class="model-badge" style="background:#8172B3"></span>Step-Audio-EditX</th>
 <th><span class="model-badge" style="background:#937860"></span>Ming-UniAudio-Edit</th>
@@ -497,10 +500,10 @@ Throughout, the speaker’s delivery is slow and deliberate, with clear enunciat
 
 In summary, the audio presents a formal, analytical lecture in which a mature male speaker defines J.M.W. Turner’s art as a synthesis of rigorous naturalism and dramatic atmospheric expression, delivered in a controlled, reverberation-free environment with historical technical characteristics. The speech’s structure, vocabulary, and context suggest a mid-20th-century American academic setting, offering a clear and authoritative interpretation of Turner’s work to an educated audience.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/fe283ab3800c5fbaa95f21f9d149bddb.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/1dbbafd3cd515c2ba33dfd343f7186ad.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/9000f7aaaeee5ecf87f17aac464a142a.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/634acf59a12155a7ba15b9a5abd8e302.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/4fd2a3221fb158c3b5264c9910fc4800.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_del/9000f7aaaeee5ecf87f17aac464a142a.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_del/1dbbafd3cd515c2ba33dfd343f7186ad.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/e043913c28505a8f9ebc1255d508332b.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/b95d1576c13d5f78806f22f732ed83a6.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/d62f64cd6d0c51dfa16887959dd32ab7.wav" type="audio/wav" /></audio></td>
@@ -523,10 +526,10 @@ No other voices, music, or ambient sounds are present, reinforcing the sense of 
 
 In summary, this audio excerpt features a solitary, contemplative female narrator reading from a classic American rural novel or short story. The narration is delivered in a neutral, reflective tone, with no musical or environmental accompaniment, set against the backdrop of a meticulously recorded studio environment. The content and style evoke a sense of timeless introspection and rural Americana, characteristic of early-to-mid 20th-century literature.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/fd67b66accbb5b5084dfa39ea55f193c.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/8fe87943a5ff5515a48d95a4de68a3ad.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/4ea7528e83cc5fa8b02b94d126f2ff65.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/b528687fb05d59b3af81b6d372922afe.wav" type="audio/wav" /></audio></td>
 <td><span class="no-audio">-</span></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_del/4ea7528e83cc5fa8b02b94d126f2ff65.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_del/8fe87943a5ff5515a48d95a4de68a3ad.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/0a8cac403a195d5383e692d929426a8a.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/8e6045f6c0b45da0911e6360028cbc9a.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/cf4e6f84767d58b186038291a0ba535b.wav" type="audio/wav" /></audio></td>
@@ -549,10 +552,10 @@ The recording ends abruptly with a soft, natural exhalation, signifying the conc
 
 In summary, the audio is a professionally produced, high-fidelity excerpt featuring a female narrator reading a literary analysis that contrasts two characters using the biblical &quot;Martha and Mary&quot; motif. The delivery is formal, precise, and emotionally neutral, set in a silent, controlled recording environment, with only a subtle analog hiss as a technical artifact. The passage is presented as part of a broader critical or narrative work, likely intended for audiobook or broadcast use.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/4faeeaf2947f5de78b3ac93ee1f1ccb3.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/7e9cc9583dd35228a16790f10359e27f.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/de6cddb895d35fde878b7366106917a8.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/e85b9f068d69517e803b968f4c83fde6.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/d9936627a1e6558c98df5e141818fe6e.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_del/de6cddb895d35fde878b7366106917a8.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_del/7e9cc9583dd35228a16790f10359e27f.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/ba157c6d590d577290919dab224f24d5.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/c00a2a10f0145b5796fd7451778cd691.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/64ee3b490f165c49a8ae9d9f4eac46b5.wav" type="audio/wav" /></audio></td>
@@ -579,10 +582,10 @@ The overall atmosphere of the recording is solemn and reflective, enhanced by th
 
 In summary, the audio is a professionally produced, analog-era recording of a male speaker reciting a paraphrased excerpt from FDR’s 1932 speech, delivered in a formal, declamatory manner with a General American accent. The content emphasizes civic values and opposition to wasteful governance, set against the backdrop of mid-20th-century American liberalism. The technical and stylistic features suggest a purposeful, archival production intended for broadcast or educational use, with a solemn, reflective atmosphere and a clear focus on rhetorical and historical significance.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/38d8c460f70f57bf9046a93ce734dcbc.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/45cfb46fd8635e3da5c495d1421e2507.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/c343143ffc1d57d99c0aa3384e2aca87.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/af30e3adf18f5482b41a38e0374d35c1.wav" type="audio/wav" /></audio></td>
 <td><span class="no-audio">-</span></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_del/c343143ffc1d57d99c0aa3384e2aca87.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_del/45cfb46fd8635e3da5c495d1421e2507.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/c9088f1c3f9b509b92e4e3523d6e8834.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/224588334d68511abd975ff6d82c54e7.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/c44bd59a78b154faab292bee8dd7b209.wav" type="audio/wav" /></audio></td>
@@ -601,10 +604,10 @@ The narrator’s delivery is emotionally nuanced, conveying care and tension thr
 
 In summary, this is a professionally recorded, high-fidelity excerpt of a classic literary work, featuring a single female narrator who delivers a poignant passage from “Anne of Green Gables.” The narration is emotionally expressive and technically pristine, set in a quiet, controlled studio environment, and is intended for an audience seeking immersive storytelling and literary appreciation.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/c0f53ac834f7515d951710bd63a91c3a.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/6c2c1399098f556db3df2b33338e28c7.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/dcf5fd01df535ed1b5ddbd1ec2650f31.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/827c4cf692425b5a97cfa8319cd56f34.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/575b2a8b9a7f573bbb8c5e432659b548.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_del/dcf5fd01df535ed1b5ddbd1ec2650f31.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_del/6c2c1399098f556db3df2b33338e28c7.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/138a8f351b505ac79b833ef2249c9089.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/9d2d0fe0031351ff8aec57f4d06a8645.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/3acb810afcad5534942043f1f28db7cf.wav" type="audio/wav" /></audio></td>
@@ -623,10 +626,10 @@ The narrator’s delivery is emotionally nuanced, conveying care and tension thr
 
 In summary, this is a professionally recorded, high-fidelity excerpt of a classic literary work, featuring a single female narrator who delivers a poignant passage from “Anne of Green Gables.” The narration is emotionally expressive and technically pristine, set in a quiet, controlled studio environment, and is intended for an audience seeking immersive storytelling and literary appreciation.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/c0f53ac834f7515d951710bd63a91c3a.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/6c2c1399098f556db3df2b33338e28c7.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/dcf5fd01df535ed1b5ddbd1ec2650f31.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/827c4cf692425b5a97cfa8319cd56f34.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/575b2a8b9a7f573bbb8c5e432659b548.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_del/dcf5fd01df535ed1b5ddbd1ec2650f31.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_del/6c2c1399098f556db3df2b33338e28c7.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/138a8f351b505ac79b833ef2249c9089.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/9d2d0fe0031351ff8aec57f4d06a8645.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/3acb810afcad5534942043f1f28db7cf.wav" type="audio/wav" /></audio></td>
@@ -645,10 +648,10 @@ The passage describes a geographical feature: &#x27;A narrow channel formed a pa
 
 In summary, the audio clip features a professionally recorded, high-fidelity excerpt of a male narrator reading a passage from classic nautical literature, describing the natural protection of a channel and its calm waters. The controlled studio environment, precise narration, and formal vocabulary create a focused, immersive experience, with the abrupt ending revealing its nature as an excerpt from a larger work.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/b76bda498eb258f7bdd45b47d8a32693.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/012adbaeb69954ef800082bf7e5298f6.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_del/0c6a9139d82056d28e4c821395e96791.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/714ea6f0b3475db1b77cc0accc90ce0d.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/556f319b27bb5f6182abd0496adf8ff7.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_del/0c6a9139d82056d28e4c821395e96791.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_del/012adbaeb69954ef800082bf7e5298f6.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/173293ff6f3a5340a0645f25fc53627b.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_del/e2cc63938c3953148ffa8f23f57611c1.wav" type="audio/wav" /></audio></td>
 <td><span class="no-audio">-</span></td>
@@ -669,13 +672,13 @@ In summary, the audio clip features a professionally recorded, high-fidelity exc
 <th>Original Caption</th>
 <th>Edited Caption</th>
 <th><span class="model-badge" style="background:#6c757d;"></span>Source</th>
+<th><span class="model-badge" style="background:#55A868"></span><b style='color:#55A868'>Bagpiper-Edit (MT)</b></th>
+<th><span class="model-badge" style="background:#DD8452"></span>Bagpiper-Edit (ST)</th>
 <th><span class="model-badge" style="background:#4C72B0"></span>Bagpiper-Base (TTS)</th>
 <th><span class="model-badge" style="background:#4C72B0"></span>Bagpiper-Base</th>
-<th><span class="model-badge" style="background:#DD8452"></span>Bagpiper-Edit (ST)</th>
-<th><span class="model-badge" style="background:#55A868"></span><b style='color:#55A868'>Bagpiper-Edit (MT)</b></th>
 <th><span class="model-badge" style="background:#C44E52"></span>CosyVoice-3</th>
-<th><span class="model-badge" style="background:#937860"></span>Ming-UniAudio-Edit</th>
 <th><span class="model-badge" style="background:#8172B3"></span>Step-Audio-EditX</th>
+<th><span class="model-badge" style="background:#937860"></span>Ming-UniAudio-Edit</th>
 </tr></thead><tbody>
 <tr>
 <td class="text-col sticky-col">you will find me continually speaking of four men titian holbein turner and tintoret in almost the same terms</td>
@@ -695,13 +698,13 @@ Throughout the recording, there is no evidence of other voices, music, or enviro
 
 In summary, the audio presents a solitary, mature male voice delivering a brief, reflective statement about four renowned artists—namely the great Titian, Holbein, Turner, and Tintoret—within a quiet, reverberant studio or library setting. The recording’s technical and acoustic characteristics, along with its content and delivery, point to an archival or educational context, likely from the early-to-mid 20th century. The speaker’s measured tone, the clarity of his enunciation, and the absence of extraneous sounds all contribute to an atmosphere of focused contemplation and authority.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/58ebde40c2385adcb819ed245e1cd819.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/c76f280ecc075e51ab8b8ed5fe4c7c8e.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/ad6a4ddb07125bbb86172ea0b420d4e0.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/061b901d5f9156909991f79f5ec04f96.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/0de2ca7de2ad5119a24c18805c1d47d5.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_ins/ad6a4ddb07125bbb86172ea0b420d4e0.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_ins/c76f280ecc075e51ab8b8ed5fe4c7c8e.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/1d34b8637f925befb9b84d982df1067a.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_ins/091dfd61397453368b4bd9b4f5cb8a00.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/b0767a6d0f545a1494c207ca8560d691.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/091dfd61397453368b4bd9b4f5cb8a00.wav" type="audio/wav" /></audio></td>
 </tr>
 <tr>
 <td class="text-col sticky-col">if any still retained rancor against him in his present condition they passed in silence while his well wishers more generous than prudent accompanied his march with tears with acclamations and with prayers for his safety</td>
@@ -721,13 +724,13 @@ The passage’s content, delivered in a manner reminiscent of 19th-century Briti
 
 In summary, this audio excerpt is a professionally produced, high-fidelity reading of a British literary passage, narrated in a formal, neutral tone by a male voice in a controlled studio environment. The content explores the contrasting reactions of those who resent and those who support a departing figure, using language and delivery that evoke the traditions of British literary and broadcast narration. The absence of music, ambient noise, or explicit context focuses attention on the narrative’s emotional and thematic depth, inviting listeners to reflect on the human responses to public adversity.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/f6c3df6bcba85f3ebeda816b22be3044.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/a07b7723da485c3cb9cef34913c2faa5.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/d70cc9a45bfc5fb6ae92651b1a99d4d7.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/8e036ebc3e015f00bd4ca105d0ec34c2.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/796dc9d4edc4590699cbed883fe56aa6.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_ins/d70cc9a45bfc5fb6ae92651b1a99d4d7.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_ins/a07b7723da485c3cb9cef34913c2faa5.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/eb52d30e48fb52c2bf7a06c1d4e695c8.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_ins/eb16beb098a15f2c925be25a61826fdd.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/2c021726face5f78a0b961692a4444b6.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/eb16beb098a15f2c925be25a61826fdd.wav" type="audio/wav" /></audio></td>
 </tr>
 <tr>
 <td class="text-col sticky-col">a gentle kick from the tall boy in the bench behind urged stephen to ask a difficult question</td>
@@ -739,13 +742,13 @@ In summary, the clip features a single, high-fidelity male narration of a passag
 
 In summary, the clip features a single, high-fidelity male narration of a passage from James Joyce’s *A Portrait of the Artist as a Young Man*, set in a quiet, controlled studio environment. The style, clarity, and absence of extraneous sounds indicate its purpose as an audiobook excerpt or literary reading, with the passage describing a moment of social pressure leading to an academic challenge. The addition of &#x27;slightly nervous&#x27; enhances the portrayal of Stephen&#x27;s emotional state, subtly emphasizing his hesitation. The recording is meticulously executed, presenting a classic work of modernist literature in an accessible, contemporary format.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/80e17d53958f50f3aa99df23a80f86f2.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/bf5269a0de5a59e5b95c503a713fc5c8.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/4f087fc010be5015a44e95d351039d21.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/e9219b4c657e5108b225bffdcc0e6012.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/f33eaf78277d51da861f1cb32bf83b41.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_ins/4f087fc010be5015a44e95d351039d21.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_ins/bf5269a0de5a59e5b95c503a713fc5c8.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/2419bc3c636c551eb623dbac7e11d368.wav" type="audio/wav" /></audio></td>
-<td><span class="no-audio">-</span></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/ed689657d9015b0d85f9516e364f9836.wav" type="audio/wav" /></audio></td>
+<td><span class="no-audio">-</span></td>
 </tr>
 <tr>
 <td class="text-col sticky-col">every line in which the master traces it even where seemingly negligent is lovely and set down with a meditative calmness which makes these two etchings capable of being placed beside the most tranquil work of holbein or duerer</td>
@@ -765,13 +768,13 @@ At the conclusion of the sentence, the voice stops abruptly, without any fade-ou
 
 In summary, the clip features a single, well-articulated male voice reading a formal, literary description of an artist’s etchings in a highly controlled, studio environment. The speaker’s tone is neutral and contemplative, and the passage emphasizes the aesthetic and meditative qualities of the artwork, drawing comparisons to renowned artists Holbein and Dürer. The overall impression is one of clarity, professionalism, and focused intent, with no extraneous sounds or distractions.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/9c11b28156e2534ca64f4b564d4b8c52.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/838cdad5095c524f83cd6f886b381b8a.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/5e1de20bd6ee50de89ef1f3479e86bf1.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/d1823044aeb959fea06c21e9f0f5745d.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/f51fded6bc5d56d8b6070c9e4b23bc8f.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_ins/5e1de20bd6ee50de89ef1f3479e86bf1.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_ins/838cdad5095c524f83cd6f886b381b8a.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/668a46b8bdbf50b5a22201d58f2efe39.wav" type="audio/wav" /></audio></td>
-<td><span class="no-audio">-</span></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/b6b1b39b840c586e98f50587750d8296.wav" type="audio/wav" /></audio></td>
+<td><span class="no-audio">-</span></td>
 </tr>
 <tr>
 <td class="text-col sticky-col">thought kills me that i am not thought to leap large lengths of miles when thou art gone but that so much of earth and water wrought i must attend time&#x27;s leisure with my moan receiving nought by elements so slow but heavy tears badges of either&#x27;s woe</td>
@@ -795,13 +798,13 @@ The passage recited is Sonnet 40, “Take all my loves, my love, yea, take them 
 
 In summary, the audio clip features a solitary female voice delivering a solemn and expressive recitation of Shakespeare’s Sonnet 40, marked by clear enunciation, deliberate pacing, and emotionally charged inflection. The recording is technically clean but modest in fidelity, with a consistent background hiss and no ambient noise, and is performed in a studio-like setting. The speaker’s General American accent and formal style reinforce the literary and historical context, while the abrupt ending underscores the clip’s intentional focus on the poetic passage’s emotional and thematic content.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/4eb03d945d535951bff8261024ae5d8d.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/a2da981892ef5a2d851496b62db7f3fc.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/7818c9372aea5699bd7de752476d3b97.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/da70699741e65a4584804d2749baa465.wav" type="audio/wav" /></audio></td>
 <td><span class="no-audio">-</span></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_ins/7818c9372aea5699bd7de752476d3b97.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_ins/a2da981892ef5a2d851496b62db7f3fc.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/6f4fb57dc8dd522a8d68cebff2ff8bb3.wav" type="audio/wav" /></audio></td>
-<td><span class="no-audio">-</span></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/37b7049b15e1531ba3b5ffe11ffadbaa.wav" type="audio/wav" /></audio></td>
+<td><span class="no-audio">-</span></td>
 </tr>
 <tr>
 <td class="text-col sticky-col">the child had a native grace which does not invariably co exist with faultless beauty its attire however simple always impressed the beholder as if it were the very garb that precisely became it best</td>
@@ -821,13 +824,13 @@ The style, diction, and delivery of the passage are consistent with classic Amer
 
 In summary, the clip features a polished, formal reading of a literary excerpt by a female narrator, delivered in a classic American accent and with mid-20th-century broadcast production values. The passage, steeped in the literary traditions of the late 19th or early 20th century, is presented without emotional coloring, set against a backdrop of analog hiss and subtle handling noise, and concludes with a natural breath. The recording’s technical and stylistic features suggest its archival or broadcast origin, aimed at an audience appreciative of historical literature.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/1aed2afaf089555baf6274c435d5b394.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/b923f14379c352cfbcb66ed26a8dadab.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_ins/394edb41adb05462b0308b13d48575d1.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/e62587a93e445f34869743206a01b438.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/e6757759fe2a500f96aaf96e01527509.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_ins/394edb41adb05462b0308b13d48575d1.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_ins/b923f14379c352cfbcb66ed26a8dadab.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/2009adf8c8f3540dabb36d03a0f761fe.wav" type="audio/wav" /></audio></td>
-<td><span class="no-audio">-</span></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_ins/3f0adb786c1a57c9b9194817ce991666.wav" type="audio/wav" /></audio></td>
+<td><span class="no-audio">-</span></td>
 </tr>
 </tbody></table></div>
       </div>
@@ -845,13 +848,13 @@ In summary, the clip features a polished, formal reading of a literary excerpt b
 <th>Original Caption</th>
 <th>Edited Caption</th>
 <th><span class="model-badge" style="background:#6c757d;"></span>Source</th>
+<th><span class="model-badge" style="background:#55A868"></span><b style='color:#55A868'>Bagpiper-Edit (MT)</b></th>
+<th><span class="model-badge" style="background:#DD8452"></span>Bagpiper-Edit (ST)</th>
 <th><span class="model-badge" style="background:#4C72B0"></span>Bagpiper-Base (TTS)</th>
 <th><span class="model-badge" style="background:#4C72B0"></span>Bagpiper-Base</th>
-<th><span class="model-badge" style="background:#DD8452"></span>Bagpiper-Edit (ST)</th>
-<th><span class="model-badge" style="background:#55A868"></span><b style='color:#55A868'>Bagpiper-Edit (MT)</b></th>
 <th><span class="model-badge" style="background:#C44E52"></span>CosyVoice-3</th>
-<th><span class="model-badge" style="background:#937860"></span>Ming-UniAudio-Edit</th>
 <th><span class="model-badge" style="background:#8172B3"></span>Step-Audio-EditX</th>
+<th><span class="model-badge" style="background:#937860"></span>Ming-UniAudio-Edit</th>
 </tr></thead><tbody>
 <tr>
 <td class="text-col sticky-col">in eighteen sixty two a law was enacted with the purpose of suppressing plural marriage and as had been predicted in the national senate prior to its passage it lay for many years a dead letter</td>
@@ -863,13 +866,13 @@ The technical characteristics of the audio point to a mid-20th-century analog re
 In summary, the audio presents a clear, authoritative historical narration by a male speaker on the enactment and ineffectiveness of an 1862 law suppressing plural marriage, recorded in a mid-20th-century analog setting with characteristic technical flaws. The controlled, formal delivery and lack of extraneous noise suggest a documentary or educational purpose, reflecting both the era and the intent of the speaker.</div></td>
 <td class="caption-col"><div class="caption-box">The audio clip opens with a faint, high-frequency click, likely caused by the operator’s mouth or lips contacting the microphone during setup. This is immediately followed by a brief, sharp inhalation, signaling the speaker’s preparation to begin. The male narrator, whose voice is deep, resonant, and marked by a General American accent, starts speaking in a measured, deliberate cadence. His delivery is formal and authoritative, with each word clearly enunciated and carefully paced. The narration proceeds: &quot;In eighteen sixty two, a law was enacted with the purpose of suppressing plural marriage. And as had been predicted in the National Senate prior to its passage, it lay for many years a dead letter.&quot; The speech is continuous, with a natural rise and fall in intonation, especially at the end of phrases and clauses, and pauses are used for rhetorical effect rather than hesitation. Throughout, the recording is dominated by a persistent low-frequency electrical hum and a broad-spectrum hiss, both of which remain constant in the background. Occasional mouth sounds—soft clicks and pops—appear intermittently, further suggesting close-miking and minimal post-production. The clip ends abruptly, with the final word &quot;letter&quot; cut off mid-syllable, indicating that the recording was stopped without a fade-out or natural conclusion.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/5db3f6d8627b5aa9af4d4811eafcfacb.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/b3cd280650275e8d8f02a1b4a9fb01e1.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/979f5e506f4e540a9edcefc15ae23f02.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/6cfa3b25d2df52c190a23cd8a28cb8a1.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/071051b79a76509aaeb5427e3a39e540.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/979f5e506f4e540a9edcefc15ae23f02.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/b3cd280650275e8d8f02a1b4a9fb01e1.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/c4c533bc29f55abea320e105ead52c77.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/e2a2e63a625e52f290972ecc1894f33b.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/7d2a60d88eba593e932ea0cac811d2eb.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/e2a2e63a625e52f290972ecc1894f33b.wav" type="audio/wav" /></audio></td>
 </tr>
 <tr>
 <td class="text-col sticky-col">while the former foretold that the scottish covenanters were secretly forming a union with the english parliament and inculcated the necessity of preventing them by some vigorous undertaking the latter still insisted that every such attempt would precipitate them into measures to which otherwise they were not perhaps inclined</td>
@@ -883,13 +886,13 @@ The speaker’s accent and delivery are consistent with mid-20th-century British
 In summary, this audio clip features a single, formally educated British male narrator presenting a concise historical account of political tensions between the Scottish Covenanters and the English Parliament. The passage is delivered in a measured, authoritative tone, recorded in a controlled studio environment with high fidelity and vintage analog characteristics. The content and delivery suggest a mid-20th-century educational or documentary context, crafted for a general audience interested in British history and political analysis.</div></td>
 <td class="caption-col"><div class="caption-box">The audio clip features a single male voice, mature and composed, speaking in a clear, formal register with Received Pronunciation. He delivers a historical narrative stating: &quot;Although the initial report claimed that the Irish Confederates were covertly negotiating a truce with the Scottish nobility, and emphasized the urgency of disrupting their plans through decisive military action, the opposing faction maintained that such aggression would only drive them toward alliances they might not have otherwise considered.&quot; The speaker proceeds at a measured pace, with crisp enunciation and slight stress on key phrases like &quot;covertly negotiating a truce,&quot; &quot;decisive military action,&quot; and &quot;drive them toward alliances.&quot; The sentence is delivered in one continuous take, with a brief pause after &quot;action&quot; and a more pronounced break following &quot;maintained,&quot; before resuming to its conclusion. The recording contains a faint, constant electronic hiss, most evident during pauses, alongside a low-frequency hum, suggesting a quiet studio setting with high-quality analog or early digital equipment. The speaker is closely miked, resulting in a dry, intimate sonic profile with minimal room ambience. The frequency response is centered in the midrange, with attenuated bass and treble, yielding a slightly boxy, compressed tonality characteristic of vintage recordings. No extraneous sounds—such as breaths, mouth clicks, or environmental noise—are audible, indicating precise microphone technique and acoustic isolation. The clip ends abruptly with a soft click, signaling a digital edit and supporting its archival or broadcast nature. The accent and delivery align with mid-20th-century British educational or public broadcasting standards, featuring precise articulation, formal lexicon, and a neutral, authoritative demeanor. The content presents a historical analysis involving the Irish Confederates and Scottish nobility, using elevated syntax and objective tone. The lack of emotional inflection and steady rhythm imply an instructional or documentary context aimed at an informed audience. Technical and stylistic cues suggest the recording was produced for radio, television, or academic media in the mid-1900s, intended for general listeners interested in European political history. In summary, this segment showcases a single, well-educated British male narrator offering a succinct account of diplomatic tensions between the Irish Confederates and Scottish nobility, delivered in a calm, authoritative manner and recorded in a controlled environment with high fidelity and analog-era sonic qualities, pointing to a mid-20th-century educational or documentary origin for a broad audience engaged in historical and political themes.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/ee2636ea9d705b6d8cbe49edc0af3c9d.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/cbd9be789bc15ffaa2a46987873879fd.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/ab9d288ad8435c2d86eaa5896fa3cd2b.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/dfdabde1226751299f4c08329cb2420e.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/841ee20bccd1554ca1c74369864ddcec.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/ab9d288ad8435c2d86eaa5896fa3cd2b.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/cbd9be789bc15ffaa2a46987873879fd.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/bc90c0724b7e5f10b9651d37f8f233f7.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/3014850df5b35bc5a62c23e0a7ef4756.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/00e873ef16be5f4799d49ca9b730451e.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/3014850df5b35bc5a62c23e0a7ef4756.wav" type="audio/wav" /></audio></td>
 </tr>
 <tr>
 <td class="text-col sticky-col">dreading the superior power of argyle who having joined his vassals to a force levied by the public was approaching with a considerable army montrose hastened northwards in order to rouse again the marquis of huntley and the gordons who having before hastily taken arms had been instantly suppressed by the covenanters</td>
@@ -901,13 +904,13 @@ At the conclusion of the narration, a brief, low-pitched, non-verbal vocalizatio
 In summary, this audio excerpt is a professionally produced, mono analog recording of a single British male narrator delivering a historical passage in formal English, likely intended for educational or archival purposes. The content references key figures and events from 17th-century Scottish history, specifically the Covenanters and Montrose’s campaign, and the technical characteristics—such as hiss, hum, and abrupt edit—point to a mid-20th-century studio environment. The clip is devoid of music, ambient sounds, or audience cues, emphasizing its utilitarian and documentary intent.</div></td>
 <td class="caption-col"><div class="caption-box">The audio clip features a solitary, mature male narrator speaking in a precise, formal British accent typical of mid-20th-century educational recordings. His tone is calm and methodical, with deliberate pacing and clear articulation, delivering a historical narrative: “Fearing the growing alliance between the Highland clans and the Royalist forces, the Covenanter leadership dispatched a regiment to secure the eastern passes before reinforcements could arrive.” The speech unfolds in a dry, acoustically neutral environment, emphasizing key terms like “Highland clans” and “Royalist forces” with slight vocal stress. A faint, continuous electronic hiss and low-frequency hum are present throughout, consistent with analog tape reproduction, alongside a steady room tone suggesting a small, untreated studio. There are no background sounds, music, or audience elements, underscoring the recording’s documentary nature. At the end of the sentence, a soft, non-verbal grunt—brief and guttural—marks the speaker’s pause, followed by an immediate, hard digital cutoff that truncates the ambient tail, indicating a deliberate post-production edit. Overall, this is a mono analog recording of a professional, scripted narration likely intended for historical instruction, focusing on 17th-century Scottish political and military dynamics, with technical artifacts pointing to a mid-century studio origin.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/6455bfa96e2655dba0c810deb9ab2275.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/60738c3572825d55a34ffd4a5abb7319.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/64fa6b34d17a5e4f9ca2fa36a778704a.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/769f52298cd3582aa2e0a953dc919cfc.wav" type="audio/wav" /></audio></td>
 <td><span class="no-audio">-</span></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/64fa6b34d17a5e4f9ca2fa36a778704a.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/60738c3572825d55a34ffd4a5abb7319.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/86fd3d85e2d55e27b970d68fb1699305.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/fd31fc6f35a651e6a3dfd2d4ea448f4d.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/bdf6553cc95d561e8c6053deb565df00.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/fd31fc6f35a651e6a3dfd2d4ea448f4d.wav" type="audio/wav" /></audio></td>
 </tr>
 <tr>
 <td class="text-col sticky-col">by being studious of color they are studious of division and while the chiaroscurist devotes himself to the representation of degrees of force in one thing unseparated light the colorists have for their function the attainment of beauty by arrangement of the divisions of light</td>
@@ -919,13 +922,13 @@ Throughout the clip, the recording is of high fidelity, capturing the full frequ
 In summary, this audio clip presents a clear, high-quality, and formal reading of a philosophical passage about the nature of artistic representation, delivered by a single male speaker in an academic style. The passage contrasts chiaroscuro and colorists in their approaches to light and beauty, employing technical terminology and a measured, didactic delivery. The recording is devoid of extraneous sounds or emotional inflection, emphasizing the intellectual and authoritative tone of the speaker.</div></td>
 <td class="caption-col"><div class="caption-box">The audio clip features a single male voice speaking in a calm, deliberate, and academic tone, articulating the sentence: &#x27;the pursuit of harmony through careful modulation of hue defines the colorist&#x27;s true objective.&#x27; Each word is clearly enunciated, with a slight emphasis on &#x27;harmony&#x27; and &#x27;colorist,&#x27; conveying a sense of intellectual precision. The speaker maintains a steady rhythm, delivering the statement in a measured cadence that underscores its philosophical nature. A brief pause follows the sentence, marked by a soft exhalation, suggesting completion. The recording is high-fidelity, with a warm, resonant baritone voice captured cleanly against a neutral acoustic background. Minimal electronic hiss is present but does not detract from clarity. The tone remains formal and didactic throughout, consistent with a lecture or scholarly reading on art theory, focusing on the colorist&#x27;s role in achieving aesthetic balance through nuanced control of color.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/c44010d423d350a9b82093a84e2876d8.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/e1b6087671b85f2a9749901f9faa2c24.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/4104258c5a0959518c617065c073b6ed.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/7a070dd3361e59588797dcdee01c2b75.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/6c86cd4d2b2e51eca9d510a6edf0f96f.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/4104258c5a0959518c617065c073b6ed.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/e1b6087671b85f2a9749901f9faa2c24.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/1e94142779ad5f78ab52f9dc0198fe5c.wav" type="audio/wav" /></audio></td>
-<td><span class="no-audio">-</span></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/ce3d05d70eaf51d697a41abc36b0d72e.wav" type="audio/wav" /></audio></td>
+<td><span class="no-audio">-</span></td>
 </tr>
 <tr>
 <td class="text-col sticky-col">he selected a small gold bottle with a pepper box top so that the powder might be sprinkled on any object through the small holes</td>
@@ -941,13 +944,13 @@ Technically, the recording exhibits high fidelity, capturing the full spectrum o
 
 In summary, the audio is a high-quality, studio-recorded excerpt of a male narrator reading a passage in the style of classic Gothic literature, featuring a detailed description of a small, elegant silver vial. The clip is marked by professional clarity, formal delivery, and a distinctly literary atmosphere, with no extraneous sounds or cues, and concludes with a clean, abrupt ending.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/b9e0412fedac5844ab9b4bfcdd9eb735.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/05a1c853c9975a86874fbd3b325d7aed.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/4ae4b871d8aa59b2a8698e8313a6b2f1.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/cfa9d477e39b5f80afa4c81d77268be4.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/97911ae35c4d51aa9bf1d8278c021b10.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/4ae4b871d8aa59b2a8698e8313a6b2f1.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/05a1c853c9975a86874fbd3b325d7aed.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/bc44b12666b4523c9d98958b96a3751a.wav" type="audio/wav" /></audio></td>
-<td><span class="no-audio">-</span></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/0a90f5fd004a58eea12cf3d31c0c4ad7.wav" type="audio/wav" /></audio></td>
+<td><span class="no-audio">-</span></td>
 </tr>
 <tr>
 <td class="text-col sticky-col">however remembering what you told me namely that you had commended the matter to a higher decision than ours and that you were resolved to submit with resignation to that decision whatever it might be i hold it my duty to yield also and to be silent it may be all for the best</td>
@@ -961,13 +964,13 @@ Throughout the recording, the speaker’s delivery is steady, with no evidence o
 In summary, the audio features a single female narrator in a professionally recorded, acoustically neutral environment, reading a passage of formal, reflective prose. The text centers on themes of deference, resignation, and acceptance of a higher authority’s decision, with the speaker expressing her own duty to yield and remain silent. The controlled recording conditions, clear diction, and abrupt ending suggest a staged reading or excerpt, likely intended for archival, educational, or dramatic purposes.</div></td>
 <td class="caption-col"><div class="caption-box">The audio unfolds in a silent, acoustically neutral indoor environment, distinguished only by a faint electronic hiss and a consistent low hum, likely originating from recording equipment. The space shows no reverberation, suggesting a small, professionally treated room. A single adult female speaker delivers her lines with composure and clarity, using a General American accent, formal vocabulary, and careful articulation. Her tone is calm and reflective, with a measured pace and a gently descending intonation that conveys acceptance and inner resolution. She speaks the following: &quot;Yet, trusting in the wisdom of the path we&#x27;ve been guided to, and knowing that some choices lie beyond our control, I find peace in releasing my doubts and embracing the quiet certainty that time will reveal the right outcome.&quot; The statement expresses a sentiment of surrender to a greater plan, acknowledging limits to personal agency while seeking solace in patience and faith in the future. Her delivery remains steady throughout, with deliberate pauses that underscore the contemplative nature of the message. There are no signs of hesitation or emotional instability. The recording concludes with a sudden, sharp click, likely from the recording device being stopped abruptly, cutting off any trailing silence. This immediate end, along with the instant disappearance of background noise, confirms the artificial termination of the clip. Overall, the piece features a solo female narrator in a controlled studio setting, delivering a carefully articulated passage of introspective, formal prose. The content revolves around trust, surrender, and the quiet hope that clarity will emerge with time, conveyed through precise diction and a poised vocal performance. The clean audio quality and abrupt ending suggest a rehearsed or scripted recording, possibly intended for broadcast, narration, or archival use.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/14c4cdd4cd935c948a44b0f88eef3071.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/12db27b0f2e554a28c304f18206a56a2.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/9d880440584f593f8bebe23737d7ef20.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/26180471ced35f72b30e5484a1209b5f.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/91415d9c9b365549b1a98d727fcb6279.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/9d880440584f593f8bebe23737d7ef20.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/12db27b0f2e554a28c304f18206a56a2.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/fde9d84ff24952ca9bd7b23b95cb14a9.wav" type="audio/wav" /></audio></td>
-<td><span class="no-audio">-</span></td>
 <td><audio controls preload="none"><source src="audios/speech/transcription_replace_sentence/87f0b1f03bb8588fa9e3ecb72f80c94a.wav" type="audio/wav" /></audio></td>
+<td><span class="no-audio">-</span></td>
 </tr>
 </tbody></table></div>
       </div>
@@ -985,13 +988,13 @@ In summary, the audio features a single female narrator in a professionally reco
 <th>Original Caption</th>
 <th>Edited Caption</th>
 <th><span class="model-badge" style="background:#6c757d;"></span>Source</th>
+<th><span class="model-badge" style="background:#55A868"></span><b style='color:#55A868'>Bagpiper-Edit (MT)</b></th>
+<th><span class="model-badge" style="background:#DD8452"></span>Bagpiper-Edit (ST)</th>
 <th><span class="model-badge" style="background:#4C72B0"></span>Bagpiper-Base (TTS)</th>
 <th><span class="model-badge" style="background:#4C72B0"></span>Bagpiper-Base</th>
-<th><span class="model-badge" style="background:#DD8452"></span>Bagpiper-Edit (ST)</th>
-<th><span class="model-badge" style="background:#55A868"></span><b style='color:#55A868'>Bagpiper-Edit (MT)</b></th>
 <th><span class="model-badge" style="background:#C44E52"></span>CosyVoice-3</th>
-<th><span class="model-badge" style="background:#937860"></span>Ming-UniAudio-Edit</th>
 <th><span class="model-badge" style="background:#8172B3"></span>Step-Audio-EditX</th>
+<th><span class="model-badge" style="background:#937860"></span>Ming-UniAudio-Edit</th>
 </tr></thead><tbody>
 <tr>
 <td class="text-col sticky-col">let him come in then said the king and as if colbert had been listening at the door for the purpose of keeping himself au courant with the conversation he entered as soon as the king had pronounced his name to the two courtiers</td>
@@ -1005,13 +1008,13 @@ The narrator continues seamlessly, maintaining his steady rhythm and formal tone
 
 This recording exemplifies a high-fidelity, mono studio production, featuring a single, mature male narrator whose voice is marked by a standard Southern British accent and a measured, declarative delivery. The text is an excerpt from an English translation of Alexandre Dumas’ “The Vicomte of Bragelonne,” specifically recounting Louis XIV’s command to admit Colbert, a key historical figure. The narrator’s style is formal and narrative, presenting the scene as a historical event with precise pronunciation and neutral affect. The absence of music, sound effects, or audience noise, alongside the controlled studio background, supports the impression of a professional archival or educational recording, likely intended for broadcast, library, or instructional purposes. The overall effect is one of authoritative clarity, historical gravitas, and focused storytelling, with the abrupt ending reinforcing its utilitarian, archival nature.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/style_emotion/a76eb751766455289b9083bae413bcaa.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/style_emotion/d2e1121b94b6546a88321033f50114c5.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/style_emotion/ec8cfec7b6f654729d4d4d2770698f1e.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/style_emotion/d2c8a24752a5526d9127bf434e61e4b9.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/style_emotion/574f27140a8c5756b5607d15a1a5be75.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/style_emotion/ec8cfec7b6f654729d4d4d2770698f1e.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/style_emotion/d2e1121b94b6546a88321033f50114c5.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/style_emotion/90d9b4c30da650b0bd62fd016e5c4b53.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/style_emotion/c12bc16df2b551fe962da2e9b0be8929.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/style_emotion/985fdfacbf125db2a8281a0960dc7a52.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/style_emotion/c12bc16df2b551fe962da2e9b0be8929.wav" type="audio/wav" /></audio></td>
 </tr>
 <tr>
 <td class="text-col sticky-col">he reached up among the branches and began to pick the sweet insipid fruit long ivory colored berries tipped with faint pink like white coral that fall to the ground unheeded all summer through</td>
@@ -1031,13 +1034,13 @@ In summary, the audio presents a carefully produced, modern reading of Alice Car
 
 This audio excerpt features a professional female narrator reading a descriptive, poetic passage from a classic literary work, likely belonging to the Western literary tradition. The content is purely narrative, devoid of dialogue or music, and is delivered in a formal, high-quality studio recording with no extraneous sounds or cultural markers beyond its literary context. The abrupt cutoff at the end suggests the clip is an excerpt from a longer reading, such as an audiobook or literary sample.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/style_emotion/f4d820e95d315210b3970795e7b5f868.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/style_emotion/a0f9b205fad95ef6a6f97cf63f57edc4.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/style_emotion/9a53f82114865ebd81171d5f753e84d1.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/style_emotion/c5a5aec3b77a537d990faa6e0d19b9b3.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/style_emotion/cca14811fde65ef1b6f6e60d5fa5dbd3.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/style_emotion/9a53f82114865ebd81171d5f753e84d1.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/style_emotion/a0f9b205fad95ef6a6f97cf63f57edc4.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/style_emotion/abe3c947d64f52c0a148b4c932b09716.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/style_emotion/9fafc3a2d68a5be092e6436fe741b91c.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/style_emotion/c7ab2a908e245c65bf87bb0d121893f3.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/style_emotion/9fafc3a2d68a5be092e6436fe741b91c.wav" type="audio/wav" /></audio></td>
 </tr>
 <tr>
 <td class="text-col sticky-col">a gramophone by the help of suitable records might relate to us the incidents of its past and people are not so different from gramophones as they like to believe</td>
@@ -1057,13 +1060,13 @@ The passage is delivered with clarity and professionalism, and its content uses 
 
 In summary, the audio features a modern, high-fidelity recording of a single male speaker reading a concise, metaphorical passage about memory and human nature in a neutral, analytical tone. The passage draws a parallel between gramophones and people, delivered with clear diction and formal English, and is presented in a silent, controlled environment, suggesting its purpose as an excerpt from a literary or philosophical audiobook.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/style_emotion/910c00cb41f0500a958b1fe811fa27c6.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/style_emotion/250ac4b3654152d7a2dfa3420b9baa55.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/style_emotion/194ba9ad83cb58dcac890e4449f00194.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/style_emotion/3ec3619fd53b57d880f0883404809f50.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/style_emotion/09f7d09fc9fc556b8558dbef728ae134.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/style_emotion/194ba9ad83cb58dcac890e4449f00194.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/style_emotion/250ac4b3654152d7a2dfa3420b9baa55.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/style_emotion/54e2db1cfb9e560e84301e954d213c2c.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/style_emotion/b772ee95198a5333b3090b42ad1e69c8.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/style_emotion/ee8889c623155c398587ff112095b7ed.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/style_emotion/b772ee95198a5333b3090b42ad1e69c8.wav" type="audio/wav" /></audio></td>
 </tr>
 <tr>
 <td class="text-col sticky-col">that christ is very god is apparent in that paul ascribes to him divine powers equally with the father as for instance the power to dispense grace and peace</td>
@@ -1077,13 +1080,13 @@ In summary, this audio excerpt features a single, authoritative male voice prese
 
 In summary, the audio features a solitary male speaker delivering a theological statement about the divinity of Christ, referencing Paul’s attribution of divine powers to Jesus. The recording is clear and focused, with technical artifacts typical of a home or office setup, and devoid of extraneous sounds or emotional inflection, indicating a formal, didactic purpose likely intended for an academic or religious audience.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/style_emotion/108da2b6a0585050bd3af8abe451bf71.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/style_emotion/358c6f3469855fe69030fb00e48eb139.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/style_emotion/2047e0108379572c83f5723b0ac44560.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/style_emotion/fb46bf6a00da5e3f82b6f18d9de0cf21.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/style_emotion/73bc9459989e54d78f0dd0526a130922.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/style_emotion/2047e0108379572c83f5723b0ac44560.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/style_emotion/358c6f3469855fe69030fb00e48eb139.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/style_emotion/76bc20f4df1b55539e1a90a1ddaca0ef.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/style_emotion/fc088b28ea2754dbbfab0810f4d1dfb8.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/style_emotion/91ed2c997f715de882c95ba7919b3d13.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/style_emotion/fc088b28ea2754dbbfab0810f4d1dfb8.wav" type="audio/wav" /></audio></td>
 </tr>
 </tbody></table></div>
       </div>
@@ -1101,13 +1104,13 @@ In summary, the audio features a solitary male speaker delivering a theological 
 <th>Original Caption</th>
 <th>Edited Caption</th>
 <th><span class="model-badge" style="background:#6c757d;"></span>Source</th>
+<th><span class="model-badge" style="background:#55A868"></span><b style='color:#55A868'>Bagpiper-Edit (MT)</b></th>
+<th><span class="model-badge" style="background:#DD8452"></span>Bagpiper-Edit (ST)</th>
 <th><span class="model-badge" style="background:#4C72B0"></span>Bagpiper-Base (TTS)</th>
 <th><span class="model-badge" style="background:#4C72B0"></span>Bagpiper-Base</th>
-<th><span class="model-badge" style="background:#DD8452"></span>Bagpiper-Edit (ST)</th>
-<th><span class="model-badge" style="background:#55A868"></span><b style='color:#55A868'>Bagpiper-Edit (MT)</b></th>
 <th><span class="model-badge" style="background:#C44E52"></span>CosyVoice-3</th>
-<th><span class="model-badge" style="background:#937860"></span>Ming-UniAudio-Edit</th>
 <th><span class="model-badge" style="background:#8172B3"></span>Step-Audio-EditX</th>
+<th><span class="model-badge" style="background:#937860"></span>Ming-UniAudio-Edit</th>
 </tr></thead><tbody>
 <tr>
 <td class="text-col sticky-col">time enough had he too for his reflections for days and nights passed on and nobody came up and when at last somebody did come it was only to put some great trunks in a corner out of the way</td>
@@ -1127,13 +1130,13 @@ The reading excerpt is drawn from Charles Dickens’s &quot;The Old Curiosity Sh
 
 In summary, the clip presents a meticulously produced studio reading of a passage from Dickens’s &quot;The Old Curiosity Shop,&quot; followed by a sudden transition to a pure, synthetic sine wave tone, indicative of technical editing or system notification. The entire recording is devoid of ambient or musical elements, emphasizing its function as a high-quality, unembellished segment of classic literature intended for digital consumption.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/a2a147736b3155d5ac592308e7242613.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/speaker_style/6b10114e03da566bae8cfc3e22e0ce0c.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/speaker_style/e3d537a2145854e5960416523e27f2e5.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/537b86331c6e57bfa17fc2f036750ef4.wav" type="audio/wav" /></audio></td>
 <td><span class="no-audio">-</span></td>
-<td><audio controls preload="none"><source src="audios/speech/speaker_style/e3d537a2145854e5960416523e27f2e5.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/speaker_style/6b10114e03da566bae8cfc3e22e0ce0c.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/5c197a1ff4245e8aa92a103b6ca01b1e.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/speaker_style/fcc67354e194551b84143b278fa0105c.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/5abe84e33b19594883c4fc6660cf39f0.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/speaker_style/fcc67354e194551b84143b278fa0105c.wav" type="audio/wav" /></audio></td>
 </tr>
 <tr>
 <td class="text-col sticky-col">it takes me several years to make this magic powder but at this moment i am pleased to say it is nearly done you see i am making it for my good wife margolotte who wants to use some of it for a purpose of her own</td>
@@ -1153,13 +1156,13 @@ Throughout the recording, the voice is captured in a highly controlled studio en
 
 In summary, this audio clip features a high-fidelity, studio-recorded narration by a mature male voice, delivered in a clear, dramatic, and theatrical manner. The speaker describes the completion of a long and magical process for his wife Margalot, using language and pacing that suggest a fantasy or adventure setting. The absence of ambient sounds, music, or effects focuses attention entirely on the spoken word, making the clip a polished and immersive example of modern voiceover artistry.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/d72e545f45b058ed83f01bc64aca6158.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/speaker_style/ffb0acd777b05b608e9f618aac77568c.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/speaker_style/01f967d308c45ae985b01e6d25464e6d.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/d835ce0a0d6d514dac4f7d8c71fd41b5.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/15b8a14ce46c5f9bb67cfc1d8a6017ed.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/speaker_style/01f967d308c45ae985b01e6d25464e6d.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/speaker_style/ffb0acd777b05b608e9f618aac77568c.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/e79eee4a939f54fcbae00fd21f508bd1.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/speaker_style/c334c905bdbe5965be9d2676e4c20d70.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/d55c8de2b91b5857acf958d4ffe17578.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/speaker_style/c334c905bdbe5965be9d2676e4c20d70.wav" type="audio/wav" /></audio></td>
 </tr>
 <tr>
 <td class="text-col sticky-col">the pleasant graveyard of my soul with sentimental cypress trees and flowers is filled that i may stroll in meditation at my ease</td>
@@ -1171,13 +1174,13 @@ Throughout the clip, the recording exhibits high fidelity, with a full and warm 
 
 This audio features a solitary female voice, recorded in a dry, acoustically controlled space, reciting a poetic passage in formal English with a gentle, reflective tone. The absence of music, ambient sound, or background noise, combined with the abrupt ending, suggests a purposefully crafted, introspective moment intended for meditation or contemplation, evoking themes of solitude, memory, and emotional closure.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/bee9413b08255546b4e176ee233e0047.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/speaker_style/a8662d14cebd59dfa30ea6710ad3278f.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/speaker_style/d3bdef7a0f5e56b0992fd0463cd5b2db.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/86416c26d7e8548d9f29f7a3bef09bff.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/d32f0c98729551f68b553da045b26395.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/speaker_style/d3bdef7a0f5e56b0992fd0463cd5b2db.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/speaker_style/a8662d14cebd59dfa30ea6710ad3278f.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/8b4d2d84f6705828adc9f8be398acbfd.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/speaker_style/d98ee85a9db2536b9414d1aefa308a95.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/bd7ab387958b54579a7bb60015f84966.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/speaker_style/d98ee85a9db2536b9414d1aefa308a95.wav" type="audio/wav" /></audio></td>
 </tr>
 <tr>
 <td class="text-col sticky-col">the lodge in which uncas was confined was in the very center of the village and in a situation perhaps more difficult than any other to approach or leave without observation</td>
@@ -1193,13 +1196,13 @@ The spoken text references Uncas, a character from James Fenimore Cooper’s “
 
 In summary, the audio presents a crisp, formal narration of a passage from Cooper’s novel, delivered by a professional male voice in a studio setting. The content and style evoke the classic American frontier narrative, with high production values and precise editing, and the excerpt ends abruptly, underscoring its role as a segment from a larger work.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/f9abe63e8f565531a8e540359556f884.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/speaker_style/71cbf87573965454aa3cd3c7af306bf2.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/speaker_style/17f67940fae95d9490fc14630111b503.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/7bb2cd30522f5cdd958ed9cb03b5fb30.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/3c42e8cbf2995d65aaa64b904c5a1ba9.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/speaker_style/17f67940fae95d9490fc14630111b503.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/speaker_style/71cbf87573965454aa3cd3c7af306bf2.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/dae51538e0e6587daa47168a0feeea56.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/speaker_style/59777092ec905bd88b839de54dbe1d1c.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/d0b2e7733d8c52b2b6347a7b86bb1b42.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/speaker_style/59777092ec905bd88b839de54dbe1d1c.wav" type="audio/wav" /></audio></td>
 </tr>
 <tr>
 <td class="text-col sticky-col">then they all marched out a little way into the fields and found that the army of pinkies had already formed and was advancing steadily toward them</td>
@@ -1213,13 +1216,13 @@ In summary, the audio clip features a single, professionally recorded, female na
 
 This audio segment is a meticulously produced excerpt from a professional audiobook or educational reading, characterized by its technical excellence and formal reading style. The excerpted text is from L. Frank Baum’s “The Marvelous Land of Oz,” specifically describing a pivotal moment in the story where characters encounter an opposing army. The absence of any musical, ambient, or additional sound elements reinforces its purpose as a standalone, high-quality recording, suitable for educational, literary, or archival use. The clip exemplifies clarity, neutrality, and attention to detail, making it ideal for listeners seeking an authentic and immersive experience of classic children’s literature.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/61de510ed4205670abad45ab25ad48ae.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/speaker_style/e6b5bcfa9d3e5003af6eab512ad9a56d.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/speaker_style/501b7653b63c50129841da80a6caebd6.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/a4cfef25b8a75937a402039c641900be.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/98b2d1d6db1c5370b345465a071d7e78.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/speaker_style/501b7653b63c50129841da80a6caebd6.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/speaker_style/e6b5bcfa9d3e5003af6eab512ad9a56d.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/efa14b3184895551a985b4b8bb2e619a.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/speaker_style/221e47b8f7d5566cb28ab8007c052149.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/d3c9c3d574b35f95868b69fcacdc7d39.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/speaker_style/221e47b8f7d5566cb28ab8007c052149.wav" type="audio/wav" /></audio></td>
 </tr>
 <tr>
 <td class="text-col sticky-col">i had not ventured to hope for such a reply so considerate in its tone so noble in its spirit</td>
@@ -1239,13 +1242,13 @@ Throughout the audio, there are no background noises, speech, or extraneous soun
 
 In summary, the audio clip features a clear, studio-quality recording of a female narrator reading a formal, literary sentence in American English, followed immediately by a synthetic, dissonant musical chord. The absence of background noise, the deliberate vocal and musical choices, and the abrupt transition between the two elements indicate a purposefully crafted moment of emotional contrast, likely intended for dramatic effect in a digital or narrative context.</div></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/12d59a7dbeba5174b7f869310f76a05a.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/speaker_style/056b2658f528530c8fea1e0d98542b0c.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/speaker_style/f30c4203bc575009ac3a8b0d526b7898.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/c3f9c7d2b0be5878a08daed65153b3a2.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/d3fe77aff6075f3ab5a1c510cc6913ad.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/speaker_style/f30c4203bc575009ac3a8b0d526b7898.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/speaker_style/056b2658f528530c8fea1e0d98542b0c.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/3a169952addd5ec49bd0d7599efd97f4.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/speech/speaker_style/d4eeaa8a887a5c8ea35dc8426477b2ba.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/speech/speaker_style/c68a4c8690315a1e9a9a923da95e3d92.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/speech/speaker_style/d4eeaa8a887a5c8ea35dc8426477b2ba.wav" type="audio/wav" /></audio></td>
 </tr>
 </tbody></table></div>
       </div>
@@ -1271,10 +1274,10 @@ In summary, the audio clip features a clear, studio-quality recording of a femal
 <th>Original Caption</th>
 <th>Edited Caption</th>
 <th><span class="model-badge" style="background:#6c757d;"></span>Source</th>
+<th><span class="model-badge" style="background:#55A868"></span><b style='color:#55A868'>Bagpiper-Edit (MT)</b></th>
+<th><span class="model-badge" style="background:#DD8452"></span>Bagpiper-Edit (ST)</th>
 <th><span class="model-badge" style="background:#4C72B0"></span>Bagpiper-Base (TTS)</th>
 <th><span class="model-badge" style="background:#4C72B0"></span>Bagpiper-Base</th>
-<th><span class="model-badge" style="background:#DD8452"></span>Bagpiper-Edit (ST)</th>
-<th><span class="model-badge" style="background:#55A868"></span><b style='color:#55A868'>Bagpiper-Edit (MT)</b></th>
 <th><span class="model-badge" style="background:#8C8C8C"></span>AudioLDM2</th>
 </tr></thead><tbody>
 <tr>
@@ -1284,10 +1287,10 @@ In summary, the audio clip features a clear, studio-quality recording of a femal
 In summary, the clip presents a polished, studio-quality excerpt of a female narrator reading a passage from a classic literary work, distinguished by its formal North American accent, measured pacing, and absence of ambient noise. The content highlights a rare social event in the fictional setting of Elmhurst, emphasizing its significance within the narrative. The production quality and style are consistent with audiobook or dramatic reading conventions, and the audio is designed for clear, immersive storytelling.</div></td>
 <td class="caption-col"><div class="caption-box">The audio clip opens with a single, clear female voice, closely mic’d in a studio-like setting, delivering a formal, measured narration in a North American accent: “This was the first occasion within a generation when such an entertainment had been given at Elmhurst, and the only one within the memory of man where the neighbors and country people had been the invited guests.” Her enunciation is precise, the recording high-fidelity and free of ambient noise, suggesting a professional audiobook or dramatic reading. Just after she finishes the phrase “within the memory of man,” a sudden shift occurs—the lush, energetic instrumentation of a salsa ensemble bursts in. A male vocalist, passionate and raspy, sings in Spanish with a strong Latin accent: “Que tus labios... viajen por mi piel,” his voice drenched in reverb and layered over a driving tumbao rhythm. The percussion surges with syncopated cowbell, conga, and bongo patterns, while a punchy bassline, bright piano montunos, and sharp brass flourishes build a vibrant, danceable groove. A second male voice answers in call-and-response: “Venga a mi cintura,” harmonizing tightly with the lead. The salsa arrangement continues with unrelenting energy, its wide stereo mix and analog-like hiss evoking a 1970s studio recording. The contrast between the quiet, formal narration and the explosive, sensual salsa performance creates a striking juxtaposition, as if two distinct cultural moments collide—one of restrained literary tradition, the other of passionate Latin expression. The clip ends with the salsa rhythm still in full swing, the brass punctuating the final phrase: “aquí te esperaré,” leaving the narrative open and resonant.</div></td>
 <td><audio controls preload="none"><source src="audios/audio/speech_add/e7e611f8982759209048eee25aeb8e4b.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/audio/speech_add/2075b418bf0a5df3b26a6cac27f52975.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/audio/speech_add/0743ada334305b88952bdb83d5ce09cd.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/audio/speech_add/265c671f5cc3535fb67c0d1752ff79b8.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/audio/speech_add/a30da7dd09fa518d81cccf5176fe1b64.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/audio/speech_add/0743ada334305b88952bdb83d5ce09cd.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/audio/speech_add/2075b418bf0a5df3b26a6cac27f52975.wav" type="audio/wav" /></audio></td>
 <td><span class="no-audio">-</span></td>
 </tr>
 <tr>
@@ -1299,10 +1302,10 @@ The passage itself reflects on a troubling memory and the speaker’s internal s
 In summary, the audio features a solitary, mid-aged American male reading a fragment of classic literary text in a quiet, intimate setting, marked by technical imperfections typical of a home or small studio recording. The speech is emotionally subdued and introspective, encapsulating themes of doubt and the haunting power of past influence, and is abruptly truncated, indicating its excerpted nature.</div></td>
 <td class="caption-col"><div class="caption-box">The audio opens with a soft, low-frequency rustling, likely the sound of fabric shifting as the speaker settles into position, followed by a brief inhalation in preparation for speech. Just as the male voice begins to speak—delivering the line &#x27;The story of its evil influence came back to me, and in my bewildered condition, I wondered whether there was not some truth in what had been said&#x27;—a virtuosic electric bass guitar suddenly erupts in the background, playing a rapid, syncopated solo in a jazz fusion and funk style. The bassist executes precise slap and pop techniques, ascending and descending through chromatic and pentatonic runs with aggressive articulation and rhythmic complexity, seemingly in counterpoint to the speaker’s somber, reflective tone. The bass performance grows more intricate, introducing rhythmic breaks and expressive licks, but is abruptly cut off mid-phrase by a loud, harsh electronic buzzer—a low-frequency, distorted square-wave tone resembling a game show &#x27;fail&#x27; signal—that blares in mono and completely overtakes the audio. The buzzer sustains at full volume until the end, drowning out the final syllable of the word &#x27;said&#x27; and creating a jarring contrast between literary introspection, musical virtuosity, and technological interruption. Throughout, the original recording&#x27;s low-level electronic hiss and faint hum persist, now juxtaposed against the clean, punchy bass tone and the abrasive synthetic tone of the buzzer. The entire sequence unfolds in a tightly framed sonic space with no reverberation, suggesting a controlled environment where the collision of narrative, music, and malfunction feels both deliberate and absurd.</div></td>
 <td><audio controls preload="none"><source src="audios/audio/speech_add/0b74dcc10f145fa987889f85b6889aec.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/audio/speech_add/bce23d305eb6571294b5637623b17b1d.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/audio/speech_add/abecacaa73ab54c99f377fb4684cb5fd.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/audio/speech_add/56e19998389d5379ba49c08aca4f7295.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/audio/speech_add/1578d075ec0051149c5edfbbd16b1c95.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/audio/speech_add/abecacaa73ab54c99f377fb4684cb5fd.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/audio/speech_add/bce23d305eb6571294b5637623b17b1d.wav" type="audio/wav" /></audio></td>
 <td><span class="no-audio">-</span></td>
 </tr>
 <tr>
@@ -1316,10 +1319,10 @@ Immediately following the last word, &quot;smile,&quot; the narration is abruptl
 In summary, the audio clip features a single female narrator reading a formal, literary sentence in a neutral, professional style, set in a silent and acoustically controlled environment. The narrative is abruptly cut off by a loud, distorted electronic buzzer, which signals an error or interruption. The overall structure and sound design are consistent with educational or testing contexts, where such cues are used to mark mistakes or segment timed tasks. No extraneous sounds or musical elements are present, and the recording is focused entirely on the spoken word and its subsequent artificial interruption.</div></td>
 <td class="caption-col"><div class="caption-box">The audio clip opens with a sudden, overwhelming surge of sound: a dense, high-pitched wall of shrieks, screams, and cheering erupts from a large crowd, predominantly composed of young adults and children, their voices overlapping in a chaotic blend of excitement and exhilaration. The acoustics suggest a vast, reverberant indoor space—such as a gymnasium or auditorium—where echoes amplify the intensity. The recording is heavily distorted, with severe clipping at peak levels, compressing the dynamic range and creating a harsh, saturated texture. Amid the noise, children’s shouts are distinctly audible, interwoven with the higher-pitched screams of teenagers and young adults, all contributing to a sense of communal thrill. Abruptly, the cacophony is cut off by a sharp, metallic click, followed by a deep, resonant thump as if a heavy mechanism has engaged, then a quick metallic clang that decays into the space’s natural reverb. A breathy &#x27;Woo!&#x27; cuts through the aftermath, followed by a guttural male grunt, as the crowd’s energy shifts from collective hysteria to low, murmuring reactions. Right after the final murmur, a single adult female speaker begins in a clear, neutral tone with a standard North American accent: &#x27;Whatever Lord Chelford said, Miss Brandon received it very graciously, and even with a momentary smile.&#x27; Her delivery is slow, precise, and devoid of emotion, set against a now-silent, dry acoustic environment with faint electronic hiss. Immediately after the word &#x27;smile,&#x27; the narration is cut off by a loud, distorted, low-pitched electronic buzzer with a square waveform, sustained and artificial, signaling an abrupt end. The sequence moves from wild, uncontrolled excitement to clinical narration and artificial termination, suggesting a staged contrast between emotional spectacle and sterile assessment.</div></td>
 <td><audio controls preload="none"><source src="audios/audio/speech_add/6509e5fdd2955176b16814012a38c1a0.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/audio/speech_add/c48444e7ff3f55178de9f49885d51100.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/audio/speech_add/6a4729d375f35365aea9ca594539dcf0.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/audio/speech_add/b36ffe1bbbee527d8f20a5cb3844164f.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/audio/speech_add/c4478a85becc5ceb99c38f5b306f765a.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/audio/speech_add/6a4729d375f35365aea9ca594539dcf0.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/audio/speech_add/c48444e7ff3f55178de9f49885d51100.wav" type="audio/wav" /></audio></td>
 <td><span class="no-audio">-</span></td>
 </tr>
 <tr>
@@ -1331,10 +1334,10 @@ Throughout the clip, the recording maintains a moderate to high fidelity, featur
 In summary, the audio presents a clear, unembellished excerpt of Thorstein Veblen’s sociological analysis, voiced by a mature British woman in a formal studio setting. The recording’s technical quality, precise diction, and academic delivery highlight its purpose as a scholarly reference or educational resource, conveying the enduring relevance of Veblen’s critique of conspicuous consumption and its cultural context.</div></td>
 <td class="caption-col"><div class="caption-box">The audio clip opens with a burst of electronic energy, immersing the listener in a meticulously produced, high-fidelity soundscape. A deep, synthetic kick drum establishes a steady four-on-the-floor rhythm, forming the foundation of a polished electronica track in C minor. Over this, a bright, metallic hi-hat ticks rapidly and crisply in the high frequencies, panned slightly to the right, while a snare or clap strikes on the off-beats, centered in the stereo field. A warm, rounded synth bassline plays a syncopated melodic phrase, cycling through G minor and F major chords, each note precisely articulated and subtly panned for spatial width. Above, a shimmering, bell-like arpeggiated synth melody unfolds in a repeating minor-scale sequence, treated with short, bright reverb that enhances its ethereal, hypnotic quality. Faint electronic noise—static and digital artifacts—adds texture, evoking the nostalgic character of vintage hardware. The arrangement is tightly structured, with all elements occupying distinct frequency bands and positions, creating a spacious, immersive stereo image. The mood is introspective and melancholic, shaped by the minor tonality, warm synth timbres, and retro production aesthetic. Midway through the sequence, just after the fifth cycle of the arpeggio, the music is abruptly interrupted by a sudden, loud low-frequency electronic buzz—harsh, synthetic, with a fundamental near 110 Hz and a rich harmonic spectrum—reminiscent of a digital error or square wave fault. This jarring tone cuts through the mix with extreme intensity, serving as a deliberate editorial intervention, before being sharply cut off. Immediately following, a faint, steady high-frequency hiss emerges from the silence, characteristic of analog recording, establishing a quiet studio atmosphere. Right after, a mature female voice with a refined Received Pronunciation accent begins speaking in a measured, formal tone: “It is evident, therefore, that the present trend of the development is in the direction of heightening the utility of conspicuous consumption as compared with leisure.” The phrase “conspicuous consumption” is articulated with precision, while “leisure” is delivered with a falling intonation and brief reverberant decay. The voice carries subtle room reverb, suggesting a small, dry studio, and is centrally placed in the stereo field. After the sentence concludes, the analog hiss persists briefly before ending abruptly. The entire sequence transitions from immersive electronica to clinical academic narration, framed by digital disruption and analog artifact, blending contemporary electronic production with archival intellectual discourse.</div></td>
 <td><audio controls preload="none"><source src="audios/audio/speech_add/11978aa599f252e49e40a0f9dfb1b6bc.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/audio/speech_add/5755e9e1f39c5f309860b27d344a722b.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/audio/speech_add/db4ecb08528055aa82f3ab425695e245.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/audio/speech_add/8fd398b553e156eca787521f8b40c369.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/audio/speech_add/dbcdc89074f95f408948e9813c8c151d.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/audio/speech_add/db4ecb08528055aa82f3ab425695e245.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/audio/speech_add/5755e9e1f39c5f309860b27d344a722b.wav" type="audio/wav" /></audio></td>
 <td><span class="no-audio">-</span></td>
 </tr>
 <tr>
@@ -1348,10 +1351,10 @@ The recording itself is high fidelity, with a clean and direct sound, free of ba
 In summary, this audio clip features a high-quality, professionally recorded excerpt of a formal American male voice reading a critical passage from early 20th-century or late 19th-century American literature, set in the historical context of the pre-Civil War Midwest. The speaker’s tone and diction are serious, authoritative, and judgmental, with no emotional inflection or background sounds. The recording’s clarity and editing point to a modern digital source, and the content reflects historical commentary on the moral failings of &quot;border ruffians.&quot;</div></td>
 <td class="caption-col"><div class="caption-box">The audio begins in absolute silence, quickly giving way to a single male voice that is immediately present and close to the microphone, with no introductory sounds or ambient noise. The speaker, an adult male with a mid-to-low pitched, resonant baritone and an American accent, delivers his speech in a deliberate and measured manner, each word articulated clearly and distinctly. His tone is steady and controlled, marked by a measured, deliberate rhythm, with no emotional inflection or variation in volume; the mood is serious, cold, and judgmental, as if the speaker is reading from a formal text or delivering a solemn report. He reads: &quot;The whole proceeding was so childish, the miserable plot so transparent, the outrage so gross as to bring disgust to the better class of border ruffians who were witnesses and accessories.&quot; The delivery is consistent, with no pauses or breaks, and the speaker’s style evokes a sense of narrative authority typical of early 20th-century or late 19th-century American literature. The phrase &quot;border ruffians&quot; signals a historical context, likely referencing the pre-Civil War period in the American Midwest, suggesting the text is from a historical narrative or critical commentary. Midway through the reading, just after the word &quot;accessories,&quot; a sharp, high-pitched electronic beep cuts through the voice—followed by a crisp mechanical shutter click, as if a digital camera has been activated. A second beep and shutter click occur right after, then a third, each interrupting the flow of speech with increasing intrusion. The speaker does not pause or react. After the final word, a fourth electronic beep sounds, immediately followed by a shutter actuation and then, without warning, a loud, synthetic, heavily distorted electronic buzzer blares—a harsh, low-pitched alarm resembling a square wave—that cuts the audio dead in its tracks while still sounding. The recording ends abruptly, with no fade or silence, merging the cold judgment of the voice with the cold precision of machine sounds. The overall effect is jarring and surreal, as if the act of documentation itself has interrupted and terminated the narrative. The audio remains high fidelity throughout, with clean, close-miked clarity and no background noise, hiss, or reverberation, indicating a professional studio environment, though the sudden camera and alarm sounds suggest an external system intrusion or layered technological presence.</div></td>
 <td><audio controls preload="none"><source src="audios/audio/speech_add/7f5ae73edf945693af5dbff4276f647b.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/audio/speech_add/3c9df9a85a5f5c459e18f1399e2ec075.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/audio/speech_add/66dcafa09a49503d9b5324cf6f85b278.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/audio/speech_add/604839a6096b57dba296c8c8b531f892.wav" type="audio/wav" /></audio></td>
 <td><span class="no-audio">-</span></td>
-<td><audio controls preload="none"><source src="audios/audio/speech_add/66dcafa09a49503d9b5324cf6f85b278.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/audio/speech_add/3c9df9a85a5f5c459e18f1399e2ec075.wav" type="audio/wav" /></audio></td>
 <td><span class="no-audio">-</span></td>
 </tr>
 </tbody></table></div>
@@ -1369,10 +1372,10 @@ In summary, this audio clip features a high-quality, professionally recorded exc
 <th>Original Caption</th>
 <th>Edited Caption</th>
 <th><span class="model-badge" style="background:#6c757d;"></span>Source</th>
+<th><span class="model-badge" style="background:#55A868"></span><b style='color:#55A868'>Bagpiper-Edit (MT)</b></th>
+<th><span class="model-badge" style="background:#DD8452"></span>Bagpiper-Edit (ST)</th>
 <th><span class="model-badge" style="background:#4C72B0"></span>Bagpiper-Base (TTS)</th>
 <th><span class="model-badge" style="background:#4C72B0"></span>Bagpiper-Base</th>
-<th><span class="model-badge" style="background:#DD8452"></span>Bagpiper-Edit (ST)</th>
-<th><span class="model-badge" style="background:#55A868"></span><b style='color:#55A868'>Bagpiper-Edit (MT)</b></th>
 <th><span class="model-badge" style="background:#8C8C8C"></span>AudioLDM2</th>
 </tr></thead><tbody>
 <tr>
@@ -1382,10 +1385,10 @@ In summary, this audio clip features a high-quality, professionally recorded exc
 
 This audio excerpt features a solo, young female voice reciting a rhetorical challenge—“Why should I rust and be stupid and sit in inaction because I am a girl?”—in a controlled, studio-like setting, with clear, theatrical enunciation and a General American accent. The absence of other sounds and the deliberate vocal delivery suggest the clip is part of a dramatic reading, likely from a play or film, and is representative of mid-20th-century American performance style, embodying themes of gender-based defiance and empowerment.</div></td>
 <td><audio controls preload="none"><source src="audios/audio/speech_remove/5108301f10205c6ca97a9d92b2fb3eb1.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/audio/speech_remove/6aa98991245256c1a8c68fdfec6e6924.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/audio/speech_remove/da0510ea3a28594888703b8c30d54a73.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/audio/speech_remove/a9844bae22f352fb8801326a22646144.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/audio/speech_remove/947cef162343545f80159c3ecba928b0.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/audio/speech_remove/da0510ea3a28594888703b8c30d54a73.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/audio/speech_remove/6aa98991245256c1a8c68fdfec6e6924.wav" type="audio/wav" /></audio></td>
 <td><span class="no-audio">-</span></td>
 </tr>
 <tr>
@@ -1399,10 +1402,10 @@ The narrative delivered by the speaker evokes the world of 18th-century European
 
 In summary, the audio presents a high-quality, professional narration of a satirical sentence about snuff boxes and social ritual, delivered by a female speaker in a neutral, culturally evocative style. The recording is abruptly interrupted mid-word by a loud, distorted electronic buzz, indicating a technical malfunction or intentional edit. This contrast between the refined historical content and the abrupt, modern interference highlights both the narrative’s cultural context and the disruptive impact of technical error.</div></td>
 <td><audio controls preload="none"><source src="audios/audio/speech_remove/8b29be0817c05f219d916ac7c6bd2809.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/audio/speech_remove/026140d6d7f95ff29977e17c23bb54e8.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/audio/speech_remove/b56c50eb95225fa59a3ece9d29ff9a53.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/audio/speech_remove/932410cca45c5ebdbfceb98125c4fd1b.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/audio/speech_remove/724162b6d519592691a704bc3c933b37.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/audio/speech_remove/b56c50eb95225fa59a3ece9d29ff9a53.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/audio/speech_remove/026140d6d7f95ff29977e17c23bb54e8.wav" type="audio/wav" /></audio></td>
 <td><span class="no-audio">-</span></td>
 </tr>
 </tbody></table></div>
@@ -1429,10 +1432,10 @@ In summary, the audio presents a high-quality, professional narration of a satir
 <th>Original Caption</th>
 <th>Edited Caption</th>
 <th><span class="model-badge" style="background:#6c757d;"></span>Source</th>
+<th><span class="model-badge" style="background:#55A868"></span><b style='color:#55A868'>Bagpiper-Edit (MT)</b></th>
+<th><span class="model-badge" style="background:#DD8452"></span>Bagpiper-Edit (ST)</th>
 <th><span class="model-badge" style="background:#4C72B0"></span>Bagpiper-Base (TTS)</th>
 <th><span class="model-badge" style="background:#4C72B0"></span>Bagpiper-Base</th>
-<th><span class="model-badge" style="background:#DD8452"></span>Bagpiper-Edit (ST)</th>
-<th><span class="model-badge" style="background:#55A868"></span><b style='color:#55A868'>Bagpiper-Edit (MT)</b></th>
 </tr></thead><tbody>
 <tr>
 <td class="caption-col sticky-col"><div class="caption-box">Keep the exact melody and deliberate tempo of &#x27;Twinkle, Twinkle, Little Star&#x27; from the music box, but reimagine it as a live choral performance by a small group of children singing in a vast stone cathedral. Their voices should be pure and close-mic&#x27;d, floating above a deep, warm bed of analog synth pads that slowly bloom underneath. The whole recording should feel like a fragile archival tape—slightly wobbly, softly saturated—with long cathedral reverb making each phrase echo into silence. Then, just as the last note lingers, cut it with the same sharp, synthetic, center-panned electronic beep from the original, as if the tape was abruptly stopped by a system fault.</div></td>
@@ -1447,10 +1450,10 @@ At the end of the final phrase, the choir sustains the last vowel sound, allowin
 
 This audio clip features a high-fidelity yet emotionally fragile recording of a children&#x27;s choir performing &#x27;Twinkle, Twinkle, Little Star&#x27; in a resonant cathedral, accompanied by analog synth textures and captured on vintage tape. The transition from ethereal harmony to jarring digital interruption preserves the original’s emotional arc—from gentle nostalgia to sudden, functional disruption. The setting and layered production suggest a conceptual or artistic context, blending sacred acoustics with electronic intervention. The recording ends with clinical finality, emphasizing the contrast between human warmth and mechanical coldness.</div></td>
 <td><audio controls preload="none"><source src="audios/creative/music_creative/6c3701095c8756f896644c51860301a7.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/creative/music_creative/5f204afd4fa755d0bc1c14ab684564ec.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/creative/music_creative/b757ccac8e19555295e75f44d235f6a5.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/creative/music_creative/370de8e9a1f45072921c52dc259bbcb1.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/creative/music_creative/c10d225465c6574aa859c9800d0c89c4.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/creative/music_creative/b757ccac8e19555295e75f44d235f6a5.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/creative/music_creative/5f204afd4fa755d0bc1c14ab684564ec.wav" type="audio/wav" /></audio></td>
 </tr>
 <tr>
 <td class="caption-col sticky-col"><div class="caption-box">Keep the exact rhythmic pulse and syncopated bass groove of the original funk loop, but reimagine it as a sacred ritual chant performed in a torch-lit stone chamber. Replace the instruments with live acoustic counterparts—upright bass, congas, bata drums, wah-wah guitar, and Hammond B3—and center the performance around a deep-voiced chant master who leads a call-and-response choir. The choir answers each phrase with harmonic intensity, their voices echoing in the chamber. Add ambient fire crackles, distant foot stomps, and breaths to create a cinematic, spiritual atmosphere. Maintain the abrupt, distorted electronic buzz at the end, but let it cut through the live ritual like a rupture from another dimension—unchanged, artificial, and jarring.</div></td>
@@ -1469,10 +1472,10 @@ The entire recording is a live, immersive capture of a ceremonial performance, f
 
 In summary, this audio clip presents a powerful, immersive ritual performance set in a torch-lit stone chamber, featuring a chant master leading a call-and-response choir over a live, acoustic reinterpretation of a funk groove. The ensemble—congas, upright bass, wah-wah guitar, and Hammond B3—creates a trance-inducing rhythm, while the spatial acoustics and ambient fire sounds deepen the cinematic realism. The sudden, distorted electronic buzz at the end serves as a jarring, otherworldly intrusion, contrasting violently with the organic intensity of the ritual and underscoring the clip’s role as a hybrid artifact—part spiritual ceremony, part sonic anomaly.</div></td>
 <td><audio controls preload="none"><source src="audios/creative/music_creative/6325ad11047754c8a24c96a9d42f79c3.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/creative/music_creative/14bfb18156895bcc9e1a6a428ddaab44.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/creative/music_creative/1f539a6cd2a055ee88ebf23a57759d64.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/creative/music_creative/38a70b912c8f547f8a694c4d8790a9f5.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/creative/music_creative/d117db9bb5fd58ac8ff1045ae36c56f8.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/creative/music_creative/1f539a6cd2a055ee88ebf23a57759d64.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/creative/music_creative/14bfb18156895bcc9e1a6a428ddaab44.wav" type="audio/wav" /></audio></td>
 </tr>
 <tr>
 <td class="caption-col sticky-col"><div class="caption-box">Take the expressive vibrato and bluesy phrasing of the guitar and transform them into the voice of a lone blues singer performing live in a 1950s Chicago club. Keep the same melodic contours and emotional pacing, but have him sing wordless, soulful phrases—&#x27;Mmm-hmm, I know… yeah…&#x27;—with the same slow bends and sustained notes. Surround him with a smoky bar atmosphere: a small audience murmuring, glasses clinking, a drummer using brushes on a snare, a walking upright bass, and a Wurlitzer piano comping softly. The guitar from the original should now appear as a responding voice—playing licks between vocal lines—while the whole thing is captured on a vintage wire recorder with warm saturation, natural room reverb, and a faint hum. Make it feel like a rediscovered live recording, raw and intimate, where every breath and string squeak is part of the story.</div></td>
@@ -1499,10 +1502,10 @@ The recording quality suggests it was made with 1950s-era analog equipment, like
 
 In summary, the audio clip presents a live blues vocal performance captured in a vintage analog setting, characterized by expressive, guitar-like phrasing, warm and woody tone, natural room reverb, and subtle analog hum. The performance features a lead singer responding to instrumental licks, with slow, contemplative melodic lines, deep vibrato, and technical flourishes. The recording’s mono image, moderate analog compression, and absence of modern artifacts reinforce its mid-century origins. The clip evokes a sense of nostalgia and intimacy, embodying the spirit of classic American blues traditions, now reimagined as a rediscovered club recording pulsing with human presence.</div></td>
 <td><audio controls preload="none"><source src="audios/creative/music_creative/813107a2d27e59f5b6a298e516778fcf.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/creative/music_creative/2c174d16a8b25ec28f4418b74c70e885.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/creative/music_creative/f609994cff9f5d0f8da897f25f8357fb.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/creative/music_creative/dc3eb08677125eeaa11581545fc16c32.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/creative/music_creative/d5653098a2235705921439e22d9f9b7f.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/creative/music_creative/f609994cff9f5d0f8da897f25f8357fb.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/creative/music_creative/2c174d16a8b25ec28f4418b74c70e885.wav" type="audio/wav" /></audio></td>
 </tr>
 <tr>
 <td class="caption-col sticky-col"><div class="caption-box">Take the original whisper and fragile vocal line, keep the breathy intimacy and exact lyrics, but reimagine the entire scene as a lost 19th-century ritual recording: the &#x27;by&#x27; becomes a sacred invocation in a cathedral, answered by a drifting choir; replace all synths with acoustic period instruments—cello drones, a lute arpeggio, a wheezing hurdy-gurdy—and place it all in a cavernous stone space with dripping water and echoes; process the whole thing like a fragile wax cylinder playback with surface noise and pitch instability, but keep her voice clear and central, and let the choir swell just before the abrupt cut, as if the ritual was interrupted</div></td>
@@ -1525,10 +1528,10 @@ Throughout the clip, the production emulates a restored archival wax cylinder: t
 
 In summary, this audio clip presents a brief, haunting fragment of a reconstructed ritual performance: a whispered invocation, an acoustic instrumental build, and a fragile, incomplete vocal line, all embedded within the sonic envelope of a vast, cold cathedral and the fragile medium of a wax cylinder recording. The piece is marked by its historical reimagining, emotional solemnity, and abrupt mechanical termination, evoking the aura of a lost ceremonial recording unearthed and partially restored.</div></td>
 <td><audio controls preload="none"><source src="audios/creative/music_creative/dfe8b7424e405fe283f59f972561c5af.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/creative/music_creative/ffc82539325458e69fee45131860bb15.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/creative/music_creative/cbbf1f34ca055abeb78a70fe304b1a8f.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/creative/music_creative/9bbb989e589351f5ac5a87da1326982a.wav" type="audio/wav" /></audio></td>
 <td><span class="no-audio">-</span></td>
-<td><audio controls preload="none"><source src="audios/creative/music_creative/cbbf1f34ca055abeb78a70fe304b1a8f.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/creative/music_creative/ffc82539325458e69fee45131860bb15.wav" type="audio/wav" /></audio></td>
 </tr>
 <tr>
 <td class="caption-col sticky-col"><div class="caption-box">Take the relentless, machine-perfect pulse of the original EDM track and turn it into a live 1970s game show performance: keep the driving rhythm but make it human—replace the synths with voices. A charismatic host leads a call-and-response chant with a studio audience, turning the arpeggiated lead into a melodic vocal hook and the sub-bass into a deep, sung bassline. The kick and hi-hats become handclaps and foot stomps, wide in stereo. The mix should feel warm and slightly compressed, like analog tape, with room reverb and live energy. Then—just as the chant peaks—hit the buzzer: loud, grating, and final, cutting through the crowd&#x27;s gasp, just like a real &#x27;wrong answer&#x27; on a vintage quiz show.</div></td>
@@ -1551,10 +1554,10 @@ Without warning, the chant is abruptly cut off mid-phrase, with no decay or reso
 
 In summary, this audio clip presents a high-fidelity, vocally driven performance reminiscent of a 1970s quiz show, featuring a humanized rhythm section, energetic call-and-response vocals, and a warm, immersive stereo mix. The music is suddenly and forcefully interrupted by a loud, grating buzzer tone, evoking the familiar sting of a time-out or incorrect response. No instrumental synths or electronic drums are present; instead, all rhythmic and melodic elements are performed vocally or through body percussion, creating a dynamic narrative of collective anticipation followed by abrupt judgment, suitable for a media context such as a retro-themed game, parody, or nostalgic broadcast.</div></td>
 <td><audio controls preload="none"><source src="audios/creative/music_creative/de59815ed35a595cb86f26daf944c781.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/creative/music_creative/75cc682688895babb0e803247710a8b1.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/creative/music_creative/d3226a4b8c1a586b8b66525798e7baa4.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/creative/music_creative/c0981eaa675a5baaa8ccd8517017d1ec.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/creative/music_creative/b313a3172ca95253854f2d7056673b2c.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/creative/music_creative/d3226a4b8c1a586b8b66525798e7baa4.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/creative/music_creative/75cc682688895babb0e803247710a8b1.wav" type="audio/wav" /></audio></td>
 </tr>
 </tbody></table></div>
       </div>
@@ -1571,10 +1574,10 @@ In summary, this audio clip presents a high-fidelity, vocally driven performance
 <th>Original Caption</th>
 <th>Edited Caption</th>
 <th><span class="model-badge" style="background:#6c757d;"></span>Source</th>
+<th><span class="model-badge" style="background:#55A868"></span><b style='color:#55A868'>Bagpiper-Edit (MT)</b></th>
+<th><span class="model-badge" style="background:#DD8452"></span>Bagpiper-Edit (ST)</th>
 <th><span class="model-badge" style="background:#4C72B0"></span>Bagpiper-Base (TTS)</th>
 <th><span class="model-badge" style="background:#4C72B0"></span>Bagpiper-Base</th>
-<th><span class="model-badge" style="background:#DD8452"></span>Bagpiper-Edit (ST)</th>
-<th><span class="model-badge" style="background:#55A868"></span><b style='color:#55A868'>Bagpiper-Edit (MT)</b></th>
 </tr></thead><tbody>
 <tr>
 <td class="caption-col sticky-col"><div class="caption-box">Keep the exact moment and rhythm where the percussion stops, and preserve the sharp metallic shekere pattern and the driving polyrhythm—but transform the entire scene into a desert ritual where a griot’s call summons a response not from machines, but from the earth itself. Replace the buzzer with a deep, harmonic-rich drone from a group of Tuvan throat singers emerging from a canyon wall, their sound growing from silence like tectonic vibration. The drums are now part of a sacred chant: a lead male griot sings in Wolof with intense, resonant authority, answered by a chorus of villagers in polyphonic harmony. Let the cut become a natural fade into wind and cracking earth, then the drone rises—not electronic, but human, ancient, and geological. Add desert ambience: distant thunder, dry wind, and spatial echoes to make the setting feel mythic. The fidelity should shift from clinical to vast and natural, with stereo depth and organic reverb. This isn’t a clash of tradition and tech—it’s tradition awakening primal force.</div></td>
@@ -1593,10 +1596,10 @@ Throughout the clip, the recording quality shifts from close-miked precision to 
 
 In summary, the audio presents a vivid, uninterrupted burst of traditional West African drumming and vocal ceremony, abruptly giving way to a natural-sounding, human-generated subharmonic drone from a distant canyon. This stark transition, rendered with high spatial fidelity and ecological ambience, reframes the original contrast not as technological intrusion but as ritual summoning. The clip’s structure, vocal content, and layered acoustics create a powerful, evocative journey from cultural expression to primal resonance, suggesting a world where music is not interrupted by the earth, but answered by it.</div></td>
 <td><audio controls preload="none"><source src="audios/creative/sound_creative/4234c9d3fc9058e2a726811bf05475df.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/creative/sound_creative/00a1c9400c5959f4b9f1c174a9a64cf3.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/creative/sound_creative/7d074a013f325686b4da0109c0d7a63b.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/creative/sound_creative/be1ad28d8f475a108bd15b3bc66a6716.wav" type="audio/wav" /></audio></td>
 <td><span class="no-audio">-</span></td>
-<td><audio controls preload="none"><source src="audios/creative/sound_creative/7d074a013f325686b4da0109c0d7a63b.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/creative/sound_creative/00a1c9400c5959f4b9f1c174a9a64cf3.wav" type="audio/wav" /></audio></td>
 </tr>
 <tr>
 <td class="caption-col sticky-col"><div class="caption-box">Keep the speaker’s exact words and calm, authoritative delivery, but transform him into the frontman of a 1970s funk-rock band performing live in a dimly lit downtown club. His voice becomes rhythmic and slightly sung, riding the groove. Turn the appliance demonstration into a theatrical performance where the machine’s roar is now the band’s instrumentation: the motor hum becomes a pulsing bassline, the blade whir a high-hat sizzle, and the clank a snare hit. Add a tight rhythm section—slap bass, wah guitar, and crisp drums—with Hammond organ accents. Introduce a small gospel choir that calls back after each phrase, echoing &#x27;funnel in the center&#x27; and &#x27;ten speeds!&#x27; like a revival. Fill the space with club ambience: low crowd buzz, warm plate reverb, and the occasional clink of a glass. The background hiss becomes a soft tube amp glow. The energy builds like a sermon turned jam session, but the voice remains clear, instructional in tone—even as it’s now part of a song.</div></td>
@@ -1617,10 +1620,10 @@ In summary, the audio is a stylized live performance blending instructional narr
 
 The performance ends abruptly mid-phrase, the band cutting off on a downbeat, the final syllable of &quot;machine&quot; left hanging in the air, swallowed by the sudden silence of a live stop—no fade, no reverb tail, just the echo of a groove that was just beginning to peak.</div></td>
 <td><audio controls preload="none"><source src="audios/creative/sound_creative/438e79a9e73e54f7a86ee02d958e165b.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/creative/sound_creative/c8a2c1ae87be5b90912c95f9fa324a44.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/creative/sound_creative/d0e2a0b5f37356e385cea4f0a348c912.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/creative/sound_creative/e4c1c3f524a75fabb33a0bf95a4fc9be.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/creative/sound_creative/d6e4985c87d55614bf10abcfe793845e.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/creative/sound_creative/d0e2a0b5f37356e385cea4f0a348c912.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/creative/sound_creative/c8a2c1ae87be5b90912c95f9fa324a44.wav" type="audio/wav" /></audio></td>
 </tr>
 <tr>
 <td class="caption-col sticky-col"><div class="caption-box">Keep the cat’s purr exactly as recorded—the rhythm, the breath-synchronized pulse, the 26 Hz fundamental—but reimagine it as the sacred heartbeat of a hidden mountain temple. Layer it with a Tuvan throat-singing duo, male and female, who lock into its harmonics, weaving drones that mirror the purr’s overtones. Add a slow, felted frame drum that pulses in sync with the inhalation-exhalation cycle, and a tanpura tuned precisely to the purr’s frequency, creating a meditative, harmonic bed. Record it all as if captured on vintage tube mic in a stone chamber, with natural reverb blooming beneath. Keep the close-mic intimacy, but expand the space around it. Let the digital click at the end become a large bronze gong struck once, its decay revealing the chamber’s depth. The hum and hiss should remain, now sounding like wind through ancient vents and the self-noise of the recording as pilgrimage artifact.</div></td>
@@ -1631,10 +1634,10 @@ In summary, the audio is a close-mic’d, high-fidelity recording of a single do
 
 In summary, the audio is a close-mic’d, high-fidelity recording of a single domestic cat purring, transformed into the spiritual core of a meditative overtone ritual, captured in a quiet, sacred stone chamber with layered acoustic and vocal textures. The recording’s clarity and detail emphasize the cat’s vocalization, now perceived as a foundational tone around which human voices and instruments orbit. The absence of speech, music, or environmental cues in the original is replaced by a carefully constructed sonic ritual—throat singers, frame drum, tanpura—yet the focus remains on the natural sound of feline contentment, elevated to sacred status. The only notable artifacts are a subtle device thump and a gong strike at the end, both recontextualized as elements of the ceremony, preserving the authenticity and cultural transformation of the recording.</div></td>
 <td><audio controls preload="none"><source src="audios/creative/sound_creative/c64f9f702cf05177b429a6efafefd566.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/creative/sound_creative/c609fafd34705097982374125742d6bb.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/creative/sound_creative/3f66a398d7355c62871c38aa05cce86c.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/creative/sound_creative/ff8c939bac535f379f56003f758460fa.wav" type="audio/wav" /></audio></td>
 <td><span class="no-audio">-</span></td>
-<td><audio controls preload="none"><source src="audios/creative/sound_creative/3f66a398d7355c62871c38aa05cce86c.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/creative/sound_creative/c609fafd34705097982374125742d6bb.wav" type="audio/wav" /></audio></td>
 </tr>
 <tr>
 <td class="caption-col sticky-col"><div class="caption-box">Keep the jarring digital crash and the relentless, escalating energy of the original synth track, but reframe it as a live cyberpunk rave in a flooded subway tunnel. Turn the arpeggio into a vocalized digital chant performed by a masked lead singer in a constructed language, perfectly synced to the original rhythm. Add four industrial drummers on electrified scrap metal and drum kits, panned across a wide stereo field. Layer in a responsive crowd whose movements and reactions build tension—stomping, shouting, gasping—as the performance spirals toward chaos. At the climax, have the entire rig fail physically: sparks fly, a speaker stack collapses with a metallic crash, and then—silence, followed by the same harsh, low-frequency buzz. Make it feel like a bootleg recording from a forbidden underground event, captured on a handheld digital recorder with clipping and distortion, but keep the buzz identical to the original.</div></td>
@@ -1665,10 +1668,10 @@ No intelligible speech or natural environmental sounds are present beyond the co
 
 In summary, this audio clip documents a high-intensity live cyberpunk performance in a derelict subway station, featuring a vocoded lead vocalist, industrial drummers, and a reactive crowd, all building toward a catastrophic system failure. The piece maintains the original’s relentless rhythm, synthetic timbres, and jarring electronic buzz, now embedded within a rich, spatially dynamic, and physically grounded soundscape. With no traditional vocals or natural ambience, the recording stands as a raw, bootleg artifact of a forbidden digital ritual, capturing the aesthetics and anxieties of a future where technology and humanity collide in violent, ecstatic rupture.</div></td>
 <td><audio controls preload="none"><source src="audios/creative/sound_creative/5c8937a94f4c541cb5d81ef67dd956a2.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/creative/sound_creative/5d195df5e93f5d09a8a937ca8b8d58fe.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/creative/sound_creative/469ec463b67b5e5aaebc727939a9cdb8.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/creative/sound_creative/e6a1382aaa9756f5a316009e98751e2c.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/creative/sound_creative/48f7cb3168e55a4a906ccdbedb4ffe57.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/creative/sound_creative/469ec463b67b5e5aaebc727939a9cdb8.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/creative/sound_creative/5d195df5e93f5d09a8a937ca8b8d58fe.wav" type="audio/wav" /></audio></td>
 </tr>
 <tr>
 <td class="caption-col sticky-col"><div class="caption-box">Turn the sports commentator into the lead vocalist of a smoky 1960s soul-jazz ensemble, keep his exact words and deliberate pacing, but transform his analysis into a sung-spoken lyric over a Hammond organ groove. Replace the basketball crowd with a live jazz audience and a small gospel choir that hums and responds to his phrases. Convert the squeaks and dribbles into rhythmic jazz motifs—use shoe squeaks as percussive stabs and turn the basketball bounce into a walking bassline. Set it all in a vintage nightclub with warm analog recording texture, and let the &#x27;Will it—&#x27; moment be cut by a piano chord stab instead of a buzzer, leaving the tension unresolved.</div></td>
@@ -1687,10 +1690,10 @@ The vocalist’s delivery reaches its peak as he leans into the microphone and b
 
 In summary, the audio clip presents a vivid, immersive snapshot of a live soul-jazz performance, blending lyrical storytelling, expressive instrumental interplay, and the palpable tension of an unresolved climax. The transformation of sports commentary into song, the reimagining of game sounds as musical elements, and the atmospheric depth of the club setting create a haunting, theatrical portrayal of anticipation and loss, capturing the emotional gravity that defines the genre’s most powerful moments.</div></td>
 <td><audio controls preload="none"><source src="audios/creative/sound_creative/64bd7a931abc52829197fc2a792de2b6.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/creative/sound_creative/93a8c8e1142d5fd28909f1f78a08d5ca.wav" type="audio/wav" /></audio></td>
+<td><audio controls preload="none"><source src="audios/creative/sound_creative/58f93d082ae3580a9f0a32e2b3d489fb.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/creative/sound_creative/cc0ce628a09a5a018fd5ce3388ae011e.wav" type="audio/wav" /></audio></td>
 <td><audio controls preload="none"><source src="audios/creative/sound_creative/0b921b4a99c85308984572a58b2c6d43.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/creative/sound_creative/58f93d082ae3580a9f0a32e2b3d489fb.wav" type="audio/wav" /></audio></td>
-<td><audio controls preload="none"><source src="audios/creative/sound_creative/93a8c8e1142d5fd28909f1f78a08d5ca.wav" type="audio/wav" /></audio></td>
 </tr>
 </tbody></table></div>
       </div>
